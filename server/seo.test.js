@@ -54,7 +54,7 @@ test("business page: content, LocalBusiness + Breadcrumb schema, no rating until
   assert.equal(biz.aggregateRating, undefined);
   assert.ok(ld.find((x) => x["@type"] === "BreadcrumbList"));
   // add a real review -> aggregateRating appears
-  const u = await api("POST", "/api/register", { email: "r@seo.test", name: "Rev", password: "password-1" });
+  const u = await api("POST", "/api/register", { accept: true, email: "r@seo.test", name: "Rev", password: "password-1" });
   await api("POST", "/api/businesses/1/reviews", { rating: 5, comment: "ممتاز" }, u.cookie);
   html = await (await get("/en/b/1")).text();
   const en = jsonLd(html).find((x) => x["@type"] === "Restaurant");
@@ -70,7 +70,7 @@ test("unknown / unapproved pages return real 404 with noindex", async () => {
     assert.equal(r.headers.get("x-robots-tag"), "noindex", p);
     assert.match(await r.text(), /name="robots" content="noindex,follow"/);
   }
-  const u = await api("POST", "/api/register", { email: "p@seo.test", name: "P", password: "password-1" });
+  const u = await api("POST", "/api/register", { accept: true, email: "p@seo.test", name: "P", password: "password-1" });
   const created = await api("POST", "/api/businesses", { name_ar: "قيد المراجعة", cat: "tech", city: "doha", phone: "55123456" }, u.cookie);
   assert.equal((await get(`/b/${created.json.id}`)).status, 404, "pending listings are not public");
 });
@@ -123,7 +123,7 @@ test("robots.txt points to the sitemap and blocks only the API", async () => {
 });
 
 test("user content cannot break out of HTML or JSON-LD", async () => {
-  const u = await api("POST", "/api/register", { email: "x@seo.test", name: "X", password: "password-1" });
+  const u = await api("POST", "/api/register", { accept: true, email: "x@seo.test", name: "X", password: "password-1" });
   const evil = `</script><script>alert(1)</script>"><img src=x onerror=alert(2)>`;
   const c = await api("POST", "/api/businesses", { name_ar: evil, name_en: evil, desc: evil, area: evil, cat: "tech", city: "doha", phone: "55123457" }, u.cookie);
   await api("POST", `/api/admin/businesses/${c.json.id}/approve`, {}, admin);

@@ -26,4 +26,5 @@ npm test   # اختبارات الـ API
 ### النشر والحالة
 - النشر على Railway خطوة بخطوة: [DEPLOY.md](DEPLOY.md)
 - تحسين محركات البحث: [SEO.md](SEO.md)
+- الصفحات القانونية وحقوق المستخدم: [LEGAL.md](LEGAL.md)
 - ما أُنجز وما بقي: [STATUS.md](STATUS.md)

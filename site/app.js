@@ -4,6 +4,10 @@
 
   var T = {
     ar: {
+      privacy: "سياسة الخصوصية", terms: "شروط الاستخدام", agree_pre: "أوافق على", agree_and: "و",
+      e_terms_required: "يجب الموافقة على شروط الاستخدام وسياسة الخصوصية.", e_admin_cannot_delete: "لا يمكن حذف حساب الأدمن من هنا.",
+      acct_title: "حسابي", acct_export: "تنزيل بياناتي (JSON)", acct_delete: "حذف حسابي نهائيًا", acct_pw: "كلمة المرور للتأكيد",
+      acct_warn: "يحذف حسابك وتقييماتك وكل الأنشطة التي أضفتها، ولا يمكن التراجع.", acct_confirm: "هل أنت متأكد من حذف حسابك نهائيًا؟",
       home_title: "دليل قطر | دليل الأعمال والخدمات في قطر",
       home_desc: "ابحث عن مطاعم وعقارات وعيادات وخدمات في قطر، واتصل بالأنشطة مباشرة واطلع على تقييمات حقيقية من المستخدمين.",
       browse_h1: "كل الأنشطة والخدمات في قطر", browse_desc: "قائمة كاملة بالأنشطة التجارية والخدمات في قطر مع أرقام التواصل والتقييمات.",
@@ -37,6 +41,10 @@
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      privacy: "Privacy Policy", terms: "Terms of Use", agree_pre: "I agree to the", agree_and: "and the",
+      e_terms_required: "You must accept the Terms of Use and Privacy Policy.", e_admin_cannot_delete: "Admin accounts cannot be deleted here.",
+      acct_title: "My account", acct_export: "Download my data (JSON)", acct_delete: "Delete my account permanently", acct_pw: "Password to confirm",
+      acct_warn: "Deletes your account, your reviews and every listing you submitted. This cannot be undone.", acct_confirm: "Are you sure you want to permanently delete your account?",
       home_title: "Qatar Guide | Business & Services Directory in Qatar",
       home_desc: "Find restaurants, real estate, clinics and services in Qatar, contact businesses directly and read genuine user reviews.",
       browse_h1: "All businesses & services in Qatar", browse_desc: "A complete list of businesses and services in Qatar with contact details and reviews.",
@@ -265,6 +273,7 @@
       (reg ? "<label>" + t("your_name") + '<input name="name" maxlength="60" autocomplete="name" required></label>' : "") +
       "<label>" + t("email") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
       "<label>" + t("password") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="' + (reg ? "new-password" : "current-password") + '" required></label>' +
+      (reg ? '<label class="check-line"><input type="checkbox" name="accept" required> <span>' + t("agree_pre") + ' <a class="link" data-native target="_blank" rel="noopener" href="' + link("/terms") + '">' + t("terms") + "</a> " + t("agree_and") + ' <a class="link" data-native target="_blank" rel="noopener" href="' + link("/privacy") + '">' + t("privacy") + "</a></span></label>" : "") +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t(reg ? "register" : "login") + "</button>" +
       '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="' + link(reg ? "/login" : "/register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
   }
@@ -272,7 +281,13 @@
   function viewMine(list) {
     return '<div class="container"><section class="block"><h2>' + t("my_listings") + "</h2>" +
       (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
-      '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section></div>";
+      '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
+      '<section class="block"><h2>' + t("acct_title") + "</h2>" +
+      '<p><a class="btn ghost" href="/api/me/export" download="my-data.json">' + t("acct_export") + "</a></p>" +
+      (state.user && state.user.role !== "admin" ? '<form class="form danger" id="deleteForm" novalidate><p>' + t("acct_warn") + "</p>" +
+        "<label>" + t("acct_pw") + '<input name="password" type="password" dir="ltr" autocomplete="current-password" required></label>' +
+        '<div id="formMsg" role="status"></div><button class="btn danger-btn" type="submit">' + t("acct_delete") + "</button></form>" : "") +
+      "</section></div>";
   }
 
   function viewAdmin(list, status) {
@@ -315,7 +330,7 @@
     });
   }
 
-  var renderSeq = 0;
+  var renderSeq = 0, legalShown = false;
   function render() {
     var seq = ++renderSeq;
     var app = document.getElementById("app");
@@ -324,6 +339,12 @@
     renderUserNav();
 
     var altPath = (lang === "ar" ? "/en" : "") + r.path + location.search;
+    if (r.path === "/privacy" || r.path === "/terms") {
+      if (legalShown) { location.reload(); return; }
+      legalShown = true; // first load: the server already rendered this page; just wire up the header
+      var lb0 = document.getElementById("langBtn"); lb0.setAttribute("href", altPath); lb0.textContent = lang === "ar" ? "EN" : "عربي";
+      return;
+    }
     var lb = document.getElementById("langBtn");
     lb.setAttribute("href", altPath === "/en/" + location.search ? "/en" + location.search : altPath);
     lb.textContent = lang === "ar" ? "EN" : "عربي";
@@ -392,7 +413,7 @@
       e.preventDefault();
       var d = new FormData(au), mode = au.getAttribute("data-mode");
       var body = { email: d.get("email"), password: d.get("password") };
-      if (mode === "register") body.name = d.get("name");
+      if (mode === "register") { body.name = d.get("name"); body.accept = d.get("accept") === "on"; }
       api("POST", mode === "register" ? "/api/register" : "/api/login", body).then(function (j) {
         state.user = j.user; navigate(link("/mine"));
       }).catch(function (err) { showMsg(false, errMsg(err)); });
@@ -409,6 +430,14 @@
         .catch(function (err) { showMsg(false, errMsg(err)); });
     });
 
+    var df = document.getElementById("deleteForm");
+    if (df) df.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!window.confirm(t("acct_confirm"))) return;
+      api("DELETE", "/api/me", { password: new FormData(df).get("password") })
+        .then(function () { state.user = null; navigate(link("/")); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
     var rf = document.getElementById("reviewForm");
     if (rf) rf.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -435,7 +464,7 @@
   document.addEventListener("click", function (e) {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var a = e.target.closest && e.target.closest("a[href]");
-    if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+    if (!a || a.target === "_blank" || a.hasAttribute("download") || a.hasAttribute("data-native")) return;
     var href = a.getAttribute("href");
     if (!href || href.charAt(0) !== "/" || href.charAt(1) === "/" || href.indexOf("/api/") === 0) return;
     if (/\.[a-z0-9]+(\?|$)/i.test(href.split("?")[0])) return; // files (xml, png...) are normal downloads

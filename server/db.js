@@ -63,6 +63,10 @@ function openDb(file) {
     CREATE INDEX IF NOT EXISTS idx_biz_status ON businesses(status);
     CREATE INDEX IF NOT EXISTS idx_biz_owner ON businesses(owner_id);
   `);
+  // migration: record consent to the legal texts
+  const cols = db.prepare("PRAGMA table_info(users)").all().map((c) => c.name);
+  if (!cols.includes("terms_accepted_at")) db.exec("ALTER TABLE users ADD COLUMN terms_accepted_at TEXT");
+  if (!cols.includes("terms_version")) db.exec("ALTER TABLE users ADD COLUMN terms_version TEXT");
   return db;
 }
 

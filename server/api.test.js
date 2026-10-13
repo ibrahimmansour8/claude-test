@@ -30,14 +30,14 @@ test("seeded approved businesses are public", async () => {
 });
 
 test("register validates input and rejects duplicates", async () => {
-  assert.equal((await call("POST", "/api/register", { email: "bad", name: "A", password: "12345678" })).status, 400);
-  assert.equal((await call("POST", "/api/register", { email: "a@b.co", name: "A", password: "short" })).status, 400);
-  const ok = await call("POST", "/api/register", { email: "User@Example.com", name: "Sara", password: "password-1" });
+  assert.equal((await call("POST", "/api/register", { accept: true, email: "bad", name: "A", password: "12345678" })).status, 400);
+  assert.equal((await call("POST", "/api/register", { accept: true, email: "a@b.co", name: "A", password: "short" })).status, 400);
+  const ok = await call("POST", "/api/register", { accept: true, email: "User@Example.com", name: "Sara", password: "password-1" });
   assert.equal(ok.status, 201);
   assert.equal(ok.json.user.email, "user@example.com");
   assert.match(ok.headers.get("set-cookie"), /HttpOnly/);
   cookieUser = ok.cookie;
-  assert.equal((await call("POST", "/api/register", { email: "user@example.com", name: "X", password: "password-1" })).status, 409);
+  assert.equal((await call("POST", "/api/register", { accept: true, email: "user@example.com", name: "X", password: "password-1" })).status, 409);
 });
 
 test("login works and wrong password fails", async () => {
@@ -108,7 +108,7 @@ test("reviews: rules, aggregation, update-in-place and deletion", async () => {
   assert.equal(after.rating, 3.5);
   // others cannot delete; owner of the review and admin can
   const mineId = list.find((r) => r.mine).id;
-  const reg = await call("POST", "/api/register", { email: "other@test.qa", name: "Other", password: "password-2" });
+  const reg = await call("POST", "/api/register", { accept: true, email: "other@test.qa", name: "Other", password: "password-2" });
   assert.equal((await call("DELETE", `/api/reviews/${mineId}`, null, reg.cookie)).status, 403);
   assert.equal((await call("DELETE", `/api/reviews/${mineId}`, null, cookieUser)).status, 200);
   const adminRev = (await call("GET", path)).json.reviews[0].id;

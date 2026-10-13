@@ -6,6 +6,7 @@ const crypto = require("node:crypto");
 const zlib = require("node:zlib");
 const { openDb, seedIfEmpty, loadSeedData } = require("./db");
 const { createSeo } = require("./seo");
+const { LEGAL_VERSION } = require("./legal");
 
 const SITE_DIR = path.join(__dirname, "..", "site");
 const SESSION_TTL_MS = 7 * 24 * 3600 * 1000;
@@ -26,10 +27,10 @@ function createApp(opts = {}) {
   const hashPw = (pw, salt) => crypto.scryptSync(pw, salt, 64).toString("hex");
   const sha = (s) => crypto.createHash("sha256").update(s).digest("hex");
 
-  function createUser(email, name, password, role = "user") {
+  function createUser(email, name, password, role = "user", accepted = false) {
     const salt = crypto.randomBytes(16).toString("hex");
-    const r = db.prepare("INSERT INTO users (email,name,pass_hash,salt,role) VALUES (?,?,?,?,?)")
-      .run(email, name, hashPw(password, salt), salt, role);
+    const r = db.prepare("INSERT INTO users (email,name,pass_hash,salt,role,terms_accepted_at,terms_version) VALUES (?,?,?,?,?,?,?)")
+      .run(email, name, hashPw(password, salt), salt, role, accepted ? new Date().toISOString() : null, accepted ? LEGAL_VERSION : null);
     return Number(r.lastInsertRowid);
   }
 
@@ -153,8 +154,9 @@ function createApp(opts = {}) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return send(res, 400, { error: "invalid_email" });
       if (!name) return send(res, 400, { error: "invalid_name" });
       if (password.length < 8 || password.length > 128) return send(res, 400, { error: "weak_password" });
+      if (b.accept !== true) return send(res, 400, { error: "terms_required" });
       if (db.prepare("SELECT 1 FROM users WHERE email=?").get(email)) return send(res, 409, { error: "email_taken" });
-      const id = createUser(email, name, password);
+      const id = createUser(email, name, password, "user", true);
       startSession(res, id);
       return send(res, 201, { user: { id, email, name, role: "user" } });
     }
@@ -170,6 +172,35 @@ function createApp(opts = {}) {
       if (!ok) return send(res, 401, { error: "bad_credentials" });
       startSession(res, row.id);
       return send(res, 200, { user: { id: row.id, email: row.email, name: row.name, role: row.role } });
+    }
+
+    // ---- data rights: export and delete my account ----
+    if (m === "GET" && p === "/api/me/export") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      const prof = db.prepare("SELECT id,email,name,role,created_at,terms_accepted_at,terms_version FROM users WHERE id=?").get(user.id);
+      const businesses = db.prepare("SELECT id,cat,city,name_ar,name_en,desc_ar,area_ar,phone,status,verified,created_at FROM businesses WHERE owner_id=?").all(user.id);
+      const reviews = db.prepare("SELECT business_id,rating,comment,created_at,updated_at FROM reviews WHERE user_id=?").all(user.id);
+      res.setHeader("Content-Disposition", 'attachment; filename="my-data.json"');
+      return send(res, 200, { exported_at: new Date().toISOString(), profile: prof, businesses, reviews });
+    }
+
+    if (m === "DELETE" && p === "/api/me") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      if (limited(req, "del", 5)) return send(res, 429, { error: "rate_limited" });
+      if (user.role === "admin") return send(res, 403, { error: "admin_cannot_delete" });
+      const b = await readJson(req);
+      const row = db.prepare("SELECT salt, pass_hash FROM users WHERE id=?").get(user.id);
+      const given = hashPw(typeof b.password === "string" ? b.password.slice(0, 128) : "", row.salt);
+      if (!crypto.timingSafeEqual(Buffer.from(given, "hex"), Buffer.from(row.pass_hash, "hex"))) return send(res, 401, { error: "bad_credentials" });
+      // removes the account, its sessions and reviews (cascade) and every listing it submitted
+      db.exec("BEGIN");
+      try {
+        db.prepare("DELETE FROM businesses WHERE owner_id=?").run(user.id);
+        db.prepare("DELETE FROM users WHERE id=?").run(user.id);
+        db.exec("COMMIT");
+      } catch (e) { db.exec("ROLLBACK"); throw e; }
+      res.setHeader("Set-Cookie", "sid=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0");
+      return send(res, 200, { ok: true });
     }
 
     if (m === "POST" && p === "/api/logout") {
@@ -274,6 +305,7 @@ function createApp(opts = {}) {
   const rowOut = (r) => ({ ...bizOut(r), updated: String(r.created_at || "").slice(0, 10) });
   const seo = createSeo({
     cats: seed.CATEGORIES, cities: seed.CITIES,
+    site: { operator: opts.operatorName || process.env.OPERATOR_NAME, contactEmail: opts.contactEmail || process.env.CONTACT_EMAIL },
     queries: {
       approved: ({ cat, city } = {}) => db.prepare(BIZ_SELECT + ` WHERE b.status='approved' AND (? IS NULL OR b.cat=?) AND (? IS NULL OR b.city=?)
         GROUP BY b.id ORDER BY avg_rating DESC, review_count DESC, b.id`).all(cat || null, cat || null, city || null, city || null).map(rowOut),
@@ -282,6 +314,9 @@ function createApp(opts = {}) {
         WHERE r.business_id=? ORDER BY r.updated_at DESC, r.id DESC LIMIT 5`).all(id)
     }
   });
+  if (process.env.NODE_ENV === "production" && !(opts.contactEmail || process.env.CONTACT_EMAIL)) {
+    console.warn("WARNING: CONTACT_EMAIL is not set - the privacy policy and terms show a placeholder instead of a contact address.");
+  }
   const shell = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
   const clientData = `window.CATEGORIES=${JSON.stringify(seed.CATEGORIES)};window.CITIES=${JSON.stringify(seed.CITIES)};`;
   const siteUrl = (opts.siteUrl || process.env.SITE_URL || "").replace(/\/+$/, "");

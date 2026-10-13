@@ -80,3 +80,10 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .crumbs { font-size: .85rem; color: var(--muted); padding: 14px 0 0; }
 .crumbs a { color: var(--maroon); }
 .lang-btn { display: inline-block; text-decoration: none; }
+.legal { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 16px 0 32px; max-width: 820px; }
+.legal h2 { margin: 24px 0 8px; font-size: 1.1rem; }
+.legal p, .legal li { line-height: 1.9; }
+.legal-links a { text-decoration: underline; }
+.check-line { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; }
+.danger { border-color: #c0392b; }
+.btn.danger-btn { background: #c0392b; }

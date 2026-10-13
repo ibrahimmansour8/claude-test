@@ -2,10 +2,12 @@
 // SEO layer: real URLs, server-rendered content, meta tags, JSON-LD, sitemap, robots.
 // Language is part of the URL: Arabic at "/…" (default), English at "/en/…".
 
+const { renderLegal } = require("./legal");
+
 const STR = {
   ar: {
     brand: "دليل قطر", nav_home: "الرئيسية", nav_browse: "تصفح الدليل", nav_add: "أضف نشاطك",
-    footer: "دليل الأعمال والخدمات في قطر. © دليل قطر", lang_switch: "EN", in: "في", locale: "ar_QA", other_locale: "en_US",
+    footer: "دليل الأعمال والخدمات في قطر. © دليل قطر", privacy: "سياسة الخصوصية", terms: "شروط الاستخدام", lang_switch: "EN", in: "في", locale: "ar_QA", other_locale: "en_US",
     home_title: "دليل قطر | دليل الأعمال والخدمات في قطر",
     home_desc: "ابحث عن مطاعم وعقارات وعيادات وخدمات في قطر، واتصل بالأنشطة مباشرة واطلع على تقييمات حقيقية من المستخدمين.",
     hero_title: "كل ما تحتاجه في قطر، في مكان واحد", categories: "التصنيفات", featured: "أنشطة موثّقة",
@@ -16,7 +18,7 @@ const STR = {
   },
   en: {
     brand: "Qatar Guide", nav_home: "Home", nav_browse: "Browse", nav_add: "List your business",
-    footer: "Business & services directory in Qatar. © Qatar Guide", lang_switch: "عربي", in: "in", locale: "en_US", other_locale: "ar_QA",
+    footer: "Business & services directory in Qatar. © Qatar Guide", privacy: "Privacy Policy", terms: "Terms of Use", lang_switch: "عربي", in: "in", locale: "en_US", other_locale: "ar_QA",
     home_title: "Qatar Guide | Business & Services Directory in Qatar",
     home_desc: "Find restaurants, real estate, clinics and services in Qatar, contact businesses directly and read genuine user reviews.",
     hero_title: "Everything you need in Qatar, in one place", categories: "Categories", featured: "Verified businesses",
@@ -41,7 +43,7 @@ function esc(s) {
 const ld = (obj) => `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, "\\u003c")}</script>`;
 const clip = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length <= n ? s : s.slice(0, n - 1).trimEnd() + "…"; };
 
-function createSeo({ cats, cities, queries }) {
+function createSeo({ cats, cities, queries, site = {} }) {
   const catById = new Map(cats.map((c) => [c.id, c]));
   const cityById = new Map(cities.map((c) => [c.id, c]));
   const pre = (lang) => (lang === "en" ? "/en" : "");
@@ -59,6 +61,7 @@ function createSeo({ cats, cities, queries }) {
     if (p === "/") return { lang, kind: "home", core: "/" };
     if (p === "/browse") return { lang, kind: "browse", core: "/browse" };
     if (PRIVATE.has(p)) return { lang, kind: "private", core: p };
+    if (p === "/privacy" || p === "/terms") return { lang, kind: "legal", page: p.slice(1), core: p };
     if ((m = p.match(/^\/category\/([a-z]+)$/)) && catById.has(m[1])) return { lang, kind: "category", cat: m[1], core: p };
     if ((m = p.match(/^\/category\/([a-z]+)\/([a-z]+)$/)) && catById.has(m[1]) && cityById.has(m[2])) return { lang, kind: "category", cat: m[1], city: m[2], core: p };
     if ((m = p.match(/^\/b\/(\d+)$/))) return { lang, kind: "business", id: Number(m[1]), core: p };
@@ -159,6 +162,12 @@ function createSeo({ cats, cities, queries }) {
         out.ldBlocks.push(biz, crumbLd(items, base));
         break;
       }
+      case "legal": {
+        const doc = renderLegal(route.page, lang, { operator: site.operator, contactEmail: site.contactEmail, homeHref });
+        out.title = `${doc.title} | ${s.brand}`; out.description = doc.description; out.body = doc.body;
+        out.ldBlocks.push(crumbLd([[s.brand, homeHref], [doc.title, P + route.core]], base));
+        break;
+      }
       case "private": {
         out.title = `${s.brand}`; out.description = s.home_desc; out.robots = "noindex,nofollow";
         out.noindexHeader = true;
@@ -201,7 +210,7 @@ function createSeo({ cats, cities, queries }) {
     const map = {
       LANG: lang, DIR: lang === "ar" ? "rtl" : "ltr", BASE: pre(lang), HOME: pre(lang) || "/",
       ALTHREF: altHref, ALTLANG: other, LANGSWITCH: s.lang_switch,
-      brand: s.brand, nav_home: s.nav_home, nav_browse: s.nav_browse, nav_add: s.nav_add, footer: s.footer
+      brand: s.brand, nav_home: s.nav_home, nav_browse: s.nav_browse, nav_add: s.nav_add, footer: s.footer, privacy: s.privacy, terms: s.terms
     };
     return shell
       .replace("<!--HEAD-->", () => head.join("\n  "))
@@ -212,7 +221,7 @@ function createSeo({ cats, cities, queries }) {
   // ---------- sitemap / robots ----------
   function sitemap(base) {
     const urls = []; // {core, lastmod}
-    urls.push({ core: "/" }, { core: "/browse" });
+    urls.push({ core: "/" }, { core: "/browse" }, { core: "/privacy" }, { core: "/terms" });
     const all = queries.approved({});
     const seenCat = new Set(), seenCombo = new Set();
     for (const b of all) { seenCat.add(b.cat); seenCombo.add(b.cat + "/" + b.city); }
