@@ -1,35 +1,35 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="{{LANG}}" dir="{{DIR}}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>دليل قطر | Qatar Business Guide</title>
-  <meta name="description" content="دليل الأعمال والخدمات في قطر - ابحث عن مطاعم وعقارات وعيادات وخدمات بسهولة. Find businesses and services in Qatar.">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#8a1538">
+  <!--HEAD-->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#/" data-nav>
+    <a class="brand" href="{{HOME}}" data-nav data-path="/">
       <span class="brand-mark">◆</span>
-      <span data-i18n="brand">دليل قطر</span>
+      <span data-i18n="brand">{{brand}}</span>
     </a>
     <nav class="nav">
-      <a href="#/" data-nav data-i18n="nav_home">الرئيسية</a>
-      <a href="#/browse" data-nav data-i18n="nav_browse">تصفح الدليل</a>
-      <a href="#/add" data-nav data-i18n="nav_add">أضف نشاطك</a>
+      <a href="{{HOME}}" data-nav data-path="/" data-i18n="nav_home">{{nav_home}}</a>
+      <a href="{{BASE}}/browse" data-nav data-path="/browse" data-i18n="nav_browse">{{nav_browse}}</a>
+      <a href="{{BASE}}/add" data-nav data-path="/add" data-i18n="nav_add">{{nav_add}}</a>
       <span id="userNav" class="user-nav"></span>
-      <button id="langBtn" class="lang-btn" type="button" aria-label="Language">EN</button>
+      <a id="langBtn" class="lang-btn" href="{{ALTHREF}}" hreflang="{{ALTLANG}}">{{LANGSWITCH}}</a>
     </nav>
   </header>
 
-  <main id="app" tabindex="-1"></main>
+  <main id="app" tabindex="-1"><!--BODY--></main>
 
   <footer class="footer">
-    <p data-i18n="footer">بيانات الدليل الحالية تجريبية. © دليل قطر</p>
+    <p data-i18n="footer">{{footer}}</p>
   </footer>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="/data.js" defer></script>
+  <script src="/app.js" defer></script>
 </body>
 </html>

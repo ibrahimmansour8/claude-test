@@ -3,7 +3,9 @@ const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const crypto = require("node:crypto");
+const zlib = require("node:zlib");
 const { openDb, seedIfEmpty, loadSeedData } = require("./db");
+const { createSeo } = require("./seo");
 
 const SITE_DIR = path.join(__dirname, "..", "site");
 const SESSION_TTL_MS = 7 * 24 * 3600 * 1000;
@@ -268,28 +270,77 @@ function createApp(opts = {}) {
     return send(res, 404, { error: "not_found" });
   }
 
-  // ---------- static files ----------
-  function serveStatic(req, res, url) {
-    let rel = decodeURIComponent(url.pathname);
-    if (rel === "/") rel = "/index.html";
-    const file = path.normalize(path.join(SITE_DIR, rel));
-    if (!file.startsWith(SITE_DIR + path.sep)) { res.writeHead(403); return res.end("Forbidden"); }
-    fs.readFile(file, (err, buf) => {
-      if (err) { res.writeHead(404, { "Content-Type": "text/plain" }); return res.end("Not found"); }
-      res.writeHead(200, {
-        "Content-Type": MIME[path.extname(file)] || "application/octet-stream",
-        "X-Content-Type-Options": "nosniff", ...hsts,
-        "Content-Security-Policy": "default-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'"
+  // ---------- SEO pages ----------
+  const rowOut = (r) => ({ ...bizOut(r), updated: String(r.created_at || "").slice(0, 10) });
+  const seo = createSeo({
+    cats: seed.CATEGORIES, cities: seed.CITIES,
+    queries: {
+      approved: ({ cat, city } = {}) => db.prepare(BIZ_SELECT + ` WHERE b.status='approved' AND (? IS NULL OR b.cat=?) AND (? IS NULL OR b.city=?)
+        GROUP BY b.id ORDER BY avg_rating DESC, review_count DESC, b.id`).all(cat || null, cat || null, city || null, city || null).map(rowOut),
+      one: (id) => { const r = db.prepare(BIZ_SELECT + " WHERE b.id=? AND b.status='approved' GROUP BY b.id").get(id); return r && r.id ? rowOut(r) : null; },
+      reviews: (id) => db.prepare(`SELECT r.rating,r.comment,u.name FROM reviews r JOIN users u ON u.id=r.user_id
+        WHERE r.business_id=? ORDER BY r.updated_at DESC, r.id DESC LIMIT 5`).all(id)
+    }
+  });
+  const shell = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
+  const clientData = `window.CATEGORIES=${JSON.stringify(seed.CATEGORIES)};window.CITIES=${JSON.stringify(seed.CITIES)};`;
+  const siteUrl = (opts.siteUrl || process.env.SITE_URL || "").replace(/\/+$/, "");
+
+  // Set SITE_URL in production: it makes canonical/sitemap URLs independent of the Host header.
+  function baseUrl(req) {
+    if (siteUrl) return siteUrl;
+    const proto = (trustProxy && req.headers["x-forwarded-proto"]) || (secureCookie ? "https" : "http");
+    const host = String(req.headers.host || "localhost").replace(/[^a-zA-Z0-9.:\-\[\]]/g, "");
+    return `${String(proto).split(",")[0]}://${host}`;
+  }
+
+  function reply(req, res, status, type, body, extra = {}) {
+    const buf = Buffer.from(body);
+    const headers = { "Content-Type": type, "X-Content-Type-Options": "nosniff", "Vary": "Accept-Encoding", ...hsts, ...extra };
+    if (/^(text|application\/(xml|json|javascript))/.test(type)) headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; frame-ancestors 'none'";
+    if (buf.length > 1024 && /gzip/.test(req.headers["accept-encoding"] || "") && /^(text|application)/.test(type)) {
+      const z = zlib.gzipSync(buf); headers["Content-Encoding"] = "gzip"; headers["Content-Length"] = z.length;
+      res.writeHead(status, headers); return res.end(z);
+    }
+    headers["Content-Length"] = buf.length;
+    res.writeHead(status, headers); res.end(buf);
+  }
+
+  const ASSET_CACHE = "public, max-age=300";
+
+  function servePage(req, res, url) {
+    let pathname;
+    try { pathname = decodeURIComponent(url.pathname); } catch { res.writeHead(400); return res.end(); }
+    const base = baseUrl(req);
+
+    if (pathname === "/sitemap.xml") return reply(req, res, 200, "application/xml; charset=utf-8", seo.sitemap(base), { "Cache-Control": "public, max-age=3600" });
+    if (pathname === "/robots.txt") return reply(req, res, 200, "text/plain; charset=utf-8", seo.robots(base), { "Cache-Control": "public, max-age=3600" });
+    if (pathname === "/data.js") return reply(req, res, 200, MIME[".js"], clientData, { "Cache-Control": ASSET_CACHE });
+    if (pathname === "/index.html") { res.writeHead(301, { Location: "/" }); return res.end(); }
+
+    // real files in /site (css, js, svg, png)
+    if (path.extname(pathname)) {
+      const file = path.normalize(path.join(SITE_DIR, pathname));
+      if (!file.startsWith(SITE_DIR + path.sep)) { res.writeHead(403); return res.end("Forbidden"); }
+      return fs.readFile(file, (err, buf) => {
+        if (err) return reply(req, res, 404, "text/plain; charset=utf-8", "Not found", { "X-Robots-Tag": "noindex" });
+        reply(req, res, 200, MIME[path.extname(file)] || "application/octet-stream", buf, { "Cache-Control": ASSET_CACHE });
       });
-      res.end(buf);
-    });
+    }
+
+    const route = seo.resolve(pathname);
+    if (route.redirect) { res.writeHead(301, { Location: route.redirect + url.search }); return res.end(); }
+    const page = seo.build(route, base);
+    const extra = { "Cache-Control": "no-cache" };
+    if (page.noindexHeader || page.status === 404) extra["X-Robots-Tag"] = "noindex";
+    reply(req, res, page.status, "text/html; charset=utf-8", seo.renderShell(shell, page, base), extra);
   }
 
   const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, "http://localhost");
       if (url.pathname.startsWith("/api/")) await api(req, res, url);
-      else if (req.method === "GET" || req.method === "HEAD") serveStatic(req, res, url);
+      else if (req.method === "GET" || req.method === "HEAD") servePage(req, res, url);
       else { res.writeHead(405); res.end(); }
     } catch (e) {
       if (e && e.status) return send(res, e.status, { error: e.error });

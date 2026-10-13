@@ -1,6 +1,6 @@
 {
   "name": "qatar-guide",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "Qatar business directory - static frontend + zero-dependency Node API (SQLite)",
   "engines": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning server/server.js",
-    "test": "node --disable-warning=ExperimentalWarning --test server/api.test.js",
+    "test": "node --disable-warning=ExperimentalWarning --test server/api.test.js server/seo.test.js",
     "backup": "node --disable-warning=ExperimentalWarning scripts/backup.js"
   }
 }

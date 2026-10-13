@@ -1,13 +1,14 @@
 (function () {
   "use strict";
 
-  var STORE_KEY = "qd_submissions_v1";
-  var LANG_KEY = "qd_lang";
 
   var T = {
     ar: {
+      home_title: "دليل قطر | دليل الأعمال والخدمات في قطر",
+      home_desc: "ابحث عن مطاعم وعقارات وعيادات وخدمات في قطر، واتصل بالأنشطة مباشرة واطلع على تقييمات حقيقية من المستخدمين.",
+      browse_h1: "كل الأنشطة والخدمات في قطر", browse_desc: "قائمة كاملة بالأنشطة التجارية والخدمات في قطر مع أرقام التواصل والتقييمات.",
       brand: "دليل قطر", nav_home: "الرئيسية", nav_browse: "تصفح الدليل", nav_add: "أضف نشاطك",
-      footer: "بيانات الدليل الحالية تجريبية. © دليل قطر",
+      footer: "دليل الأعمال والخدمات في قطر. © دليل قطر",
       hero_title: "كل ما تحتاجه في قطر، في مكان واحد",
       hero_sub: "ابحث عن المطاعم والعقارات والعيادات والخدمات واتصل بهم مباشرة.",
       search_ph: "ابحث عن نشاط أو خدمة…", all_cities: "كل المدن", all_cats: "كل التصنيفات", search: "بحث",
@@ -36,8 +37,11 @@
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      home_title: "Qatar Guide | Business & Services Directory in Qatar",
+      home_desc: "Find restaurants, real estate, clinics and services in Qatar, contact businesses directly and read genuine user reviews.",
+      browse_h1: "All businesses & services in Qatar", browse_desc: "A complete list of businesses and services in Qatar with contact details and reviews.",
       brand: "Qatar Guide", nav_home: "Home", nav_browse: "Browse", nav_add: "List your business",
-      footer: "Listings shown are demo data. © Qatar Guide",
+      footer: "Business & services directory in Qatar. © Qatar Guide",
       hero_title: "Everything you need in Qatar, in one place",
       hero_sub: "Find restaurants, real estate, clinics and services, and contact them directly.",
       search_ph: "Search a business or service…", all_cities: "All cities", all_cats: "All categories", search: "Search",
@@ -68,7 +72,9 @@
   };
 
   var lang = "ar";
-  try { lang = localStorage.getItem(LANG_KEY) === "en" ? "en" : "ar"; } catch (e) {}
+  function langFromPath() { return location.pathname === "/en" || location.pathname.indexOf("/en/") === 0 ? "en" : "ar"; }
+  function base() { return lang === "en" ? "/en" : ""; }
+  function link(path) { return path === "/" ? (base() || "/") : base() + path; }
 
   function t(k) { return T[lang][k] || k; }
   function L(o) { return o[lang] || o.ar; }
@@ -97,13 +103,28 @@
 
   function setLang(l) {
     lang = l;
-    try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
     document.documentElement.lang = l;
     document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
-    document.title = t("brand") + (l === "ar" ? " | Qatar Business Guide" : " | دليل قطر");
-    document.getElementById("langBtn").textContent = l === "ar" ? "EN" : "عربي";
     document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-path]").forEach(function (el) { el.setAttribute("href", link(el.getAttribute("data-path"))); });
   }
+
+  // update <title>, description, robots and canonical on client-side navigation
+  function setHead(title, desc, robots) {
+    document.title = title;
+    function meta(name, val) {
+      var el = document.querySelector('meta[name="' + name + '"]');
+      if (!el) { el = document.createElement("meta"); el.setAttribute("name", name); document.head.appendChild(el); }
+      el.setAttribute("content", val);
+    }
+    meta("description", desc); meta("robots", robots || "index,follow");
+    var c = document.querySelector('link[rel="canonical"]');
+    if (!c) { c = document.createElement("link"); c.setAttribute("rel", "canonical"); document.head.appendChild(c); }
+    c.setAttribute("href", location.origin + location.pathname);
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(function (n) { n.remove(); });
+  }
+
+  function navigate(url) { history.pushState(null, "", url); render(); }
 
   function opts(list, allLabel, selected) {
     return '<option value="">' + esc(allLabel) + "</option>" + list.map(function (x) {
@@ -126,7 +147,7 @@
       '<div class="actions">' +
       '<a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
       '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a>" +
-      '<a class="btn ghost" href="#/b/' + esc(b.id) + '">' + t("details") + "</a></div></article>";
+      '<a class="btn ghost" href="' + link("/b/" + b.id) + '">' + t("details") + "</a></div></article>";
   }
 
   function viewHome() {
@@ -138,12 +159,12 @@
       '<button class="btn" type="submit">🔍 ' + t("search") + "</button></form></section>" +
       '<div class="container"><section class="block"><h2>' + t("categories") + '</h2><div class="grid">' +
       window.CATEGORIES.map(function (c) {
-        return '<a class="cat" href="#/browse?cat=' + c.id + '"><span class="ico">' + c.icon + "</span>" + esc(L(c)) + "</a>";
+        return '<a class="cat" href="' + link("/category/" + c.id) + '"><span class="ico">' + c.icon + "</span>" + esc(L(c)) + "</a>";
       }).join("") + '</div></section><section class="block"><h2>' + t("featured") + '</h2><div class="grid">' +
       verified.map(card).join("") + "</div></section></div>";
   }
 
-  function viewBrowse(params) {
+  function viewBrowse(params, heading) {
     var q = (params.q || "").trim().toLowerCase();
     var list = allBusinesses().filter(function (b) {
       if (params.cat && b.cat !== params.cat) return false;
@@ -168,17 +189,17 @@
       '<label class="check"><input type="checkbox" name="verified" value="1"' +
       (params.verified === "1" ? " checked" : "") + "> " + t("verified_only") + "</label>" +
       '<button class="btn" type="submit">' + t("search") + "</button></form>" +
-      "<div><p class=\"meta\">" + list.length + " " + t("results") + "</p>" +
+      "<div>" + (heading || "") + "<p class=\"meta\">" + list.length + " " + t("results") + "</p>" +
       (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_results") + "</p>") +
       "</div></div></div>";
   }
 
   function viewDetail(id, reviews) {
     var b = allBusinesses().filter(function (x) { return String(x.id) === String(id); })[0];
-    if (!b) return '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn ghost" href="#/browse">' + t("back") + "</a></div>";
+    if (!b) return '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn ghost" href="' + link("/browse") + '">' + t("back") + "</a></div>";
     var cat = window.CATEGORIES.filter(function (c) { return c.id === b.cat; })[0];
     var city = window.CITIES.filter(function (c) { return c.id === b.city; })[0];
-    return '<div class="container"><div class="detail"><div><a class="btn ghost" href="#/browse">← ' + t("back") + "</a></div>" +
+    return '<div class="container">' + crumbs([[t("brand"), link("/")], [cat ? L(cat) : "", cat ? link("/category/" + b.cat) : link("/browse")], [L(b.name), link("/b/" + b.id)]]) + '<div class="detail"><div><a class="btn ghost" href="' + link("/browse") + '">← ' + t("back") + "</a></div>" +
       "<h1>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") + "</h1>" +
       '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
       "<p>" + esc(L(b.desc)) + "</p><dl>" +
@@ -192,7 +213,7 @@
   }
 
   function viewAdd() {
-    if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="#/login">' + t("login") + "</a></div></div>";
+    if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="' + link("/login") + '">' + t("login") + "</a></div></div>";
     return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
       "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
       "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
@@ -204,12 +225,23 @@
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("submit") + "</button></form></div>";
   }
 
+  function crumbs(items) {
+    return '<nav class="crumbs" aria-label="breadcrumb">' + items.map(function (i, n) {
+      return n < items.length - 1 ? '<a href="' + esc(i[1]) + '">' + esc(i[0]) + "</a> › " : "<span>" + esc(i[0]) + "</span>";
+    }).join("") + "</nav>";
+  }
+  function find(list, id) { return list.filter(function (x) { return x.id === id; })[0]; }
+  function catH1(cat, city) {
+    var c = L(cat), k = city ? L(city) : "";
+    return city ? (lang === "ar" ? c + " في " + k : c + " in " + k + ", Qatar") : (lang === "ar" ? c + " في قطر" : c + " in Qatar");
+  }
+
   function stars(n) { return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); }
 
   function viewReviews(b, reviews) {
     var mine = reviews.filter(function (r) { return r.mine; })[0];
     var form;
-    if (!state.user) form = '<p class="meta">' + t("rev_login") + ' <a class="link" href="#/login">' + t("login") + "</a></p>";
+    if (!state.user) form = '<p class="meta">' + t("rev_login") + ' <a class="link" href="' + link("/login") + '">' + t("login") + "</a></p>";
     else form = '<form class="form" id="reviewForm" data-biz="' + esc(b.id) + '" novalidate><h3>' + t("rev_write") + "</h3>" +
       (mine ? '<p class="meta">' + t("rev_update_hint") + "</p>" : "") +
       "<label>" + t("rev_rating") + '<select name="rating">' + [5, 4, 3, 2, 1].map(function (n) {
@@ -234,18 +266,18 @@
       "<label>" + t("email") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
       "<label>" + t("password") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="' + (reg ? "new-password" : "current-password") + '" required></label>' +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t(reg ? "register" : "login") + "</button>" +
-      '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="#/' + (reg ? "login" : "register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
+      '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="' + link(reg ? "/login" : "/register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
   }
 
   function viewMine(list) {
     return '<div class="container"><section class="block"><h2>' + t("my_listings") + "</h2>" +
       (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
-      '<p><a class="btn" href="#/add">+ ' + t("nav_add") + "</a></p></section></div>";
+      '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section></div>";
   }
 
   function viewAdmin(list, status) {
     var tabs = ["pending", "approved", "rejected"].map(function (st) {
-      return '<a class="btn' + (st === status ? "" : " ghost") + '" href="#/admin?status=' + st + '">' + t("status_" + st) + "</a>";
+      return '<a class="btn' + (st === status ? "" : " ghost") + '" href="' + link("/admin") + '?status=' + st + '">' + t("status_" + st) + "</a>";
     }).join(" ");
     var rows = list.map(function (b) {
       return '<div class="card"><h3>' + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + '</p><div class="actions">' +
@@ -258,12 +290,12 @@
       (list.length ? '<div class="grid">' + rows + "</div>" : '<p class="empty">' + t("no_pending") + "</p>") + "</section></div>";
   }
 
-  function parseHash() {
-    var h = location.hash.replace(/^#/, "") || "/";
-    var parts = h.split("?");
+  function parseLocation() {
+    var path = location.pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+    if (path.length > 1) path = path.replace(/\/+$/, "");
     var params = {};
-    new URLSearchParams(parts[1] || "").forEach(function (v, k) { params[k] = v; });
-    return { path: parts[0], params: params };
+    new URLSearchParams(location.search).forEach(function (v, k) { params[k] = v; });
+    return { path: path, params: params };
   }
 
   function toQuery(form) {
@@ -274,12 +306,12 @@
 
   function renderUserNav() {
     var el = document.getElementById("userNav");
-    if (!state.user) { el.innerHTML = '<a href="#/login">' + t("login") + "</a>"; return; }
-    el.innerHTML = '<a href="#/mine">' + esc(state.user.name) + "</a>" +
-      (state.user.role === "admin" ? ' <a href="#/admin">' + t("admin") + "</a>" : "") +
+    if (!state.user) { el.innerHTML = '<a href="' + link("/login") + '">' + t("login") + "</a>"; return; }
+    el.innerHTML = '<a href="' + link("/mine") + '">' + esc(state.user.name) + "</a>" +
+      (state.user.role === "admin" ? ' <a href="' + link("/admin") + '">' + t("admin") + "</a>" : "") +
       ' <button id="logoutBtn" class="lang-btn" type="button">' + t("logout") + "</button>";
     document.getElementById("logoutBtn").addEventListener("click", function () {
-      api("POST", "/api/logout", {}).then(function () { state.user = null; location.hash = "#/"; render(); });
+      api("POST", "/api/logout", {}).then(function () { state.user = null; navigate(link("/")); });
     });
   }
 
@@ -287,9 +319,16 @@
   function render() {
     var seq = ++renderSeq;
     var app = document.getElementById("app");
-    var r = parseHash();
+    setLang(langFromPath());
+    var r = parseLocation();
     renderUserNav();
 
+    var altPath = (lang === "ar" ? "/en" : "") + r.path + location.search;
+    var lb = document.getElementById("langBtn");
+    lb.setAttribute("href", altPath === "/en/" + location.search ? "/en" + location.search : altPath);
+    lb.textContent = lang === "ar" ? "EN" : "عربي";
+
+    var catM = r.path.match(/^\/category\/([a-z]+)(?:\/([a-z]+))?$/);
     var jobs = [api("GET", "/api/businesses").then(function (j) { state.businesses = j.businesses; })];
     var extra = null;
     if (r.path.indexOf("/b/") === 0) extra = api("GET", "/api/businesses/" + encodeURIComponent(r.path.slice(3)) + "/reviews").catch(function () { return { reviews: [] }; });
@@ -299,18 +338,35 @@
     Promise.all([Promise.all(jobs), extra]).then(function (res) {
       if (seq !== renderSeq) return;
       var data = res[1];
-      var html;
-      if (r.path === "/browse") html = viewBrowse(r.params);
-      else if (r.path.indexOf("/b/") === 0) html = viewDetail(decodeURIComponent(r.path.slice(3)), data && data.reviews);
-      else if (r.path === "/add") html = viewAdd();
-      else if (r.path === "/login") html = viewAuth("login");
-      else if (r.path === "/register") html = viewAuth("register");
-      else if (r.path === "/mine") html = state.user ? viewMine(data.businesses) : viewAuth("login");
-      else if (r.path === "/admin") html = state.user && state.user.role === "admin" ? viewAdmin(data.businesses, r.params.status || "pending") : viewAuth("login");
-      else html = viewHome();
+      var html, head = [t("home_title"), t("home_desc"), "index,follow"];
+      var cat = catM && find(window.CATEGORIES, catM[1]), city = catM && catM[2] && find(window.CITIES, catM[2]);
+      if (r.path === "/browse") {
+        html = viewBrowse(r.params);
+        head = [t("browse_h1") + " | " + t("brand"), t("browse_desc"), Object.keys(r.params).length ? "noindex,follow" : "index,follow"];
+      } else if (catM && cat) {
+        var h1 = catH1(cat, city);
+        var items = [[t("brand"), link("/")], [L(cat), link("/category/" + cat.id)]];
+        if (city) items.push([L(city), link("/category/" + cat.id + "/" + city.id)]);
+        var p2 = Object.assign({}, r.params, { cat: cat.id, city: city ? city.id : r.params.city });
+        html = viewBrowse(p2, crumbs(items) + "<h1>" + esc(h1) + "</h1>");
+        head = [h1 + " | " + t("brand"), h1, "index,follow"];
+      } else if (r.path.indexOf("/b/") === 0) {
+        html = viewDetail(decodeURIComponent(r.path.slice(3)), data && data.reviews);
+        var bz = find(allBusinesses(), Number(r.path.slice(3)));
+        if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
+          head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
+        else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (r.path === "/add") { html = viewAdd(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/login") { html = viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/register") { html = viewAuth("register"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/mine") { html = state.user ? viewMine(data.businesses) : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/admin") { html = state.user && state.user.role === "admin" ? viewAdmin(data.businesses, r.params.status || "pending") : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/") html = viewHome();
+      else { html = '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn" href="' + link("/") + '">' + t("nav_home") + "</a></div>"; head = [t("not_found"), t("not_found"), "noindex,follow"]; }
       app.innerHTML = html;
+      setHead(head[0], head[1], head[2]);
       document.querySelectorAll("[data-nav]").forEach(function (a) {
-        a.classList.toggle("active", a.getAttribute("href") === "#" + r.path);
+        a.classList.toggle("active", a.getAttribute("href") === link(r.path));
       });
       bind();
       window.scrollTo(0, 0);
@@ -327,9 +383,9 @@
 
   function bind() {
     var hs = document.getElementById("homeSearch");
-    if (hs) hs.addEventListener("submit", function (e) { e.preventDefault(); location.hash = "#/browse?" + toQuery(hs); });
+    if (hs) hs.addEventListener("submit", function (e) { e.preventDefault(); navigate(link("/browse") + "?" + toQuery(hs)); });
     var f = document.getElementById("filters");
-    if (f) f.addEventListener("submit", function (e) { e.preventDefault(); location.hash = "#/browse?" + toQuery(f); });
+    if (f) f.addEventListener("submit", function (e) { e.preventDefault(); navigate(link("/browse") + "?" + toQuery(f)); });
 
     var au = document.getElementById("authForm");
     if (au) au.addEventListener("submit", function (e) {
@@ -338,7 +394,7 @@
       var body = { email: d.get("email"), password: d.get("password") };
       if (mode === "register") body.name = d.get("name");
       api("POST", mode === "register" ? "/api/register" : "/api/login", body).then(function (j) {
-        state.user = j.user; location.hash = "#/mine"; render();
+        state.user = j.user; navigate(link("/mine"));
       }).catch(function (err) { showMsg(false, errMsg(err)); });
     });
 
@@ -375,10 +431,22 @@
     });
   }
 
-  document.getElementById("langBtn").addEventListener("click", function () {
-    setLang(lang === "ar" ? "en" : "ar"); render();
+  // real links, SPA behaviour: intercept internal clicks
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest("a[href]");
+    if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+    var href = a.getAttribute("href");
+    if (!href || href.charAt(0) !== "/" || href.charAt(1) === "/" || href.indexOf("/api/") === 0) return;
+    if (/\.[a-z0-9]+(\?|$)/i.test(href.split("?")[0])) return; // files (xml, png...) are normal downloads
+    e.preventDefault();
+    navigate(href);
   });
-  window.addEventListener("hashchange", render);
-  setLang(lang);
+  window.addEventListener("popstate", render);
+
+  // old hash links (#/b/5) -> real URLs
+  if (location.hash.indexOf("#/") === 0) history.replaceState(null, "", location.hash.slice(1));
+
+  setLang(langFromPath());
   api("GET", "/api/me").then(function (j) { state.user = j.user; }).catch(function () {}).then(render);
 })();
