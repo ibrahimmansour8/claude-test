@@ -60,7 +60,8 @@
       "<ol>" +
       "<li>" + T("تصفّح التصنيفات وافتح نشاطًا وجرّب البحث وتبديل اللغة.", "Browse categories, open a business, try search and the language switch.") + "</li>" +
       "<li>" + T("أنشئ حسابًا (يلزم قبول الشروط). ستصلك رسالة تفعيل في «البريد التجريبي» أسفل الشاشة: افتح رابطها لتفعيل بريدك.", "Create an account (terms acceptance required). A confirmation message lands in the demo mailbox below: open its link to confirm your e-mail.") + "</li>" +
-      "<li>" + T("أضف نشاطًا: يبقى «قيد المراجعة». (قبل التفعيل لا يمكنك الإضافة ولا التقييم.)", "Add a business: it stays pending. (Before confirming you cannot add or rate.)") + "</li>" +
+      "<li>" + T("أضف نشاطًا وصورًا له: يبقى «قيد المراجعة». (قبل التفعيل لا يمكنك الإضافة ولا التقييم.)", "Add a business and photos for it: it stays pending. (Before confirming you cannot add or rate.)") + "</li>" +
+      "<li>" + T("بعد قبول الأدمن جرّب تعديل النشاط من «حسابي ← تعديل»: يبقى المنشور كما هو حتى يوافق الأدمن على تعديلك.", "Once approved, try editing it from My account → Edit: the published version stays until the admin approves your change.") + "</li>" +
       "<li>" + T("سجّل الخروج وادخل كأدمن لقبوله، ثم قيّم نشاطًا من حساب آخر.", "Log out and sign in as admin to approve it, then rate a business from another account.") + "</li>" +
       "<li>" + T("جرّب «نسيت كلمة المرور؟» ثم افتح «البريد التجريبي» أسفل الشاشة لتجد الرسالة.", "Try “Forgot your password?”, then open the demo mailbox below to find the message.") + "</li></ol>";
     var cred = el("div", "demo-cred");

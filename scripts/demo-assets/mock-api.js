@@ -14,7 +14,7 @@
   }
 
   function seed() {
-    var S = { users: [], businesses: [], reviews: [], resets: [], mails: [], me: null, seq: { u: 1, b: 1, r: 1 } };
+    var S = { users: [], businesses: [], reviews: [], resets: [], mails: [], me: null, seq: { u: 1, b: 1, r: 1, i: 1 }, images: [], verifs: [] };
     window.BUSINESSES.forEach(function (b) {
       S.businesses.push({ id: S.seq.b++, owner_id: null, cat: b.cat, city: b.city, name: b.name, desc: b.desc, area: b.area, hours: b.hours,
         phone: b.phone, whatsapp: b.whatsapp, verified: !!b.verified, status: "approved", created_at: new Date().toISOString() });
@@ -27,7 +27,7 @@
     S = memory || seed();
   }
   function normalise() {
-    S.verifs = S.verifs || [];
+    S.verifs = S.verifs || []; S.images = S.images || []; S.seq.i = S.seq.i || 1;
     S.users.forEach(function (u) { if (!("verified" in u)) u.verified = u.accepted || new Date().toISOString(); }); // saved before verification existed
   }
   function save() { memory = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
@@ -50,10 +50,38 @@
     var avg = rs.length ? Math.round(rs.reduce(function (a, r) { return a + r.rating; }, 0) / rs.length * 10) / 10 : 0;
     return { rating: avg, reviews: rs.length };
   }
-  function out(b) {
-    var st = stats(b.id);
+  function imagesOf(b, all) {
+    return S.images.filter(function (i) { return i.business_id === b.id && (all || i.status === "approved"); }).map(function (i) { return { id: i.id, w: i.w, h: i.h, status: i.status }; });
+  }
+  function out(b, all) {
+    var st = stats(b.id), imgs = imagesOf(b, all), ok = imgs.filter(function (i) { return i.status === "approved"; });
     return { id: b.id, cat: b.cat, city: b.city, name: b.name, desc: b.desc, area: b.area, hours: b.hours || { ar: "", en: "" },
-      phone: b.phone, whatsapp: b.whatsapp, rating: st.rating, reviews: st.reviews, verified: b.verified, status: b.status, mine: false };
+      phone: b.phone, whatsapp: b.whatsapp, rating: st.rating, reviews: st.reviews, verified: b.verified, status: b.status, mine: false,
+      images: imgs, cover: ok.length ? ok[0].id : null };
+  }
+  function listing(body) {
+    var f = { cat: body.cat, city: body.city, name_ar: str(body.name_ar, 80), desc: str(body.desc, 300), area: str(body.area, 80), hours: str(body.hours, 80), phone: str(body.phone, 20).replace(/\s/g, "") };
+    f.name_en = str(body.name_en, 80) || f.name_ar;
+    if (!f.name_ar) return { error: "invalid_name" };
+    if (CATS.indexOf(f.cat) < 0) return { error: "invalid_category" };
+    if (CITIES.indexOf(f.city) < 0) return { error: "invalid_city" };
+    if (!/^[34567]\d{7}$/.test(f.phone)) return { error: "invalid_phone" };
+    return { f: f };
+  }
+  function live(b) { return { cat: b.cat, city: b.city, name_ar: b.name.ar, name_en: b.name.en, desc: b.desc.ar, area: b.area.ar, hours: (b.hours || {}).ar || "", phone: b.phone.replace("+974", "") }; }
+  function same(a, b) { return ["cat", "city", "name_ar", "name_en", "desc", "area", "hours", "phone"].every(function (k) { return a[k] === b[k]; }); }
+  function apply(b, f) {
+    b.cat = f.cat; b.city = f.city; b.name = { ar: f.name_ar, en: f.name_en }; b.desc = { ar: f.desc, en: f.desc }; b.area = { ar: f.area, en: f.area };
+    b.hours = { ar: f.hours, en: f.hours }; b.phone = "+974" + f.phone; b.whatsapp = "974" + f.phone; b.edit = null; b.updated = new Date().toISOString();
+  }
+  function manage(u, id) {
+    var b = S.businesses.filter(function (x) { return x.id === id; })[0];
+    if (!b) return { err: R(404, { error: "not_found" }) };
+    if (b.owner_id !== u.id && u.role !== "admin") return { err: R(403, { error: "forbidden" }) };
+    return { b: b };
+  }
+  function decode(dataUrl) {
+    return new Promise(function (resolve, reject) { var im = new Image(); im.onload = function () { resolve({ w: im.naturalWidth, h: im.naturalHeight }); }; im.onerror = reject; im.src = dataUrl; });
   }
   function byRating(a, b) { return b.rating - a.rating || b.reviews - a.reviews || a.id - b.id; }
   function me() { return S.me ? S.users.filter(function (u) { return u.id === S.me; })[0] || null : null; }
@@ -186,28 +214,63 @@
       return hash(typeof body.password === "string" ? body.password : "", u.salt).then(function (h) {
         if (h !== u.hash) return R(401, { error: "bad_credentials" });
         var mine = S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return b.id; });
-        S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; });
+        S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; }); S.images = S.images.filter(function (i) { return mine.indexOf(i.business_id) < 0; });
         S.reviews = S.reviews.filter(function (r) { return r.user_id !== u.id && mine.indexOf(r.business_id) < 0; });
         S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.verifs = S.verifs.filter(function (v) { return v.user_id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
       });
     }
 
-    if (method === "GET" && path === "/api/businesses") return R(200, { businesses: S.businesses.filter(function (b) { return b.status === "approved"; }).map(out).sort(byRating) });
+    if (method === "GET" && path === "/api/businesses") return R(200, { businesses: S.businesses.filter(function (b) { return b.status === "approved"; }).map(function (b) { return out(b, false); }).sort(byRating) });
     if (method === "GET" && path === "/api/my/businesses") {
       if (!u) return R(401, { error: "auth_required" });
-      return R(200, { businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { var o = out(b); o.mine = true; return o; }).sort(function (a, b) { return b.id - a.id; }) });
+      return R(200, { businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { var o = out(b, true); o.mine = true; o.edit = b.edit || null; return o; }).sort(function (a, b) { return b.id - a.id; }) });
     }
     if (method === "POST" && path === "/api/businesses") {
       if (!u) return R(401, { error: "auth_required" });
       if (gated(u)) return R(403, { error: "email_unverified" });
-      var nameAr = str(body.name_ar, 80), nameEn = str(body.name_en, 80) || nameAr, desc = str(body.desc, 300), area = str(body.area, 80), phone = str(body.phone, 8).replace(/\s/g, "");
-      if (!nameAr) return R(400, { error: "invalid_name" });
-      if (CATS.indexOf(body.cat) < 0) return R(400, { error: "invalid_category" });
-      if (CITIES.indexOf(body.city) < 0) return R(400, { error: "invalid_city" });
-      if (!/^[34567]\d{7}$/.test(phone)) return R(400, { error: "invalid_phone" });
-      var nb = { id: S.seq.b++, owner_id: u.id, cat: body.cat, city: body.city, name: { ar: nameAr, en: nameEn }, desc: { ar: desc, en: desc }, area: { ar: area, en: area },
-        hours: { ar: "", en: "" }, phone: "+974" + phone, whatsapp: "974" + phone, verified: false, status: "pending", created_at: new Date().toISOString() };
+      var v = listing(body);
+      if (v.error) return R(400, { error: v.error });
+      var f = v.f, nb = { id: S.seq.b++, owner_id: u.id, cat: f.cat, city: f.city, name: { ar: f.name_ar, en: f.name_en }, desc: { ar: f.desc, en: f.desc }, area: { ar: f.area, en: f.area },
+        hours: { ar: f.hours, en: f.hours }, phone: "+974" + f.phone, whatsapp: "974" + f.phone, verified: false, status: "pending", created_at: new Date().toISOString(), edit: null };
       S.businesses.push(nb); save(); return R(201, { id: nb.id, status: "pending" });
+    }
+    if ((m = path.match(/^\/api\/businesses\/(\d+)$/)) && method === "PATCH") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (gated(u)) return R(403, { error: "email_unverified" });
+      var mg = manage(u, Number(m[1])); if (mg.err) return mg.err;
+      var v2 = listing(body); if (v2.error) return R(400, { error: v2.error });
+      if (mg.b.status === "approved" && u.role !== "admin") {
+        if (same(v2.f, live(mg.b))) { mg.b.edit = null; save(); return R(200, { status: "unchanged" }); }
+        mg.b.edit = v2.f; save(); return R(200, { status: "edit_pending" });
+      }
+      apply(mg.b, v2.f); if (mg.b.status === "rejected" && u.role !== "admin") mg.b.status = "pending"; save(); return R(200, { status: "updated" });
+    }
+    if ((m = path.match(/^\/api\/businesses\/(\d+)\/manage$/)) && method === "GET") {
+      if (!u) return R(401, { error: "auth_required" });
+      var mg2 = manage(u, Number(m[1])); if (mg2.err) return mg2.err;
+      var o2 = out(mg2.b, true); o2.mine = true; o2.edit = mg2.b.edit || null;
+      return R(200, { business: o2, form: mg2.b.edit || live(mg2.b), maxImages: 6 });
+    }
+    if ((m = path.match(/^\/api\/businesses\/(\d+)\/images$/)) && method === "POST") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (gated(u)) return R(403, { error: "email_unverified" });
+      var mg3 = manage(u, Number(m[1])); if (mg3.err) return mg3.err;
+      var du = body.__dataUrl || "";
+      if (!/^data:image\/(jpeg|png);base64,/.test(du)) return R(415, { error: "unsupported_image_type" });
+      if (S.images.filter(function (i) { return i.business_id === mg3.b.id && i.status !== "rejected"; }).length >= 6) return R(400, { error: "too_many_images" });
+      return decode(du).then(function (d) {
+        if (d.w < 16 || d.h < 16) return R(400, { error: "image_too_small" });
+        var im = { id: S.seq.i++, business_id: mg3.b.id, user_id: u.id, data: du, w: d.w, h: d.h, status: u.role === "admin" ? "approved" : "pending" };
+        S.images.push(im); save(); return R(201, { id: im.id, status: im.status, w: im.w, h: im.h });
+      }, function () { return R(400, { error: "invalid_image" }); });
+    }
+    if ((m = path.match(/^\/api\/images\/(\d+)$/)) && method === "DELETE") {
+      if (!u) return R(401, { error: "auth_required" });
+      var img = S.images.filter(function (i) { return i.id === Number(m[1]); })[0];
+      if (!img) return R(404, { error: "not_found" });
+      var owner = S.businesses.filter(function (x) { return x.id === img.business_id; })[0];
+      if (!owner || (owner.owner_id !== u.id && u.role !== "admin")) return R(403, { error: "forbidden" });
+      S.images = S.images.filter(function (i) { return i !== img; }); save(); return R(200, { ok: true });
     }
 
     if ((m = path.match(/^\/api\/businesses\/(\d+)\/reviews$/))) {
@@ -244,14 +307,28 @@
       if (method === "GET" && path === "/api/admin/businesses") {
         var stt = query.status || "pending";
         if (["pending", "approved", "rejected"].indexOf(stt) < 0) return R(400, { error: "invalid_status" });
-        return R(200, { businesses: S.businesses.filter(function (b) { return b.status === stt; }).map(out).sort(function (a, b) { return b.id - a.id; }) });
+        var inQueue = function (b) { return b.status === "pending" || !!b.edit || S.images.some(function (i) { return i.business_id === b.id && i.status === "pending"; }); };
+        return R(200, { businesses: S.businesses.filter(function (b) { return stt === "pending" ? inQueue(b) : b.status === stt; }).map(function (b) {
+          var o = out(b, true); o.edit = b.edit || null; o.review = b.status === "pending" ? "new" : b.edit ? "edit" : "images"; return o;
+        }).sort(function (a, b) { return b.id - a.id; }) });
       }
       if (method === "POST" && (m = path.match(/^\/api\/admin\/businesses\/(\d+)\/(approve|reject|verify|unverify)$/))) {
         var tb = S.businesses.filter(function (b) { return b.id === Number(m[1]); })[0];
         if (!tb) return R(404, { error: "not_found" });
-        if (m[2] === "approve") tb.status = "approved"; else if (m[2] === "reject") tb.status = "rejected"; else tb.verified = m[2] === "verify";
+        if (m[2] === "approve") {
+          if (tb.edit) apply(tb, tb.edit); else tb.status = "approved";
+          S.images.forEach(function (i) { if (i.business_id === tb.id && i.status === "pending") i.status = "approved"; });
+        } else if (m[2] === "reject") {
+          if (tb.status === "approved") { tb.edit = null; S.images.forEach(function (i) { if (i.business_id === tb.id && i.status === "pending") i.status = "rejected"; }); }
+          else tb.status = "rejected";
+        } else tb.verified = m[2] === "verify";
         save(); return R(200, { ok: true });
       }
+    }
+    if (method === "POST" && (m = path.match(/^\/api\/admin\/images\/(\d+)\/(approve|reject)$/)) && u && u.role === "admin") {
+      var ti = S.images.filter(function (i) { return i.id === Number(m[1]); })[0];
+      if (!ti) return R(404, { error: "not_found" });
+      ti.status = m[2] === "approve" ? "approved" : "rejected"; save(); return R(200, { ok: true });
     }
     return R(404, { error: "not_found" });
   }
@@ -261,8 +338,11 @@
     if (typeof url !== "string" || url.indexOf("/api/") !== 0) return realFetch ? realFetch(url, opt) : Promise.reject(new Error("offline"));
     var qi = url.indexOf("?"), path = qi < 0 ? url : url.slice(0, qi), query = {};
     if (qi >= 0) new URLSearchParams(url.slice(qi + 1)).forEach(function (v, k) { query[k] = v; });
-    var body = {}; try { body = opt && opt.body ? JSON.parse(opt.body) : {}; } catch (e) {}
-    return ensureAdmin().then(function () { return handle(((opt && opt.method) || "GET").toUpperCase(), path, query, body); }).then(function (r) {
+    var bodyP;
+    if (opt && opt.body && typeof Blob !== "undefined" && opt.body instanceof Blob) {
+      bodyP = new Promise(function (resolve) { var fr = new FileReader(); fr.onload = function () { resolve({ __dataUrl: fr.result }); }; fr.onerror = function () { resolve({}); }; fr.readAsDataURL(opt.body); });
+    } else { var parsed = {}; try { parsed = opt && opt.body ? JSON.parse(opt.body) : {}; } catch (e) {} bodyP = Promise.resolve(parsed); }
+    return bodyP.then(function (body) { return ensureAdmin().then(function () { return handle(((opt && opt.method) || "GET").toUpperCase(), path, query, body); }); }).then(function (r) {
       return new Response(JSON.stringify(r.json), { status: r.status, headers: { "Content-Type": "application/json" } });
     });
   };
@@ -270,6 +350,7 @@
   window.__demoStore = {
     mails: function () { return S.mails; },
     reset: function () { memory = null; try { localStorage.removeItem(KEY); } catch (e) {} S = seed(); adminReady = null; save(); },
+    img: function (id) { var i = S.images.filter(function (x) { return x.id === id; })[0]; return i ? i.data : ""; },
     admin: ADMIN
   };
 })();

@@ -61,6 +61,7 @@ function createSeo({ cats, cities, queries, site = {} }) {
     if (p === "/") return { lang, kind: "home", core: "/" };
     if (p === "/browse") return { lang, kind: "browse", core: "/browse" };
     if (PRIVATE.has(p)) return { lang, kind: "private", core: p };
+    if (/^\/edit\/\d+$/.test(p)) return { lang, kind: "private", core: p };
     if (p === "/privacy" || p === "/terms") return { lang, kind: "legal", page: p.slice(1), core: p };
     if ((m = p.match(/^\/category\/([a-z]+)$/)) && catById.has(m[1])) return { lang, kind: "category", cat: m[1], core: p };
     if ((m = p.match(/^\/category\/([a-z]+)\/([a-z]+)$/)) && catById.has(m[1]) && cityById.has(m[2])) return { lang, kind: "category", cat: m[1], city: m[2], core: p };
@@ -71,7 +72,9 @@ function createSeo({ cats, cities, queries, site = {} }) {
   // ---------- HTML fragments (server-rendered content, replaced by the SPA on load) ----------
   function card(b, lang, s) {
     const cat = catById.get(b.cat), city = cityById.get(b.city);
-    return `<article class="card"><h3><a href="${pre(lang)}/b/${b.id}">${esc(L(b.name, lang))}</a>${b.verified ? ` <span class="badge">✓ ${s.verified}</span>` : ""}</h3>` +
+    const cover = (b.images || []).find((i) => i.status === "approved");
+    const thumb = cover ? `<a class="thumb-link" href="${pre(lang)}/b/${b.id}"><img class="thumb" src="/img/${cover.id}" alt="${esc(L(b.name, lang))}" width="${cover.w}" height="${cover.h}" loading="lazy"></a>` : "";
+    return `<article class="card">${thumb}<h3><a href="${pre(lang)}/b/${b.id}">${esc(L(b.name, lang))}</a>${b.verified ? ` <span class="badge">✓ ${s.verified}</span>` : ""}</h3>` +
       `<div class="meta">${cat ? esc(L(cat, lang)) : ""} · ${city ? esc(L(city, lang)) : ""}</div><p>${esc(L(b.desc, lang))}</p>` +
       (b.reviews ? `<div class="meta"><span class="stars">★ ${esc(b.rating)}</span> (${esc(b.reviews)} ${s.reviews})</div>` : "") +
       `<div class="actions"><a class="btn" href="tel:${esc(b.phone)}">${s.call}</a><a class="btn ghost" href="${pre(lang)}/b/${b.id}">${s.details}</a></div></article>`;
@@ -146,7 +149,9 @@ function createSeo({ cats, cities, queries, site = {} }) {
         const reviews = queries.reviews(b.id);
         const items = [[s.brand, homeHref], [catName, `${P}/category/${b.cat}`], [name, `${P}/b/${b.id}`]];
         out.body = `<div class="container">${crumbs(items)}<div class="detail"><h1>${esc(name)}${b.verified ? ` <span class="badge">✓ ${s.verified}</span>` : ""}</h1>` +
-          `<div class="meta">${esc(catName)} · ${esc(cityName)}</div><p>${esc(L(b.desc, lang))}</p><dl>` +
+          `<div class="meta">${esc(catName)} · ${esc(cityName)}</div>` +
+          ((b.images || []).length ? `<div class="gallery">${b.images.map((i, n) => `<img class="gallery-img" src="/img/${i.id}" alt="${esc(name)}" width="${i.w}" height="${i.h}"${n ? ' loading="lazy"' : ""}>`).join("")}</div>` : "") +
+          `<p>${esc(L(b.desc, lang))}</p><dl>` +
           `<dt>${s.area}</dt><dd>${esc(L(b.area, lang))}</dd>` + (L(b.hours, lang) ? `<dt>${s.hours}</dt><dd>${esc(L(b.hours, lang))}</dd>` : "") +
           `<dt>${s.phone}</dt><dd dir="ltr" class="ltr">${esc(b.phone)}</dd></dl>` +
           (b.reviews ? `<div class="meta"><span class="stars">★ ${esc(b.rating)}</span> (${esc(b.reviews)} ${s.reviews})</div>` : "") +
@@ -158,6 +163,7 @@ function createSeo({ cats, cities, queries, site = {} }) {
           description: L(b.desc, lang), telephone: b.phone, inLanguage: lang,
           address: { "@type": "PostalAddress", addressLocality: cityName, streetAddress: L(b.area, lang), addressCountry: "QA" }
         };
+        if ((b.images || []).length) { biz.image = b.images.map((i) => `${base}/img/${i.id}`); out.ogImage = biz.image[0]; }
         if (b.reviews > 0) biz.aggregateRating = { "@type": "AggregateRating", ratingValue: b.rating, reviewCount: b.reviews, bestRating: 5, worstRating: 1 };
         out.ldBlocks.push(biz, crumbLd(items, base));
         break;
@@ -201,7 +207,7 @@ function createSeo({ cats, cities, queries, site = {} }) {
       head.push(
         `<meta property="og:type" content="website">`, `<meta property="og:site_name" content="${esc(s.brand)}">`,
         `<meta property="og:title" content="${esc(page.title)}">`, `<meta property="og:description" content="${esc(page.description)}">`,
-        `<meta property="og:url" content="${esc(page.canonical)}">`, `<meta property="og:image" content="${esc(base)}/og-image.png">`,
+        `<meta property="og:url" content="${esc(page.canonical)}">`, `<meta property="og:image" content="${esc(page.ogImage || base + "/og-image.png")}">`,
         `<meta property="og:locale" content="${s.locale}">`, `<meta property="og:locale:alternate" content="${s.other_locale}">`,
         `<meta name="twitter:card" content="summary_large_image">`);
     }

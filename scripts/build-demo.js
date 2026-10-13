@@ -49,6 +49,7 @@ async function main() {
   app = must(app, "location.reload()", "__vl.reload()", "reload");
   for (const k of ["pathname", "search", "origin", "hash"]) app = must(app, `location.${k}`, `__vl.${k}`, `location.${k}`);
   app = must(app, ' download="my-data.json"', "", "download attribute"); // the viewer blocks downloads; demo-ui shows the data in a panel instead
+  app = must(app, 'function imgSrc(id) { return "/img/" + id; }', "function imgSrc(id) { return window.__demoStore.img(id); }", "imgSrc"); // photos live in the browser store here
   app = must(app, "window.confirm(", "__demo.confirm(", "confirm");
   app = must(app, "alert(errMsg(err))", "__demo.toast(errMsg(err))", "alert");
   app = must(app, 'data-native target="_blank" rel="noopener" ', "", "consent links");

@@ -4,6 +4,18 @@
 
   var T = {
     ar: {
+      f_hours: "ساعات العمل (اختياري)", sent_photos: "أُرسل نشاطك للمراجعة. أضف له صورًا الآن إن أردت.",
+      edit_title: "تعديل النشاط", edit_btn: "تعديل", edit_save: "حفظ التعديلات", back_mine: "← حسابي",
+      edit_hint_new: "النشاط قيد المراجعة. يمكنك تعديله وإضافة صور قبل الموافقة.",
+      edit_hint_live: "هذا النشاط منشور. تعديلاتك تُراجَع قبل ظهورها، وتبقى النسخة الحالية معروضة حتى الموافقة.",
+      edit_hint_pending: "لديك تعديل قيد المراجعة، والنموذج يعرض آخر ما أرسلته.", edit_hint_rejected: "رُفض هذا النشاط. عدّل بياناته وأرسلها لإعادة المراجعة.",
+      edit_saved_updated: "تم حفظ التعديلات.", edit_saved_pending: "أُرسل تعديلك للمراجعة. تبقى النسخة المنشورة كما هي حتى الموافقة.", edit_unchanged: "لا فرق بين ما أدخلته والنسخة المنشورة.",
+      badge_edit: "تعديل قيد المراجعة", photos_title: "الصور", photos_hint: "حتى 6 صور. تُصغَّر تلقائيًا وتُحذف منها بيانات الكاميرا والموقع، وتُراجَع قبل ظهورها للجميع.",
+      photos_add: "إضافة صور", photos_uploading: "جارٍ رفع الصورة…", photos_done: "رُفعت الصورة وهي قيد المراجعة.", photos_done_pub: "رُفعت الصورة ونُشرت.", photos_none: "لا توجد صور بعد.",
+      photo_del: "حذف", photo_pending: "قيد المراجعة", photo_approved: "منشورة", photo_rejected: "مرفوضة",
+      rev_new: "نشاط جديد", rev_edit: "تعديل على نشاط منشور", rev_images: "صور جديدة", changes: "التغييرات المقترحة", img_ok: "قبول", img_no: "رفض",
+      e_image_too_big: "حجم الصورة كبير جدًا.", e_invalid_image: "الملف ليس صورة صالحة.", e_unsupported_image_type: "نوع الصورة غير مدعوم.", e_image_too_small: "الصورة صغيرة جدًا.",
+      e_image_too_large_dimensions: "أبعاد الصورة كبيرة جدًا.", e_too_many_images: "وصلت للحد الأقصى من الصور.", e_img_decode: "تعذّر قراءة هذه الصورة. جرّب صيغة JPEG أو PNG.",
       verify_banner: "فعّل بريدك الإلكتروني لتتمكن من إضافة الأنشطة والتقييمات. أرسلنا رابط التفعيل إلى {email}.", verify_resend: "إعادة إرسال الرابط",
       verify_sent: "أُرسل رابط جديد. تحقق من بريدك ومن مجلد المزعج.", verify_need: "فعّل بريدك الإلكتروني أولًا بفتح الرابط الذي أرسلناه إليك.",
       verify_working: "جارٍ تفعيل بريدك الإلكتروني…", verify_ok: "تم تفعيل بريدك الإلكتروني. يمكنك الآن إضافة الأنشطة والتقييمات.",
@@ -55,6 +67,18 @@
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      f_hours: "Opening hours (optional)", sent_photos: "Your listing was sent for review. Add photos now if you like.",
+      edit_title: "Edit business", edit_btn: "Edit", edit_save: "Save changes", back_mine: "← My account",
+      edit_hint_new: "This listing is under review. You can edit it and add photos before it is approved.",
+      edit_hint_live: "This listing is published. Your changes are reviewed before they appear, and the current version stays live until then.",
+      edit_hint_pending: "You have a change waiting for review; the form shows what you last sent.", edit_hint_rejected: "This listing was rejected. Fix its details and send it again for review.",
+      edit_saved_updated: "Changes saved.", edit_saved_pending: "Your change was sent for review. The published version stays as it is until approved.", edit_unchanged: "What you entered matches the published version.",
+      badge_edit: "Edit under review", photos_title: "Photos", photos_hint: "Up to 6 photos. They are resized automatically, camera and location data is removed, and they are reviewed before everyone can see them.",
+      photos_add: "Add photos", photos_uploading: "Uploading photo…", photos_done: "Photo uploaded and waiting for review.", photos_done_pub: "Photo uploaded and published.", photos_none: "No photos yet.",
+      photo_del: "Delete", photo_pending: "Under review", photo_approved: "Published", photo_rejected: "Rejected",
+      rev_new: "New listing", rev_edit: "Edit to a published listing", rev_images: "New photos", changes: "Proposed changes", img_ok: "Approve", img_no: "Reject",
+      e_image_too_big: "The image is too big.", e_invalid_image: "That file is not a valid image.", e_unsupported_image_type: "This image type is not supported.", e_image_too_small: "The image is too small.",
+      e_image_too_large_dimensions: "The image dimensions are too large.", e_too_many_images: "You reached the maximum number of photos.", e_img_decode: "This image could not be read. Try a JPEG or PNG.",
       verify_banner: "Confirm your e-mail to add businesses and reviews. We sent the activation link to {email}.", verify_resend: "Resend the link",
       verify_sent: "A new link was sent. Check your inbox and spam folder.", verify_need: "Confirm your e-mail first by opening the link we sent you.",
       verify_working: "Confirming your e-mail…", verify_ok: "Your e-mail is confirmed. You can now add businesses and reviews.",
@@ -136,6 +160,9 @@
   }
   function errMsg(e) { var k = "e_" + (e && e.code); return T[lang][k] ? t(k) : t("e_generic"); }
   function allBusinesses() { return state.businesses; }
+  function imgSrc(id) { return "/img/" + id; }
+  function find2(list, id) { return list.filter(function (x) { return x.id === id; })[0]; }
+  function statusBadge(st) { return '<span class="badge ' + (st === "approved" ? "" : st === "rejected" ? "bad" : "warn") + '">' + t("photo_" + st) + "</span>"; }
 
   function setLang(l) {
     lang = l;
@@ -171,19 +198,24 @@
   function telHref(p) { return "tel:" + String(p).replace(/[^+\d]/g, ""); }
   function waHref(n) { return "https://wa.me/" + String(n).replace(/\D/g, ""); }
 
-  function card(b) {
+  function card(b, opts) {
+    opts = opts || {};
+    var cover = b.cover && find2(b.images || [], b.cover);
+    var thumb = cover ? '<a class="thumb-link" href="' + link("/b/" + b.id) + '"><img class="thumb" src="' + imgSrc(cover.id) + '" alt="' + esc(L(b.name)) + '" width="' + cover.w + '" height="' + cover.h + '" loading="lazy"></a>' : "";
     var cat = window.CATEGORIES.filter(function (c) { return c.id === b.cat; })[0];
     var city = window.CITIES.filter(function (c) { return c.id === b.city; })[0];
-    return '<article class="card">' +
+    return '<article class="card">' + thumb +
       "<h3>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") +
-      (b.status === "pending" ? ' <span class="badge warn">' + t("pending") + "</span>" : b.status === "rejected" ? ' <span class="badge bad">' + t("rejected") + "</span>" : "") + "</h3>" +
+      (b.status === "pending" ? ' <span class="badge warn">' + t("pending") + "</span>" : b.status === "rejected" ? ' <span class="badge bad">' + t("rejected") + "</span>" : "") +
+      (b.edit ? ' <span class="badge warn">' + t("badge_edit") + "</span>" : "") + "</h3>" +
       '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
       "<p>" + esc(L(b.desc)) + "</p>" +
       (b.reviews ? '<div class="meta"><span class="stars">★ ' + esc(b.rating) + "</span> (" + esc(b.reviews) + " " + t("reviews") + ")</div>" : "") +
       '<div class="actions">' +
       '<a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
       '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a>" +
-      '<a class="btn ghost" href="' + link("/b/" + b.id) + '">' + t("details") + "</a></div></article>";
+      (b.status === "approved" || opts.mine ? '<a class="btn ghost" href="' + link("/b/" + b.id) + '">' + t("details") + "</a>" : "") +
+      (opts.mine ? '<a class="btn" href="' + link("/edit/" + b.id) + '">✎ ' + t("edit_btn") + "</a>" : "") + "</div></article>";
   }
 
   function viewHome() {
@@ -197,7 +229,7 @@
       window.CATEGORIES.map(function (c) {
         return '<a class="cat" href="' + link("/category/" + c.id) + '"><span class="ico">' + c.icon + "</span>" + esc(L(c)) + "</a>";
       }).join("") + '</div></section><section class="block"><h2>' + t("featured") + '</h2><div class="grid">' +
-      verified.map(card).join("") + "</div></section></div>";
+      verified.map(function (b) { return card(b); }).join("") + "</div></section></div>";
   }
 
   function viewBrowse(params, heading) {
@@ -226,7 +258,7 @@
       (params.verified === "1" ? " checked" : "") + "> " + t("verified_only") + "</label>" +
       '<button class="btn" type="submit">' + t("search") + "</button></form>" +
       "<div>" + (heading || "") + "<p class=\"meta\">" + list.length + " " + t("results") + "</p>" +
-      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_results") + "</p>") +
+      (list.length ? '<div class="grid">' + list.map(function (b) { return card(b); }).join("") + "</div>" : '<p class="empty">' + t("no_results") + "</p>") +
       "</div></div></div>";
   }
 
@@ -238,6 +270,7 @@
     return '<div class="container">' + crumbs([[t("brand"), link("/")], [cat ? L(cat) : "", cat ? link("/category/" + b.cat) : link("/browse")], [L(b.name), link("/b/" + b.id)]]) + '<div class="detail"><div><a class="btn ghost" href="' + link("/browse") + '">← ' + t("back") + "</a></div>" +
       "<h1>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") + "</h1>" +
       '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
+      ((b.images || []).length ? '<div class="gallery">' + b.images.map(function (i, n) { return '<img class="gallery-img" src="' + imgSrc(i.id) + '" alt="' + esc(L(b.name)) + '" width="' + i.w + '" height="' + i.h + '"' + (n ? ' loading="lazy"' : "") + ">"; }).join("") + "</div>" : "") +
       "<p>" + esc(L(b.desc)) + "</p><dl>" +
       "<dt>" + t("area") + "</dt><dd>" + esc(b.area ? L(b.area) : "") + "</dd>" +
       (b.hours ? "<dt>" + t("hours") + "</dt><dd>" + esc(L(b.hours)) + "</dd>" : "") +
@@ -248,17 +281,42 @@
       viewReviews(b, reviews || []) + "</div>";
   }
 
+  function listingFields(v) {
+    return "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80" value="' + esc(v.name_ar || "") + '"></label>' +
+      "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80" value="' + esc(v.name_en && v.name_en !== v.name_ar ? v.name_en : "") + '"></label>' +
+      "<label>" + t("category") + '<select name="cat" required>' + opts(window.CATEGORIES, "—", v.cat) + "</select></label>" +
+      "<label>" + t("city") + '<select name="city" required>' + opts(window.CITIES, "—", v.city) + "</select></label>" +
+      "<label>" + t("f_area") + '<input name="area" maxlength="80" value="' + esc(v.area || "") + '"></label>' +
+      "<label>" + t("f_hours") + '<input name="hours" maxlength="80" value="' + esc(v.hours || "") + '"></label>' +
+      "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required value="' + esc(v.phone || "") + '"></label>' +
+      "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300">' + esc(v.desc || "") + "</textarea></label>";
+  }
+  function readListing(fd) {
+    return { name_ar: fd.get("name_ar"), name_en: fd.get("name_en"), cat: fd.get("cat"), city: fd.get("city"), area: fd.get("area"),
+      hours: fd.get("hours"), phone: String(fd.get("phone")).replace(/\s/g, ""), desc: fd.get("desc") };
+  }
+
+  function viewEdit(data) {
+    var b = data.business, hint = b.status === "rejected" ? "edit_hint_rejected" : b.status === "approved" ? (b.edit ? "edit_hint_pending" : "edit_hint_live") : "edit_hint_new";
+    var tiles = (b.images || []).map(function (i) {
+      return '<div class="tile"><img src="' + imgSrc(i.id) + '" alt="" width="' + i.w + '" height="' + i.h + '">' + statusBadge(i.status) +
+        ' <button class="btn ghost" type="button" data-delimg="' + i.id + '">' + t("photo_del") + "</button></div>";
+    }).join("");
+    var full = (b.images || []).filter(function (i) { return i.status !== "rejected"; }).length >= data.maxImages;
+    return '<div class="container"><p><a class="link" href="' + link("/mine") + '">' + t("back_mine") + '</a></p>' +
+      '<form class="form" id="editForm" data-id="' + b.id + '" novalidate><h2>' + t("edit_title") + ": " + esc(L(b.name)) + '</h2><p class="meta">' + t(hint) + "</p>" +
+      listingFields(data.form) + '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("edit_save") + "</button></form>" +
+      '<section class="form" id="photos" data-id="' + b.id + '"><h3>' + t("photos_title") + '</h3><p class="meta">' + t("photos_hint") + "</p>" +
+      (tiles ? '<div class="tiles">' + tiles + "</div>" : '<p class="empty">' + t("photos_none") + "</p>") +
+      (full ? "" : '<label class="btn ghost filebtn">+ ' + t("photos_add") + '<input id="imgInput" type="file" accept="image/*" multiple hidden></label>') +
+      '<div id="imgMsg" role="status"></div></section></div>';
+  }
+
   function viewAdd() {
     if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="' + link("/login") + '">' + t("login") + "</a></div></div>";
     if (needsVerify()) return '<div class="container"><div class="form">' + verifyPrompt() + "</div></div>";
     return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
-      "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
-      "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
-      "<label>" + t("category") + '<select name="cat" required>' + opts(window.CATEGORIES, "—") + "</select></label>" +
-      "<label>" + t("city") + '<select name="city" required>' + opts(window.CITIES, "—") + "</select></label>" +
-      "<label>" + t("f_area") + '<input name="area" maxlength="80"></label>' +
-      "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required></label>' +
-      "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300"></textarea></label>' +
+      listingFields({}) +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("submit") + "</button></form></div>";
   }
 
@@ -344,7 +402,7 @@
 
   function viewMine(list) {
     return '<div class="container"><section class="block"><h2>' + t("my_listings") + "</h2>" +
-      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
+      (list.length ? '<div class="grid">' + list.map(function (b) { return card(b, { mine: true }); }).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
       '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
       '<section class="block"><h2>' + t("acct_title") + "</h2>" +
       (state.user ? '<p class="meta">' + t("acct_email") + ': <strong dir="ltr">' + esc(state.user.email) + "</strong> · " +
@@ -368,10 +426,31 @@
     var tabs = ["pending", "approved", "rejected"].map(function (st) {
       return '<a class="btn' + (st === status ? "" : " ghost") + '" href="' + link("/admin") + '?status=' + st + '">' + t("status_" + st) + "</a>";
     }).join(" ");
+    function changes(b) {
+      if (!b.edit) return "";
+      var live = { name_ar: b.name.ar, name_en: b.name.en, cat: b.cat, city: b.city, desc: b.desc.ar, area: b.area.ar, hours: b.hours.ar, phone: String(b.phone).replace("+974", "") };
+      var labels = { name_ar: "f_name_ar", name_en: "f_name_en", cat: "category", city: "city", desc: "f_desc", area: "f_area", hours: "f_hours", phone: "f_phone" };
+      var rows = Object.keys(labels).filter(function (k) { return String(live[k] || "") !== String(b.edit[k] || ""); }).map(function (k) {
+        return "<li><strong>" + t(labels[k]) + ':</strong> <del>' + esc(live[k] || "—") + "</del> → <ins>" + esc(b.edit[k] || "—") + "</ins></li>";
+      }).join("");
+      return '<div class="diff"><strong>' + t("changes") + "</strong><ul>" + rows + "</ul></div>";
+    }
+    function imgs(b) {
+      var pending = (b.images || []).filter(function (i) { return i.status === "pending"; });
+      if (!pending.length) return "";
+      return '<div class="tiles">' + pending.map(function (i) {
+        return '<div class="tile"><a href="' + imgSrc(i.id) + '" target="_blank" rel="noopener"><img src="' + imgSrc(i.id) + '" alt="" width="' + i.w + '" height="' + i.h + '"></a>' +
+          '<button class="btn" type="button" data-imgact="approve" data-imgid="' + i.id + '">' + t("img_ok") + "</button> " +
+          '<button class="btn ghost" type="button" data-imgact="reject" data-imgid="' + i.id + '">' + t("img_no") + "</button></div>";
+      }).join("") + "</div>";
+    }
     var rows = list.map(function (b) {
-      return '<div class="card"><h3>' + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + '</p><div class="actions">' +
-        (b.status !== "approved" ? '<button class="btn" data-act="approve" data-id="' + b.id + '">' + t("approve") + "</button>" : "") +
-        (b.status !== "rejected" ? '<button class="btn ghost" data-act="reject" data-id="' + b.id + '">' + t("reject") + "</button>" : "") +
+      var inQueue = !!b.review;                                     // something waits for a decision
+      var tag = inQueue ? '<span class="badge warn">' + t(b.review === "new" ? "rev_new" : b.review === "edit" ? "rev_edit" : "rev_images") + "</span> " : "";
+      return '<div class="card"><h3>' + tag + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + "</p>" +
+        changes(b) + imgs(b) + '<div class="actions">' +
+        (inQueue || b.status !== "approved" ? '<button class="btn" data-act="approve" data-id="' + b.id + '">' + t("approve") + "</button>" : "") +
+        ((inQueue || b.status !== "approved") && b.status !== "rejected" ? '<button class="btn ghost" data-act="reject" data-id="' + b.id + '">' + t("reject") + "</button>" : "") +
         (b.status === "approved" ? '<button class="btn ghost" data-act="' + (b.verified ? "unverify" : "verify") + '" data-id="' + b.id + '">' + t(b.verified ? "unverify" : "verify") + "</button>" : "") +
         "</div></div>";
     }).join("");
@@ -423,10 +502,12 @@
     lb.setAttribute("href", altPath === "/en/" + location.search ? "/en" + location.search : altPath);
     lb.textContent = lang === "ar" ? "EN" : "عربي";
 
+    var editM = r.path.match(/^\/edit\/(\d+)$/);
     var catM = r.path.match(/^\/category\/([a-z]+)(?:\/([a-z]+))?$/);
     var jobs = [api("GET", "/api/businesses").then(function (j) { state.businesses = j.businesses; })];
     var extra = null;
     if (r.path.indexOf("/b/") === 0) extra = api("GET", "/api/businesses/" + encodeURIComponent(r.path.slice(3)) + "/reviews").catch(function () { return { reviews: [] }; });
+    if (editM && state.user) extra = api("GET", "/api/businesses/" + editM[1] + "/manage");
     if (r.path === "/mine" && state.user) extra = api("GET", "/api/my/businesses");
     if (r.path === "/admin" && state.user && state.user.role === "admin") extra = api("GET", "/api/admin/businesses?status=" + encodeURIComponent(r.params.status || "pending"));
 
@@ -451,6 +532,8 @@
         if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
           head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
         else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (editM) {
+        html = state.user ? viewEdit(data) : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"];
       } else if (r.path === "/verify") {
         // keep the token in memory only and remove it from the address bar / history
         if (r.params.token) { state.verifyToken = r.params.token; history.replaceState(null, "", location.pathname); }
@@ -477,6 +560,45 @@
     }).catch(function (e) {
       if (seq !== renderSeq) return;
       app.innerHTML = '<div class="container"><p class="empty">' + (e && e.code === "auth_required" ? t("e_auth_required") : t("load_err")) + "</p></div>";
+    });
+  }
+
+  // Resize and re-encode in the browser: smaller uploads, camera/GPS data never leaves the device, every format becomes JPEG.
+  function prepareImage(file) {
+    function fail() { var e = new Error("decode"); e.code = "img_decode"; return e; }
+    function draw(src, w, h) {
+      var k = Math.min(1, 1280 / Math.max(w, h)), cw = Math.max(1, Math.round(w * k)), ch = Math.max(1, Math.round(h * k));
+      var c = document.createElement("canvas"); c.width = cw; c.height = ch;
+      var x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, cw, ch); x.drawImage(src, 0, 0, cw, ch);
+      return new Promise(function (resolve, reject) {
+        var q = 0.85;
+        (function encode() {
+          c.toBlob(function (blob) {
+            if (!blob) return reject(fail());
+            if (blob.size > 1.8 * 1024 * 1024 && q > 0.45) { q -= 0.15; return encode(); }
+            resolve(blob);
+          }, "image/jpeg", q);
+        })();
+      });
+    }
+    if (window.createImageBitmap) {
+      return createImageBitmap(file).then(function (bmp) { return draw(bmp, bmp.width, bmp.height); }, function () { throw fail(); });
+    }
+    return new Promise(function (resolve, reject) {
+      var u = URL.createObjectURL(file), img = new Image();
+      img.onload = function () { URL.revokeObjectURL(u); draw(img, img.naturalWidth, img.naturalHeight).then(resolve, reject); };
+      img.onerror = function () { URL.revokeObjectURL(u); reject(fail()); };
+      img.src = u;
+    });
+  }
+  function uploadImage(businessId, blob) {
+    return fetch("/api/businesses/" + businessId + "/images", {
+      method: "POST", credentials: "same-origin", headers: { "Content-Type": "image/jpeg", "X-Upload": "1" }, body: blob
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.error || "generic"); e.code = j.error || "generic"; throw e; }
+        return j;
+      });
     });
   }
 
@@ -542,12 +664,40 @@
     var af = document.getElementById("addForm");
     if (af) af.addEventListener("submit", function (e) {
       e.preventDefault();
-      var d = new FormData(af);
-      api("POST", "/api/businesses", {
-        name_ar: d.get("name_ar"), name_en: d.get("name_en"), cat: d.get("cat"), city: d.get("city"),
-        area: d.get("area"), phone: String(d.get("phone")).replace(/\s/g, ""), desc: d.get("desc")
-      }).then(function () { af.reset(); showMsg(true, t("sent")); })
+      api("POST", "/api/businesses", readListing(new FormData(af)))
+        .then(function (j) { state.flash = t("sent_photos"); navigate(link("/edit/" + j.id)); })
         .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
+    var ef = document.getElementById("editForm");
+    if (ef) ef.addEventListener("submit", function (e) {
+      e.preventDefault();
+      api("PATCH", "/api/businesses/" + ef.getAttribute("data-id"), readListing(new FormData(ef)))
+        .then(function (j) { state.flash = t(j.status === "edit_pending" ? "edit_saved_pending" : j.status === "unchanged" ? "edit_unchanged" : "edit_saved_updated"); render(); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var ph = document.getElementById("photos");
+    if (ph) {
+      var inp = document.getElementById("imgInput"), box = document.getElementById("imgMsg"), bid = ph.getAttribute("data-id");
+      if (inp) inp.addEventListener("change", function () {
+        var files = Array.prototype.slice.call(inp.files || []), uploaded = 0, lastStatus = "pending";
+        (function next() {
+          var f = files.shift();
+          if (!f) { if (uploaded) { state.flash = t(lastStatus === "approved" ? "photos_done_pub" : "photos_done"); } render(); return; }
+          box.className = "meta"; box.textContent = t("photos_uploading");
+          prepareImage(f).then(function (blob) { return uploadImage(bid, blob); })
+            .then(function (j) { uploaded++; lastStatus = j.status; next(); })
+            .catch(function (err) { box.className = "error"; box.textContent = errMsg(err); if (uploaded) setTimeout(render, 1500); });
+        })();
+      });
+      ph.querySelectorAll("[data-delimg]").forEach(function (btn) {
+        btn.addEventListener("click", function () { api("DELETE", "/api/images/" + btn.getAttribute("data-delimg")).then(render).catch(function (err) { box.className = "error"; box.textContent = errMsg(err); }); });
+      });
+    }
+    document.querySelectorAll("[data-imgact]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        api("POST", "/api/admin/images/" + btn.getAttribute("data-imgid") + "/" + btn.getAttribute("data-imgact"), {}).then(render).catch(function (err) { alert(errMsg(err)); });
+      });
     });
 
     bindResend();

@@ -3,7 +3,7 @@
 // The text describes what THIS software actually does. It is a template, not legal advice:
 // have a qualified lawyer review it before launch (see LEGAL.md).
 
-const LEGAL_VERSION = "2026-10-13-r3"; // bump on every change of the texts; "-rN" = revision within a day
+const LEGAL_VERSION = "2026-10-13-r4"; // bump on every change of the texts; "-rN" = revision within a day
 const shownDate = () => LEGAL_VERSION.split("-r")[0];
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -19,6 +19,7 @@ const TEXT = {
           { ul: [
             "<strong>بيانات الحساب:</strong> الاسم والبريد الإلكتروني وكلمة المرور. لا نحفظ كلمة المرور نفسها، بل نحفظ بصمة مشفّرة (مملّحة) لا نستطيع قراءتها.",
             "<strong>بيانات الأنشطة التي تضيفها:</strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.",
+            "<strong>الصور:</strong> الصور التي ترفعها لنشاطك. نحذف منها بيانات الكاميرا والموقع (EXIF) قبل حفظها في قاعدة بياناتنا، وتظهر للجميع بعد مراجعتنا لها.",
             "<strong>التقييمات:</strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.",
             "<strong>سجل الموافقة:</strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.",
             "<strong>تفعيل البريد:</strong> نرسل رابط تفعيل إلى بريدك ونحفظ بصمة الرمز فقط (يُحذف بعد الاستخدام أو بعد 24 ساعة) ونسجّل وقت تفعيل بريدك.",
@@ -34,14 +35,14 @@ const TEXT = {
           ] },
           "أساس المعالجة هو موافقتك عند التسجيل وتقديمنا للخدمة التي طلبتها. لا نستخدم بياناتك للإعلانات ولا نبيعها."
         ]],
-        ["ما يكون عامًّا", ["بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته ورقم هاتفه. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك معلومات شخصية لا تريد نشرها."]],
+        ["ما يكون عامًّا", ["بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته وساعات عمله ورقم هاتفه وصوره المعتمدة. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك أو صورك معلومات شخصية لا تريد نشرها (مثل وجوه أشخاص دون إذنهم)."]],
         ["ملفات تعريف الارتباط (الكوكيز)", ["نستخدم كوكي واحدًا ضروريًا للتشغيل باسم <code>sid</code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي."]],
         ["مشاركة البيانات", [
           "لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.",
           "نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (تفعيل البريد واستعادة كلمة المرور وإشعارات تغييرهما). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.",
           "أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها."
         ]],
-        ["مدة الاحتفاظ", ["نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. الحسابات التي لم يُفعَّل بريدها ولا تملك أي محتوى تُحذف تلقائيًا بعد 7 أيام. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ."]],
+        ["مدة الاحتفاظ", ["نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها وصورها. الحسابات التي لم يُفعَّل بريدها ولا تملك أي محتوى تُحذف تلقائيًا بعد 7 أيام. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ."]],
         ["حقوقك", [
           "وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:",
           { ul: [
@@ -72,6 +73,8 @@ const TEXT = {
             "لا تضف إلا نشاطًا تملكه أو مخوّلًا بتمثيله، وبمعلومات صحيحة غير مضلّلة، ورقم هاتف قطري يخصّه.",
             "يُمنع إدراج أنشطة أو سلع أو خدمات مخالفة لقوانين دولة قطر أو الآداب العامة.",
             "تخضع الأنشطة لمراجعتنا؛ ولنا قبولها أو رفضها أو تعديلها أو إزالتها في أي وقت دون التزام بإبداء الأسباب.",
+            "تعديلاتك على نشاط منشور تُراجَع أيضًا؛ وتبقى النسخة المعتمدة معروضة حتى الموافقة.",
+            "لا ترفع إلا صورًا تملك حق نشرها (صورك أو بإذن صاحبها) ولا تحتوي محتوى مخالفًا أو صور أشخاص دون إذنهم. لنا رفض أي صورة أو حذفها في أي وقت.",
             "شارة «موثّق» تعني أننا راجعنا بعض المعلومات؛ وهي ليست ضمانًا ولا توصية بالنشاط."
           ] }
         ]],
@@ -104,6 +107,7 @@ const TEXT = {
           { ul: [
             "<strong>Account data:</strong> name, e-mail and password. We never store the password itself, only a salted cryptographic hash that we cannot read.",
             "<strong>Listings you submit:</strong> business name, category, city, area, description and phone number.",
+            "<strong>Photos:</strong> the photos you upload for your business. We remove camera and location data (EXIF) before storing them in our database, and they become visible to everyone after we review them.",
             "<strong>Reviews:</strong> the star rating and comment you write, displayed with your name.",
             "<strong>Consent record:</strong> when you accepted the Terms and Privacy Policy and which version of the text.",
             "<strong>E-mail confirmation:</strong> we send a confirmation link to your address and store only the token’s hash (deleted once used or after 24 hours), and we record when you confirmed it.",
@@ -119,14 +123,14 @@ const TEXT = {
           ] },
           "Our basis is your consent at sign-up and providing the service you requested. We do not use your data for advertising and we do not sell it."
         ]],
-        ["What is public", ["Once a listing is approved, its name, description, area and phone number are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing or review."]],
+        ["What is public", ["Once a listing is approved, its name, description, area, opening hours, phone number and approved photos are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing, review or photo (for example, people’s faces without their consent)."]],
         ["Cookies", ["We use one strictly necessary cookie, <code>sid</code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie."]],
         ["Sharing", [
           "We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.",
           "We use an e-mail delivery provider only to send account e-mails (e-mail confirmation, password reset and notices when they change). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.",
           "The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply."
         ]],
-        ["Retention", ["We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Accounts whose e-mail was never confirmed and that own no content are deleted automatically after 7 days. Backup copies may remain for a limited time until replaced in the normal backup cycle."]],
+        ["Retention", ["We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted together with its photos. Accounts whose e-mail was never confirmed and that own no content are deleted automatically after 7 days. Backup copies may remain for a limited time until replaced in the normal backup cycle."]],
         ["Your rights", [
           "Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:",
           { ul: [
@@ -157,6 +161,8 @@ const TEXT = {
             "Only list a business you own or are authorised to represent, with accurate, non-misleading information and its own Qatar phone number.",
             "Listings of businesses, goods or services that break the laws of the State of Qatar or public morals are prohibited.",
             "Listings are subject to our review; we may approve, reject, edit or remove them at any time without giving reasons.",
+            "Changes to a published listing are reviewed too; the approved version stays live until approval.",
+            "Only upload photos you have the right to publish (your own or with the owner’s permission) that contain nothing unlawful and no people without their consent. We may reject or remove any photo at any time.",
             "The “Verified” badge means we checked some information. It is not a guarantee or endorsement."
           ] }
         ]],

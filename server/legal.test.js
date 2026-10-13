@@ -54,6 +54,8 @@ test("policy text matches reality: states the cookie, hashing, and no advertisin
   assert.match(en, /e-mail delivery provider/);
   assert.match(en, /Password-reset token/);
   assert.match(en, /E-mail confirmation/);
+  assert.match(en, /remove camera and location data \(EXIF\)/);
+  assert.match(await (await get("/en/terms")).text(), /Only upload photos you have the right to publish/);
   assert.match(en, /deleted automatically after 7 days/);
   const ar = await (await get("/privacy")).text();
   assert.ok(ar.includes("تفعيل البريد") && ar.includes("بعد 7 أيام"));

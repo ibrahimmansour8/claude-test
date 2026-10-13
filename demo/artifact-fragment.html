@@ -93,6 +93,19 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .banner { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: rgba(217, 154, 0, .16); border-bottom: 1px solid var(--line); text-align: center; }
 .banner.flash { background: rgba(31, 122, 77, .16); }
 .banner .btn { padding: 4px 12px; }
+.thumb-link { display: block; margin: -16px -16px 4px; }
+.thumb { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; background: var(--line); }
+.gallery { display: flex; flex-wrap: wrap; gap: 8px; }
+.gallery-img { max-width: 100%; max-height: 360px; width: auto; height: auto; border-radius: 10px; object-fit: cover; background: var(--line); }
+.gallery-img:first-child { width: 100%; max-height: 420px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 8px 0; }
+.tile { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--line); }
+.tile .btn { padding: 4px 10px; font-size: .85rem; }
+.filebtn { cursor: pointer; justify-self: start; }
+.diff { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.diff ul { margin: 6px 0 0; padding-inline-start: 18px; line-height: 1.8; }
+.diff del { color: #c0392b; } .diff ins { color: var(--ok); text-decoration: none; font-weight: 600; }
 
 /* demo-only additions */
 [hidden] { display: none !important; }
@@ -234,7 +247,7 @@ window.BUSINESSES = [
 ];
 
 ;
-window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>سياسة الخصوصية\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>سياسة الخصوصية\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. من نحن\u003c/h2>\u003cp>يُدير هذا الموقع «Qatar Guide (demo)» (ويُشار إليه بـ«نحن»). هو دليل للأنشطة التجارية والخدمات في دولة قطر. للتواصل بخصوص خصوصيتك: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. البيانات التي نجمعها\u003c/h2>\u003cul>\u003cli>\u003cstrong>بيانات الحساب:\u003c/strong> الاسم والبريد الإلكتروني وكلمة المرور. لا نحفظ كلمة المرور نفسها، بل نحفظ بصمة مشفّرة (مملّحة) لا نستطيع قراءتها.\u003c/li>\u003cli>\u003cstrong>بيانات الأنشطة التي تضيفها:\u003c/strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.\u003c/li>\u003cli>\u003cstrong>التقييمات:\u003c/strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.\u003c/li>\u003cli>\u003cstrong>سجل الموافقة:\u003c/strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.\u003c/li>\u003cli>\u003cstrong>تفعيل البريد:\u003c/strong> نرسل رابط تفعيل إلى بريدك ونحفظ بصمة الرمز فقط (يُحذف بعد الاستخدام أو بعد 24 ساعة) ونسجّل وقت تفعيل بريدك.\u003c/li>\u003cli>\u003cstrong>رمز استعادة كلمة المرور:\u003c/strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.\u003c/li>\u003cli>\u003cstrong>بيانات تقنية:\u003c/strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. لماذا نستخدم بياناتك\u003c/h2>\u003cul>\u003cli>إنشاء حسابك وتسجيل دخولك وحمايته، والتأكد من أن البريد يعود لك ومنع إساءة الاستخدام.\u003c/li>\u003cli>نشر الأنشطة والتقييمات بعد المراجعة، وإدارة المحتوى ومنع إساءة الاستخدام.\u003c/li>\u003cli>تحسين ظهور الدليل في محركات البحث (للأنشطة والتقييمات المنشورة فقط).\u003c/li>\u003c/ul>\u003cp>أساس المعالجة هو موافقتك عند التسجيل وتقديمنا للخدمة التي طلبتها. لا نستخدم بياناتك للإعلانات ولا نبيعها.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. ما يكون عامًّا\u003c/h2>\u003cp>بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته ورقم هاتفه. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك معلومات شخصية لا تريد نشرها.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. ملفات تعريف الارتباط (الكوكيز)\u003c/h2>\u003cp>نستخدم كوكي واحدًا ضروريًا للتشغيل باسم \u003ccode>sid\u003c/code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. مشاركة البيانات\u003c/h2>\u003cp>لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.\u003c/p>\u003cp>نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (تفعيل البريد واستعادة كلمة المرور وإشعارات تغييرهما). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.\u003c/p>\u003cp>أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. مدة الاحتفاظ\u003c/h2>\u003cp>نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. الحسابات التي لم يُفعَّل بريدها ولا تملك أي محتوى تُحذف تلقائيًا بعد 7 أيام. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. حقوقك\u003c/h2>\u003cp>وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:\u003c/p>\u003cul>\u003cli>\u003cstrong>تنزيل بياناتك\u003c/strong> وحذف حسابك مباشرة من صفحة «حسابي» داخل الموقع.\u003c/li>\u003cli>طلب تصحيح أي بيانات أو ممارسة أي حق آخر بمراسلتنا على \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>تقديم شكوى إلى الجهة المختصة في دولة قطر إن رأيت أن بياناتك عولجت بشكل مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. الأمان\u003c/h2>\u003cp>نطبّق إجراءات معقولة: تشفير كلمات المرور، وجلسات محمية، وتحديد محاولات الدخول، واتصال مشفّر. لا توجد حماية مطلقة، وتقع عليك مسؤولية سرية كلمة مرورك.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. الأطفال\u003c/h2>\u003cp>الموقع غير موجّه لمن هم دون 18 عامًا، ولا نجمع بياناتهم عن علم. إذا علمنا بحساب لقاصر نحذفه.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات على هذه السياسة\u003c/h2>\u003cp>قد نحدّث هذه السياسة، وسيظهر تاريخ آخر تحديث أدناه. للتغييرات الجوهرية نبلّغك بوسيلة مناسبة.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"شروط الاستخدام","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>شروط الاستخدام\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>شروط الاستخدام\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. القبول\u003c/h2>\u003cp>باستخدامك الموقع أو إنشاء حساب فيه فإنك توافق على هذه الشروط وعلى سياسة الخصوصية. إن لم توافق فلا تستخدم الموقع.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. طبيعة الخدمة\u003c/h2>\u003cp>الموقع دليل معلومات يعرض أنشطة وخدمات يضيفها مستخدمون. لسنا طرفًا في أي اتفاق أو تعامل بينك وبين أي نشاط، ولا نضمن دقة المعلومات أو جودة الخدمات أو توفّرها. تحقّق بنفسك قبل التعامل.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. الحسابات\u003c/h2>\u003cul>\u003cli>يجب أن تكون 18 عامًا أو أكثر وأن تقدّم معلومات صحيحة.\u003c/li>\u003cli>أنت مسؤول عن سرية كلمة مرورك وعن كل ما يجري عبر حسابك.\u003c/li>\u003cli>يجوز لنا تعليق الحساب أو إغلاقه عند مخالفة هذه الشروط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. إضافة الأنشطة\u003c/h2>\u003cul>\u003cli>لا تضف إلا نشاطًا تملكه أو مخوّلًا بتمثيله، وبمعلومات صحيحة غير مضلّلة، ورقم هاتف قطري يخصّه.\u003c/li>\u003cli>يُمنع إدراج أنشطة أو سلع أو خدمات مخالفة لقوانين دولة قطر أو الآداب العامة.\u003c/li>\u003cli>تخضع الأنشطة لمراجعتنا؛ ولنا قبولها أو رفضها أو تعديلها أو إزالتها في أي وقت دون التزام بإبداء الأسباب.\u003c/li>\u003cli>شارة «موثّق» تعني أننا راجعنا بعض المعلومات؛ وهي ليست ضمانًا ولا توصية بالنشاط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. التقييمات\u003c/h2>\u003cul>\u003cli>اكتب تقييمًا عن تجربة حقيقية فقط. يُمنع التقييم المزوّر أو المدفوع أو تقييم نشاطك أو منافسك للإضرار به.\u003c/li>\u003cli>يُسمح بتقييم واحد لكل نشاط لكل مستخدم، ويمكنك تعديله أو حذفه.\u003c/li>\u003cli>يُمنع في التعليقات السبّ والتشهير والتحريض ونشر بيانات شخصية للآخرين والإعلانات والروابط المزعجة.\u003c/li>\u003cli>لنا إزالة أي تقييم مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. سلوك محظور\u003c/h2>\u003cul>\u003cli>محاولة اختراق الموقع أو تعطيله أو تجاوز حدود الاستخدام.\u003c/li>\u003cli>انتحال شخصية أو جهة.\u003c/li>\u003cli>جمع بيانات الموقع آليًا بشكل مفرط أو إعادة نشرها دون إذن.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. المحتوى الذي تنشره\u003c/h2>\u003cp>تبقى حقوق المحتوى الذي تضيفه لك. وبنشره تمنحنا ترخيصًا غير حصري ومجانيًّا لعرضه وتخزينه وتهيئته للعرض في الموقع وفي نتائج محركات البحث ما دام منشورًا. وتقرّ بأن لك حق نشره.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. إخلاء المسؤولية وحدودها\u003c/h2>\u003cp>تُقدَّم الخدمة «كما هي» دون ضمانات من أي نوع. وفي الحدود التي يسمح بها القانون لا نتحمّل مسؤولية عن خسائر غير مباشرة أو تبعية أو عن تعاملك مع الأنشطة المدرجة. لا يستبعد هذا النص أي مسؤولية لا يجوز استبعادها نظامًا.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. إنهاء الاستخدام\u003c/h2>\u003cp>يمكنك حذف حسابك في أي وقت من صفحة «حسابي». وللموقع إيقاف الخدمة أو تعديلها.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. القانون المطبّق\u003c/h2>\u003cp>تخضع هذه الشروط لقوانين دولة قطر، وتختص محاكمها بالنظر في أي نزاع ينشأ عنها.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات والتواصل\u003c/h2>\u003cp>قد نعدّل هذه الشروط، واستمرارك في الاستخدام بعد التعديل يعني قبولك. للاستفسار: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}},"en":{"privacy":{"title":"Privacy Policy","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Privacy Policy\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Privacy Policy\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Who we are\u003c/h2>\u003cp>This website is operated by “Qatar Guide (demo)” (“we”). It is a directory of businesses and services in the State of Qatar. Privacy contact: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. Data we collect\u003c/h2>\u003cul>\u003cli>\u003cstrong>Account data:\u003c/strong> name, e-mail and password. We never store the password itself, only a salted cryptographic hash that we cannot read.\u003c/li>\u003cli>\u003cstrong>Listings you submit:\u003c/strong> business name, category, city, area, description and phone number.\u003c/li>\u003cli>\u003cstrong>Reviews:\u003c/strong> the star rating and comment you write, displayed with your name.\u003c/li>\u003cli>\u003cstrong>Consent record:\u003c/strong> when you accepted the Terms and Privacy Policy and which version of the text.\u003c/li>\u003cli>\u003cstrong>E-mail confirmation:\u003c/strong> we send a confirmation link to your address and store only the token’s hash (deleted once used or after 24 hours), and we record when you confirmed it.\u003c/li>\u003cli>\u003cstrong>Password-reset token:\u003c/strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.\u003c/li>\u003cli>\u003cstrong>Technical data:\u003c/strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. Why we use your data\u003c/h2>\u003cul>\u003cli>To create, secure and sign you in to your account, to confirm that the e-mail address is yours and to prevent abuse.\u003c/li>\u003cli>To publish listings and reviews after moderation, run the site and prevent abuse.\u003c/li>\u003cli>To make published listings and reviews discoverable in search engines.\u003c/li>\u003c/ul>\u003cp>Our basis is your consent at sign-up and providing the service you requested. We do not use your data for advertising and we do not sell it.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. What is public\u003c/h2>\u003cp>Once a listing is approved, its name, description, area and phone number are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing or review.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. Cookies\u003c/h2>\u003cp>We use one strictly necessary cookie, \u003ccode>sid\u003c/code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. Sharing\u003c/h2>\u003cp>We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.\u003c/p>\u003cp>We use an e-mail delivery provider only to send account e-mails (e-mail confirmation, password reset and notices when they change). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.\u003c/p>\u003cp>The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. Retention\u003c/h2>\u003cp>We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Accounts whose e-mail was never confirmed and that own no content are deleted automatically after 7 days. Backup copies may remain for a limited time until replaced in the normal backup cycle.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Your rights\u003c/h2>\u003cp>Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:\u003c/p>\u003cul>\u003cli>\u003cstrong>Download your data\u003c/strong> and delete your account directly from the “My account” page.\u003c/li>\u003cli>Ask us to correct data or exercise any other right at \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>Complain to the competent authority in the State of Qatar if you believe your data was handled unlawfully.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. Security\u003c/h2>\u003cp>We apply reasonable measures: password hashing, protected sessions, login rate limiting and encrypted connections. No system is perfectly secure, and keeping your password confidential is your responsibility.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Children\u003c/h2>\u003cp>The site is not directed to anyone under 18 and we do not knowingly collect their data. If we learn of an account held by a minor we delete it.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes\u003c/h2>\u003cp>We may update this policy; the last-updated date appears below. For material changes we will notify you by suitable means.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"Terms of Use","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Terms of Use\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Terms of Use\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Acceptance\u003c/h2>\u003cp>By using the site or creating an account you agree to these Terms and to the Privacy Policy. If you do not agree, do not use the site.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. The service\u003c/h2>\u003cp>The site is an information directory showing businesses and services submitted by users. We are not a party to any agreement or dealing between you and any business, and we do not guarantee the accuracy of information or the quality or availability of services. Do your own checks before dealing with anyone.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. Accounts\u003c/h2>\u003cul>\u003cli>You must be 18 or older and provide accurate information.\u003c/li>\u003cli>You are responsible for keeping your password confidential and for everything done through your account.\u003c/li>\u003cli>We may suspend or close an account that breaches these Terms.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. Listing a business\u003c/h2>\u003cul>\u003cli>Only list a business you own or are authorised to represent, with accurate, non-misleading information and its own Qatar phone number.\u003c/li>\u003cli>Listings of businesses, goods or services that break the laws of the State of Qatar or public morals are prohibited.\u003c/li>\u003cli>Listings are subject to our review; we may approve, reject, edit or remove them at any time without giving reasons.\u003c/li>\u003cli>The “Verified” badge means we checked some information. It is not a guarantee or endorsement.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. Reviews\u003c/h2>\u003cul>\u003cli>Write a review only about a genuine experience. Fake, paid, self-reviews or reviews of competitors meant to harm them are prohibited.\u003c/li>\u003cli>One review per business per user; you may edit or delete yours.\u003c/li>\u003cli>Comments must not contain abuse, defamation, incitement, other people’s personal data, advertising or spam links.\u003c/li>\u003cli>We may remove any review that breaches these rules.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. Prohibited conduct\u003c/h2>\u003cul>\u003cli>Attempting to hack, disrupt or bypass the limits of the site.\u003c/li>\u003cli>Impersonating a person or organisation.\u003c/li>\u003cli>Excessive automated scraping or republishing the site’s data without permission.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. Content you post\u003c/h2>\u003cp>You keep the rights to content you post. By posting it you grant us a non-exclusive, free licence to display, store and format it on the site and in search-engine results while it is published. You confirm you have the right to post it.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Disclaimer and liability\u003c/h2>\u003cp>The service is provided “as is” without warranties of any kind. To the extent permitted by law we are not liable for indirect or consequential losses or for your dealings with listed businesses. Nothing here excludes liability that cannot lawfully be excluded.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. Ending use\u003c/h2>\u003cp>You can delete your account at any time from the “My account” page. We may change or discontinue the service.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Governing law\u003c/h2>\u003cp>These Terms are governed by the laws of the State of Qatar and its courts have jurisdiction over any dispute arising from them.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes and contact\u003c/h2>\u003cp>We may amend these Terms; continuing to use the site after a change means you accept it. Questions: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}}};
+window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>سياسة الخصوصية\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>سياسة الخصوصية\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. من نحن\u003c/h2>\u003cp>يُدير هذا الموقع «Qatar Guide (demo)» (ويُشار إليه بـ«نحن»). هو دليل للأنشطة التجارية والخدمات في دولة قطر. للتواصل بخصوص خصوصيتك: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. البيانات التي نجمعها\u003c/h2>\u003cul>\u003cli>\u003cstrong>بيانات الحساب:\u003c/strong> الاسم والبريد الإلكتروني وكلمة المرور. لا نحفظ كلمة المرور نفسها، بل نحفظ بصمة مشفّرة (مملّحة) لا نستطيع قراءتها.\u003c/li>\u003cli>\u003cstrong>بيانات الأنشطة التي تضيفها:\u003c/strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.\u003c/li>\u003cli>\u003cstrong>الصور:\u003c/strong> الصور التي ترفعها لنشاطك. نحذف منها بيانات الكاميرا والموقع (EXIF) قبل حفظها في قاعدة بياناتنا، وتظهر للجميع بعد مراجعتنا لها.\u003c/li>\u003cli>\u003cstrong>التقييمات:\u003c/strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.\u003c/li>\u003cli>\u003cstrong>سجل الموافقة:\u003c/strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.\u003c/li>\u003cli>\u003cstrong>تفعيل البريد:\u003c/strong> نرسل رابط تفعيل إلى بريدك ونحفظ بصمة الرمز فقط (يُحذف بعد الاستخدام أو بعد 24 ساعة) ونسجّل وقت تفعيل بريدك.\u003c/li>\u003cli>\u003cstrong>رمز استعادة كلمة المرور:\u003c/strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.\u003c/li>\u003cli>\u003cstrong>بيانات تقنية:\u003c/strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. لماذا نستخدم بياناتك\u003c/h2>\u003cul>\u003cli>إنشاء حسابك وتسجيل دخولك وحمايته، والتأكد من أن البريد يعود لك ومنع إساءة الاستخدام.\u003c/li>\u003cli>نشر الأنشطة والتقييمات بعد المراجعة، وإدارة المحتوى ومنع إساءة الاستخدام.\u003c/li>\u003cli>تحسين ظهور الدليل في محركات البحث (للأنشطة والتقييمات المنشورة فقط).\u003c/li>\u003c/ul>\u003cp>أساس المعالجة هو موافقتك عند التسجيل وتقديمنا للخدمة التي طلبتها. لا نستخدم بياناتك للإعلانات ولا نبيعها.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. ما يكون عامًّا\u003c/h2>\u003cp>بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته وساعات عمله ورقم هاتفه وصوره المعتمدة. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك أو صورك معلومات شخصية لا تريد نشرها (مثل وجوه أشخاص دون إذنهم).\u003c/p>\u003c/section>\u003csection>\u003ch2>5. ملفات تعريف الارتباط (الكوكيز)\u003c/h2>\u003cp>نستخدم كوكي واحدًا ضروريًا للتشغيل باسم \u003ccode>sid\u003c/code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. مشاركة البيانات\u003c/h2>\u003cp>لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.\u003c/p>\u003cp>نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (تفعيل البريد واستعادة كلمة المرور وإشعارات تغييرهما). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.\u003c/p>\u003cp>أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. مدة الاحتفاظ\u003c/h2>\u003cp>نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها وصورها. الحسابات التي لم يُفعَّل بريدها ولا تملك أي محتوى تُحذف تلقائيًا بعد 7 أيام. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. حقوقك\u003c/h2>\u003cp>وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:\u003c/p>\u003cul>\u003cli>\u003cstrong>تنزيل بياناتك\u003c/strong> وحذف حسابك مباشرة من صفحة «حسابي» داخل الموقع.\u003c/li>\u003cli>طلب تصحيح أي بيانات أو ممارسة أي حق آخر بمراسلتنا على \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>تقديم شكوى إلى الجهة المختصة في دولة قطر إن رأيت أن بياناتك عولجت بشكل مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. الأمان\u003c/h2>\u003cp>نطبّق إجراءات معقولة: تشفير كلمات المرور، وجلسات محمية، وتحديد محاولات الدخول، واتصال مشفّر. لا توجد حماية مطلقة، وتقع عليك مسؤولية سرية كلمة مرورك.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. الأطفال\u003c/h2>\u003cp>الموقع غير موجّه لمن هم دون 18 عامًا، ولا نجمع بياناتهم عن علم. إذا علمنا بحساب لقاصر نحذفه.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات على هذه السياسة\u003c/h2>\u003cp>قد نحدّث هذه السياسة، وسيظهر تاريخ آخر تحديث أدناه. للتغييرات الجوهرية نبلّغك بوسيلة مناسبة.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"شروط الاستخدام","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>شروط الاستخدام\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>شروط الاستخدام\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. القبول\u003c/h2>\u003cp>باستخدامك الموقع أو إنشاء حساب فيه فإنك توافق على هذه الشروط وعلى سياسة الخصوصية. إن لم توافق فلا تستخدم الموقع.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. طبيعة الخدمة\u003c/h2>\u003cp>الموقع دليل معلومات يعرض أنشطة وخدمات يضيفها مستخدمون. لسنا طرفًا في أي اتفاق أو تعامل بينك وبين أي نشاط، ولا نضمن دقة المعلومات أو جودة الخدمات أو توفّرها. تحقّق بنفسك قبل التعامل.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. الحسابات\u003c/h2>\u003cul>\u003cli>يجب أن تكون 18 عامًا أو أكثر وأن تقدّم معلومات صحيحة.\u003c/li>\u003cli>أنت مسؤول عن سرية كلمة مرورك وعن كل ما يجري عبر حسابك.\u003c/li>\u003cli>يجوز لنا تعليق الحساب أو إغلاقه عند مخالفة هذه الشروط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. إضافة الأنشطة\u003c/h2>\u003cul>\u003cli>لا تضف إلا نشاطًا تملكه أو مخوّلًا بتمثيله، وبمعلومات صحيحة غير مضلّلة، ورقم هاتف قطري يخصّه.\u003c/li>\u003cli>يُمنع إدراج أنشطة أو سلع أو خدمات مخالفة لقوانين دولة قطر أو الآداب العامة.\u003c/li>\u003cli>تخضع الأنشطة لمراجعتنا؛ ولنا قبولها أو رفضها أو تعديلها أو إزالتها في أي وقت دون التزام بإبداء الأسباب.\u003c/li>\u003cli>تعديلاتك على نشاط منشور تُراجَع أيضًا؛ وتبقى النسخة المعتمدة معروضة حتى الموافقة.\u003c/li>\u003cli>لا ترفع إلا صورًا تملك حق نشرها (صورك أو بإذن صاحبها) ولا تحتوي محتوى مخالفًا أو صور أشخاص دون إذنهم. لنا رفض أي صورة أو حذفها في أي وقت.\u003c/li>\u003cli>شارة «موثّق» تعني أننا راجعنا بعض المعلومات؛ وهي ليست ضمانًا ولا توصية بالنشاط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. التقييمات\u003c/h2>\u003cul>\u003cli>اكتب تقييمًا عن تجربة حقيقية فقط. يُمنع التقييم المزوّر أو المدفوع أو تقييم نشاطك أو منافسك للإضرار به.\u003c/li>\u003cli>يُسمح بتقييم واحد لكل نشاط لكل مستخدم، ويمكنك تعديله أو حذفه.\u003c/li>\u003cli>يُمنع في التعليقات السبّ والتشهير والتحريض ونشر بيانات شخصية للآخرين والإعلانات والروابط المزعجة.\u003c/li>\u003cli>لنا إزالة أي تقييم مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. سلوك محظور\u003c/h2>\u003cul>\u003cli>محاولة اختراق الموقع أو تعطيله أو تجاوز حدود الاستخدام.\u003c/li>\u003cli>انتحال شخصية أو جهة.\u003c/li>\u003cli>جمع بيانات الموقع آليًا بشكل مفرط أو إعادة نشرها دون إذن.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. المحتوى الذي تنشره\u003c/h2>\u003cp>تبقى حقوق المحتوى الذي تضيفه لك. وبنشره تمنحنا ترخيصًا غير حصري ومجانيًّا لعرضه وتخزينه وتهيئته للعرض في الموقع وفي نتائج محركات البحث ما دام منشورًا. وتقرّ بأن لك حق نشره.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. إخلاء المسؤولية وحدودها\u003c/h2>\u003cp>تُقدَّم الخدمة «كما هي» دون ضمانات من أي نوع. وفي الحدود التي يسمح بها القانون لا نتحمّل مسؤولية عن خسائر غير مباشرة أو تبعية أو عن تعاملك مع الأنشطة المدرجة. لا يستبعد هذا النص أي مسؤولية لا يجوز استبعادها نظامًا.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. إنهاء الاستخدام\u003c/h2>\u003cp>يمكنك حذف حسابك في أي وقت من صفحة «حسابي». وللموقع إيقاف الخدمة أو تعديلها.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. القانون المطبّق\u003c/h2>\u003cp>تخضع هذه الشروط لقوانين دولة قطر، وتختص محاكمها بالنظر في أي نزاع ينشأ عنها.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات والتواصل\u003c/h2>\u003cp>قد نعدّل هذه الشروط، واستمرارك في الاستخدام بعد التعديل يعني قبولك. للاستفسار: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}},"en":{"privacy":{"title":"Privacy Policy","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Privacy Policy\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Privacy Policy\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Who we are\u003c/h2>\u003cp>This website is operated by “Qatar Guide (demo)” (“we”). It is a directory of businesses and services in the State of Qatar. Privacy contact: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. Data we collect\u003c/h2>\u003cul>\u003cli>\u003cstrong>Account data:\u003c/strong> name, e-mail and password. We never store the password itself, only a salted cryptographic hash that we cannot read.\u003c/li>\u003cli>\u003cstrong>Listings you submit:\u003c/strong> business name, category, city, area, description and phone number.\u003c/li>\u003cli>\u003cstrong>Photos:\u003c/strong> the photos you upload for your business. We remove camera and location data (EXIF) before storing them in our database, and they become visible to everyone after we review them.\u003c/li>\u003cli>\u003cstrong>Reviews:\u003c/strong> the star rating and comment you write, displayed with your name.\u003c/li>\u003cli>\u003cstrong>Consent record:\u003c/strong> when you accepted the Terms and Privacy Policy and which version of the text.\u003c/li>\u003cli>\u003cstrong>E-mail confirmation:\u003c/strong> we send a confirmation link to your address and store only the token’s hash (deleted once used or after 24 hours), and we record when you confirmed it.\u003c/li>\u003cli>\u003cstrong>Password-reset token:\u003c/strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.\u003c/li>\u003cli>\u003cstrong>Technical data:\u003c/strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. Why we use your data\u003c/h2>\u003cul>\u003cli>To create, secure and sign you in to your account, to confirm that the e-mail address is yours and to prevent abuse.\u003c/li>\u003cli>To publish listings and reviews after moderation, run the site and prevent abuse.\u003c/li>\u003cli>To make published listings and reviews discoverable in search engines.\u003c/li>\u003c/ul>\u003cp>Our basis is your consent at sign-up and providing the service you requested. We do not use your data for advertising and we do not sell it.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. What is public\u003c/h2>\u003cp>Once a listing is approved, its name, description, area, opening hours, phone number and approved photos are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing, review or photo (for example, people’s faces without their consent).\u003c/p>\u003c/section>\u003csection>\u003ch2>5. Cookies\u003c/h2>\u003cp>We use one strictly necessary cookie, \u003ccode>sid\u003c/code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. Sharing\u003c/h2>\u003cp>We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.\u003c/p>\u003cp>We use an e-mail delivery provider only to send account e-mails (e-mail confirmation, password reset and notices when they change). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.\u003c/p>\u003cp>The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. Retention\u003c/h2>\u003cp>We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted together with its photos. Accounts whose e-mail was never confirmed and that own no content are deleted automatically after 7 days. Backup copies may remain for a limited time until replaced in the normal backup cycle.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Your rights\u003c/h2>\u003cp>Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:\u003c/p>\u003cul>\u003cli>\u003cstrong>Download your data\u003c/strong> and delete your account directly from the “My account” page.\u003c/li>\u003cli>Ask us to correct data or exercise any other right at \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>Complain to the competent authority in the State of Qatar if you believe your data was handled unlawfully.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. Security\u003c/h2>\u003cp>We apply reasonable measures: password hashing, protected sessions, login rate limiting and encrypted connections. No system is perfectly secure, and keeping your password confidential is your responsibility.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Children\u003c/h2>\u003cp>The site is not directed to anyone under 18 and we do not knowingly collect their data. If we learn of an account held by a minor we delete it.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes\u003c/h2>\u003cp>We may update this policy; the last-updated date appears below. For material changes we will notify you by suitable means.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"Terms of Use","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Terms of Use\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Terms of Use\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Acceptance\u003c/h2>\u003cp>By using the site or creating an account you agree to these Terms and to the Privacy Policy. If you do not agree, do not use the site.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. The service\u003c/h2>\u003cp>The site is an information directory showing businesses and services submitted by users. We are not a party to any agreement or dealing between you and any business, and we do not guarantee the accuracy of information or the quality or availability of services. Do your own checks before dealing with anyone.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. Accounts\u003c/h2>\u003cul>\u003cli>You must be 18 or older and provide accurate information.\u003c/li>\u003cli>You are responsible for keeping your password confidential and for everything done through your account.\u003c/li>\u003cli>We may suspend or close an account that breaches these Terms.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. Listing a business\u003c/h2>\u003cul>\u003cli>Only list a business you own or are authorised to represent, with accurate, non-misleading information and its own Qatar phone number.\u003c/li>\u003cli>Listings of businesses, goods or services that break the laws of the State of Qatar or public morals are prohibited.\u003c/li>\u003cli>Listings are subject to our review; we may approve, reject, edit or remove them at any time without giving reasons.\u003c/li>\u003cli>Changes to a published listing are reviewed too; the approved version stays live until approval.\u003c/li>\u003cli>Only upload photos you have the right to publish (your own or with the owner’s permission) that contain nothing unlawful and no people without their consent. We may reject or remove any photo at any time.\u003c/li>\u003cli>The “Verified” badge means we checked some information. It is not a guarantee or endorsement.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. Reviews\u003c/h2>\u003cul>\u003cli>Write a review only about a genuine experience. Fake, paid, self-reviews or reviews of competitors meant to harm them are prohibited.\u003c/li>\u003cli>One review per business per user; you may edit or delete yours.\u003c/li>\u003cli>Comments must not contain abuse, defamation, incitement, other people’s personal data, advertising or spam links.\u003c/li>\u003cli>We may remove any review that breaches these rules.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. Prohibited conduct\u003c/h2>\u003cul>\u003cli>Attempting to hack, disrupt or bypass the limits of the site.\u003c/li>\u003cli>Impersonating a person or organisation.\u003c/li>\u003cli>Excessive automated scraping or republishing the site’s data without permission.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. Content you post\u003c/h2>\u003cp>You keep the rights to content you post. By posting it you grant us a non-exclusive, free licence to display, store and format it on the site and in search-engine results while it is published. You confirm you have the right to post it.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Disclaimer and liability\u003c/h2>\u003cp>The service is provided “as is” without warranties of any kind. To the extent permitted by law we are not liable for indirect or consequential losses or for your dealings with listed businesses. Nothing here excludes liability that cannot lawfully be excluded.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. Ending use\u003c/h2>\u003cp>You can delete your account at any time from the “My account” page. We may change or discontinue the service.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Governing law\u003c/h2>\u003cp>These Terms are governed by the laws of the State of Qatar and its courts have jurisdiction over any dispute arising from them.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes and contact\u003c/h2>\u003cp>We may amend these Terms; continuing to use the site after a change means you accept it. Questions: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}}};
 ;
 /* In-browser stand-in for the Node API, used only by the single-file demo (scripts/build-demo.js).
    Same endpoints and rules as server/server.js, minus rate limiting. Data lives in this browser only. */
@@ -252,7 +265,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
   }
 
   function seed() {
-    var S = { users: [], businesses: [], reviews: [], resets: [], mails: [], me: null, seq: { u: 1, b: 1, r: 1 } };
+    var S = { users: [], businesses: [], reviews: [], resets: [], mails: [], me: null, seq: { u: 1, b: 1, r: 1, i: 1 }, images: [], verifs: [] };
     window.BUSINESSES.forEach(function (b) {
       S.businesses.push({ id: S.seq.b++, owner_id: null, cat: b.cat, city: b.city, name: b.name, desc: b.desc, area: b.area, hours: b.hours,
         phone: b.phone, whatsapp: b.whatsapp, verified: !!b.verified, status: "approved", created_at: new Date().toISOString() });
@@ -265,7 +278,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     S = memory || seed();
   }
   function normalise() {
-    S.verifs = S.verifs || [];
+    S.verifs = S.verifs || []; S.images = S.images || []; S.seq.i = S.seq.i || 1;
     S.users.forEach(function (u) { if (!("verified" in u)) u.verified = u.accepted || new Date().toISOString(); }); // saved before verification existed
   }
   function save() { memory = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
@@ -288,10 +301,38 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     var avg = rs.length ? Math.round(rs.reduce(function (a, r) { return a + r.rating; }, 0) / rs.length * 10) / 10 : 0;
     return { rating: avg, reviews: rs.length };
   }
-  function out(b) {
-    var st = stats(b.id);
+  function imagesOf(b, all) {
+    return S.images.filter(function (i) { return i.business_id === b.id && (all || i.status === "approved"); }).map(function (i) { return { id: i.id, w: i.w, h: i.h, status: i.status }; });
+  }
+  function out(b, all) {
+    var st = stats(b.id), imgs = imagesOf(b, all), ok = imgs.filter(function (i) { return i.status === "approved"; });
     return { id: b.id, cat: b.cat, city: b.city, name: b.name, desc: b.desc, area: b.area, hours: b.hours || { ar: "", en: "" },
-      phone: b.phone, whatsapp: b.whatsapp, rating: st.rating, reviews: st.reviews, verified: b.verified, status: b.status, mine: false };
+      phone: b.phone, whatsapp: b.whatsapp, rating: st.rating, reviews: st.reviews, verified: b.verified, status: b.status, mine: false,
+      images: imgs, cover: ok.length ? ok[0].id : null };
+  }
+  function listing(body) {
+    var f = { cat: body.cat, city: body.city, name_ar: str(body.name_ar, 80), desc: str(body.desc, 300), area: str(body.area, 80), hours: str(body.hours, 80), phone: str(body.phone, 20).replace(/\s/g, "") };
+    f.name_en = str(body.name_en, 80) || f.name_ar;
+    if (!f.name_ar) return { error: "invalid_name" };
+    if (CATS.indexOf(f.cat) < 0) return { error: "invalid_category" };
+    if (CITIES.indexOf(f.city) < 0) return { error: "invalid_city" };
+    if (!/^[34567]\d{7}$/.test(f.phone)) return { error: "invalid_phone" };
+    return { f: f };
+  }
+  function live(b) { return { cat: b.cat, city: b.city, name_ar: b.name.ar, name_en: b.name.en, desc: b.desc.ar, area: b.area.ar, hours: (b.hours || {}).ar || "", phone: b.phone.replace("+974", "") }; }
+  function same(a, b) { return ["cat", "city", "name_ar", "name_en", "desc", "area", "hours", "phone"].every(function (k) { return a[k] === b[k]; }); }
+  function apply(b, f) {
+    b.cat = f.cat; b.city = f.city; b.name = { ar: f.name_ar, en: f.name_en }; b.desc = { ar: f.desc, en: f.desc }; b.area = { ar: f.area, en: f.area };
+    b.hours = { ar: f.hours, en: f.hours }; b.phone = "+974" + f.phone; b.whatsapp = "974" + f.phone; b.edit = null; b.updated = new Date().toISOString();
+  }
+  function manage(u, id) {
+    var b = S.businesses.filter(function (x) { return x.id === id; })[0];
+    if (!b) return { err: R(404, { error: "not_found" }) };
+    if (b.owner_id !== u.id && u.role !== "admin") return { err: R(403, { error: "forbidden" }) };
+    return { b: b };
+  }
+  function decode(dataUrl) {
+    return new Promise(function (resolve, reject) { var im = new Image(); im.onload = function () { resolve({ w: im.naturalWidth, h: im.naturalHeight }); }; im.onerror = reject; im.src = dataUrl; });
   }
   function byRating(a, b) { return b.rating - a.rating || b.reviews - a.reviews || a.id - b.id; }
   function me() { return S.me ? S.users.filter(function (u) { return u.id === S.me; })[0] || null : null; }
@@ -424,28 +465,63 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       return hash(typeof body.password === "string" ? body.password : "", u.salt).then(function (h) {
         if (h !== u.hash) return R(401, { error: "bad_credentials" });
         var mine = S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return b.id; });
-        S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; });
+        S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; }); S.images = S.images.filter(function (i) { return mine.indexOf(i.business_id) < 0; });
         S.reviews = S.reviews.filter(function (r) { return r.user_id !== u.id && mine.indexOf(r.business_id) < 0; });
         S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.verifs = S.verifs.filter(function (v) { return v.user_id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
       });
     }
 
-    if (method === "GET" && path === "/api/businesses") return R(200, { businesses: S.businesses.filter(function (b) { return b.status === "approved"; }).map(out).sort(byRating) });
+    if (method === "GET" && path === "/api/businesses") return R(200, { businesses: S.businesses.filter(function (b) { return b.status === "approved"; }).map(function (b) { return out(b, false); }).sort(byRating) });
     if (method === "GET" && path === "/api/my/businesses") {
       if (!u) return R(401, { error: "auth_required" });
-      return R(200, { businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { var o = out(b); o.mine = true; return o; }).sort(function (a, b) { return b.id - a.id; }) });
+      return R(200, { businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { var o = out(b, true); o.mine = true; o.edit = b.edit || null; return o; }).sort(function (a, b) { return b.id - a.id; }) });
     }
     if (method === "POST" && path === "/api/businesses") {
       if (!u) return R(401, { error: "auth_required" });
       if (gated(u)) return R(403, { error: "email_unverified" });
-      var nameAr = str(body.name_ar, 80), nameEn = str(body.name_en, 80) || nameAr, desc = str(body.desc, 300), area = str(body.area, 80), phone = str(body.phone, 8).replace(/\s/g, "");
-      if (!nameAr) return R(400, { error: "invalid_name" });
-      if (CATS.indexOf(body.cat) < 0) return R(400, { error: "invalid_category" });
-      if (CITIES.indexOf(body.city) < 0) return R(400, { error: "invalid_city" });
-      if (!/^[34567]\d{7}$/.test(phone)) return R(400, { error: "invalid_phone" });
-      var nb = { id: S.seq.b++, owner_id: u.id, cat: body.cat, city: body.city, name: { ar: nameAr, en: nameEn }, desc: { ar: desc, en: desc }, area: { ar: area, en: area },
-        hours: { ar: "", en: "" }, phone: "+974" + phone, whatsapp: "974" + phone, verified: false, status: "pending", created_at: new Date().toISOString() };
+      var v = listing(body);
+      if (v.error) return R(400, { error: v.error });
+      var f = v.f, nb = { id: S.seq.b++, owner_id: u.id, cat: f.cat, city: f.city, name: { ar: f.name_ar, en: f.name_en }, desc: { ar: f.desc, en: f.desc }, area: { ar: f.area, en: f.area },
+        hours: { ar: f.hours, en: f.hours }, phone: "+974" + f.phone, whatsapp: "974" + f.phone, verified: false, status: "pending", created_at: new Date().toISOString(), edit: null };
       S.businesses.push(nb); save(); return R(201, { id: nb.id, status: "pending" });
+    }
+    if ((m = path.match(/^\/api\/businesses\/(\d+)$/)) && method === "PATCH") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (gated(u)) return R(403, { error: "email_unverified" });
+      var mg = manage(u, Number(m[1])); if (mg.err) return mg.err;
+      var v2 = listing(body); if (v2.error) return R(400, { error: v2.error });
+      if (mg.b.status === "approved" && u.role !== "admin") {
+        if (same(v2.f, live(mg.b))) { mg.b.edit = null; save(); return R(200, { status: "unchanged" }); }
+        mg.b.edit = v2.f; save(); return R(200, { status: "edit_pending" });
+      }
+      apply(mg.b, v2.f); if (mg.b.status === "rejected" && u.role !== "admin") mg.b.status = "pending"; save(); return R(200, { status: "updated" });
+    }
+    if ((m = path.match(/^\/api\/businesses\/(\d+)\/manage$/)) && method === "GET") {
+      if (!u) return R(401, { error: "auth_required" });
+      var mg2 = manage(u, Number(m[1])); if (mg2.err) return mg2.err;
+      var o2 = out(mg2.b, true); o2.mine = true; o2.edit = mg2.b.edit || null;
+      return R(200, { business: o2, form: mg2.b.edit || live(mg2.b), maxImages: 6 });
+    }
+    if ((m = path.match(/^\/api\/businesses\/(\d+)\/images$/)) && method === "POST") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (gated(u)) return R(403, { error: "email_unverified" });
+      var mg3 = manage(u, Number(m[1])); if (mg3.err) return mg3.err;
+      var du = body.__dataUrl || "";
+      if (!/^data:image\/(jpeg|png);base64,/.test(du)) return R(415, { error: "unsupported_image_type" });
+      if (S.images.filter(function (i) { return i.business_id === mg3.b.id && i.status !== "rejected"; }).length >= 6) return R(400, { error: "too_many_images" });
+      return decode(du).then(function (d) {
+        if (d.w < 16 || d.h < 16) return R(400, { error: "image_too_small" });
+        var im = { id: S.seq.i++, business_id: mg3.b.id, user_id: u.id, data: du, w: d.w, h: d.h, status: u.role === "admin" ? "approved" : "pending" };
+        S.images.push(im); save(); return R(201, { id: im.id, status: im.status, w: im.w, h: im.h });
+      }, function () { return R(400, { error: "invalid_image" }); });
+    }
+    if ((m = path.match(/^\/api\/images\/(\d+)$/)) && method === "DELETE") {
+      if (!u) return R(401, { error: "auth_required" });
+      var img = S.images.filter(function (i) { return i.id === Number(m[1]); })[0];
+      if (!img) return R(404, { error: "not_found" });
+      var owner = S.businesses.filter(function (x) { return x.id === img.business_id; })[0];
+      if (!owner || (owner.owner_id !== u.id && u.role !== "admin")) return R(403, { error: "forbidden" });
+      S.images = S.images.filter(function (i) { return i !== img; }); save(); return R(200, { ok: true });
     }
 
     if ((m = path.match(/^\/api\/businesses\/(\d+)\/reviews$/))) {
@@ -482,14 +558,28 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       if (method === "GET" && path === "/api/admin/businesses") {
         var stt = query.status || "pending";
         if (["pending", "approved", "rejected"].indexOf(stt) < 0) return R(400, { error: "invalid_status" });
-        return R(200, { businesses: S.businesses.filter(function (b) { return b.status === stt; }).map(out).sort(function (a, b) { return b.id - a.id; }) });
+        var inQueue = function (b) { return b.status === "pending" || !!b.edit || S.images.some(function (i) { return i.business_id === b.id && i.status === "pending"; }); };
+        return R(200, { businesses: S.businesses.filter(function (b) { return stt === "pending" ? inQueue(b) : b.status === stt; }).map(function (b) {
+          var o = out(b, true); o.edit = b.edit || null; o.review = b.status === "pending" ? "new" : b.edit ? "edit" : "images"; return o;
+        }).sort(function (a, b) { return b.id - a.id; }) });
       }
       if (method === "POST" && (m = path.match(/^\/api\/admin\/businesses\/(\d+)\/(approve|reject|verify|unverify)$/))) {
         var tb = S.businesses.filter(function (b) { return b.id === Number(m[1]); })[0];
         if (!tb) return R(404, { error: "not_found" });
-        if (m[2] === "approve") tb.status = "approved"; else if (m[2] === "reject") tb.status = "rejected"; else tb.verified = m[2] === "verify";
+        if (m[2] === "approve") {
+          if (tb.edit) apply(tb, tb.edit); else tb.status = "approved";
+          S.images.forEach(function (i) { if (i.business_id === tb.id && i.status === "pending") i.status = "approved"; });
+        } else if (m[2] === "reject") {
+          if (tb.status === "approved") { tb.edit = null; S.images.forEach(function (i) { if (i.business_id === tb.id && i.status === "pending") i.status = "rejected"; }); }
+          else tb.status = "rejected";
+        } else tb.verified = m[2] === "verify";
         save(); return R(200, { ok: true });
       }
+    }
+    if (method === "POST" && (m = path.match(/^\/api\/admin\/images\/(\d+)\/(approve|reject)$/)) && u && u.role === "admin") {
+      var ti = S.images.filter(function (i) { return i.id === Number(m[1]); })[0];
+      if (!ti) return R(404, { error: "not_found" });
+      ti.status = m[2] === "approve" ? "approved" : "rejected"; save(); return R(200, { ok: true });
     }
     return R(404, { error: "not_found" });
   }
@@ -499,8 +589,11 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     if (typeof url !== "string" || url.indexOf("/api/") !== 0) return realFetch ? realFetch(url, opt) : Promise.reject(new Error("offline"));
     var qi = url.indexOf("?"), path = qi < 0 ? url : url.slice(0, qi), query = {};
     if (qi >= 0) new URLSearchParams(url.slice(qi + 1)).forEach(function (v, k) { query[k] = v; });
-    var body = {}; try { body = opt && opt.body ? JSON.parse(opt.body) : {}; } catch (e) {}
-    return ensureAdmin().then(function () { return handle(((opt && opt.method) || "GET").toUpperCase(), path, query, body); }).then(function (r) {
+    var bodyP;
+    if (opt && opt.body && typeof Blob !== "undefined" && opt.body instanceof Blob) {
+      bodyP = new Promise(function (resolve) { var fr = new FileReader(); fr.onload = function () { resolve({ __dataUrl: fr.result }); }; fr.onerror = function () { resolve({}); }; fr.readAsDataURL(opt.body); });
+    } else { var parsed = {}; try { parsed = opt && opt.body ? JSON.parse(opt.body) : {}; } catch (e) {} bodyP = Promise.resolve(parsed); }
+    return bodyP.then(function (body) { return ensureAdmin().then(function () { return handle(((opt && opt.method) || "GET").toUpperCase(), path, query, body); }); }).then(function (r) {
       return new Response(JSON.stringify(r.json), { status: r.status, headers: { "Content-Type": "application/json" } });
     });
   };
@@ -508,6 +601,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
   window.__demoStore = {
     mails: function () { return S.mails; },
     reset: function () { memory = null; try { localStorage.removeItem(KEY); } catch (e) {} S = seed(); adminReady = null; save(); },
+    img: function (id) { var i = S.images.filter(function (x) { return x.id === id; })[0]; return i ? i.data : ""; },
     admin: ADMIN
   };
 })();
@@ -575,7 +669,8 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       "<ol>" +
       "<li>" + T("تصفّح التصنيفات وافتح نشاطًا وجرّب البحث وتبديل اللغة.", "Browse categories, open a business, try search and the language switch.") + "</li>" +
       "<li>" + T("أنشئ حسابًا (يلزم قبول الشروط). ستصلك رسالة تفعيل في «البريد التجريبي» أسفل الشاشة: افتح رابطها لتفعيل بريدك.", "Create an account (terms acceptance required). A confirmation message lands in the demo mailbox below: open its link to confirm your e-mail.") + "</li>" +
-      "<li>" + T("أضف نشاطًا: يبقى «قيد المراجعة». (قبل التفعيل لا يمكنك الإضافة ولا التقييم.)", "Add a business: it stays pending. (Before confirming you cannot add or rate.)") + "</li>" +
+      "<li>" + T("أضف نشاطًا وصورًا له: يبقى «قيد المراجعة». (قبل التفعيل لا يمكنك الإضافة ولا التقييم.)", "Add a business and photos for it: it stays pending. (Before confirming you cannot add or rate.)") + "</li>" +
+      "<li>" + T("بعد قبول الأدمن جرّب تعديل النشاط من «حسابي ← تعديل»: يبقى المنشور كما هو حتى يوافق الأدمن على تعديلك.", "Once approved, try editing it from My account → Edit: the published version stays until the admin approves your change.") + "</li>" +
       "<li>" + T("سجّل الخروج وادخل كأدمن لقبوله، ثم قيّم نشاطًا من حساب آخر.", "Log out and sign in as admin to approve it, then rate a business from another account.") + "</li>" +
       "<li>" + T("جرّب «نسيت كلمة المرور؟» ثم افتح «البريد التجريبي» أسفل الشاشة لتجد الرسالة.", "Try “Forgot your password?”, then open the demo mailbox below to find the message.") + "</li></ol>";
     var cred = el("div", "demo-cred");
@@ -652,6 +747,18 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
 
   var T = {
     ar: {
+      f_hours: "ساعات العمل (اختياري)", sent_photos: "أُرسل نشاطك للمراجعة. أضف له صورًا الآن إن أردت.",
+      edit_title: "تعديل النشاط", edit_btn: "تعديل", edit_save: "حفظ التعديلات", back_mine: "← حسابي",
+      edit_hint_new: "النشاط قيد المراجعة. يمكنك تعديله وإضافة صور قبل الموافقة.",
+      edit_hint_live: "هذا النشاط منشور. تعديلاتك تُراجَع قبل ظهورها، وتبقى النسخة الحالية معروضة حتى الموافقة.",
+      edit_hint_pending: "لديك تعديل قيد المراجعة، والنموذج يعرض آخر ما أرسلته.", edit_hint_rejected: "رُفض هذا النشاط. عدّل بياناته وأرسلها لإعادة المراجعة.",
+      edit_saved_updated: "تم حفظ التعديلات.", edit_saved_pending: "أُرسل تعديلك للمراجعة. تبقى النسخة المنشورة كما هي حتى الموافقة.", edit_unchanged: "لا فرق بين ما أدخلته والنسخة المنشورة.",
+      badge_edit: "تعديل قيد المراجعة", photos_title: "الصور", photos_hint: "حتى 6 صور. تُصغَّر تلقائيًا وتُحذف منها بيانات الكاميرا والموقع، وتُراجَع قبل ظهورها للجميع.",
+      photos_add: "إضافة صور", photos_uploading: "جارٍ رفع الصورة…", photos_done: "رُفعت الصورة وهي قيد المراجعة.", photos_done_pub: "رُفعت الصورة ونُشرت.", photos_none: "لا توجد صور بعد.",
+      photo_del: "حذف", photo_pending: "قيد المراجعة", photo_approved: "منشورة", photo_rejected: "مرفوضة",
+      rev_new: "نشاط جديد", rev_edit: "تعديل على نشاط منشور", rev_images: "صور جديدة", changes: "التغييرات المقترحة", img_ok: "قبول", img_no: "رفض",
+      e_image_too_big: "حجم الصورة كبير جدًا.", e_invalid_image: "الملف ليس صورة صالحة.", e_unsupported_image_type: "نوع الصورة غير مدعوم.", e_image_too_small: "الصورة صغيرة جدًا.",
+      e_image_too_large_dimensions: "أبعاد الصورة كبيرة جدًا.", e_too_many_images: "وصلت للحد الأقصى من الصور.", e_img_decode: "تعذّر قراءة هذه الصورة. جرّب صيغة JPEG أو PNG.",
       verify_banner: "فعّل بريدك الإلكتروني لتتمكن من إضافة الأنشطة والتقييمات. أرسلنا رابط التفعيل إلى {email}.", verify_resend: "إعادة إرسال الرابط",
       verify_sent: "أُرسل رابط جديد. تحقق من بريدك ومن مجلد المزعج.", verify_need: "فعّل بريدك الإلكتروني أولًا بفتح الرابط الذي أرسلناه إليك.",
       verify_working: "جارٍ تفعيل بريدك الإلكتروني…", verify_ok: "تم تفعيل بريدك الإلكتروني. يمكنك الآن إضافة الأنشطة والتقييمات.",
@@ -703,6 +810,18 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      f_hours: "Opening hours (optional)", sent_photos: "Your listing was sent for review. Add photos now if you like.",
+      edit_title: "Edit business", edit_btn: "Edit", edit_save: "Save changes", back_mine: "← My account",
+      edit_hint_new: "This listing is under review. You can edit it and add photos before it is approved.",
+      edit_hint_live: "This listing is published. Your changes are reviewed before they appear, and the current version stays live until then.",
+      edit_hint_pending: "You have a change waiting for review; the form shows what you last sent.", edit_hint_rejected: "This listing was rejected. Fix its details and send it again for review.",
+      edit_saved_updated: "Changes saved.", edit_saved_pending: "Your change was sent for review. The published version stays as it is until approved.", edit_unchanged: "What you entered matches the published version.",
+      badge_edit: "Edit under review", photos_title: "Photos", photos_hint: "Up to 6 photos. They are resized automatically, camera and location data is removed, and they are reviewed before everyone can see them.",
+      photos_add: "Add photos", photos_uploading: "Uploading photo…", photos_done: "Photo uploaded and waiting for review.", photos_done_pub: "Photo uploaded and published.", photos_none: "No photos yet.",
+      photo_del: "Delete", photo_pending: "Under review", photo_approved: "Published", photo_rejected: "Rejected",
+      rev_new: "New listing", rev_edit: "Edit to a published listing", rev_images: "New photos", changes: "Proposed changes", img_ok: "Approve", img_no: "Reject",
+      e_image_too_big: "The image is too big.", e_invalid_image: "That file is not a valid image.", e_unsupported_image_type: "This image type is not supported.", e_image_too_small: "The image is too small.",
+      e_image_too_large_dimensions: "The image dimensions are too large.", e_too_many_images: "You reached the maximum number of photos.", e_img_decode: "This image could not be read. Try a JPEG or PNG.",
       verify_banner: "Confirm your e-mail to add businesses and reviews. We sent the activation link to {email}.", verify_resend: "Resend the link",
       verify_sent: "A new link was sent. Check your inbox and spam folder.", verify_need: "Confirm your e-mail first by opening the link we sent you.",
       verify_working: "Confirming your e-mail…", verify_ok: "Your e-mail is confirmed. You can now add businesses and reviews.",
@@ -784,6 +903,9 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
   }
   function errMsg(e) { var k = "e_" + (e && e.code); return T[lang][k] ? t(k) : t("e_generic"); }
   function allBusinesses() { return state.businesses; }
+  function imgSrc(id) { return window.__demoStore.img(id); }
+  function find2(list, id) { return list.filter(function (x) { return x.id === id; })[0]; }
+  function statusBadge(st) { return '<span class="badge ' + (st === "approved" ? "" : st === "rejected" ? "bad" : "warn") + '">' + t("photo_" + st) + "</span>"; }
 
   function setLang(l) {
     lang = l;
@@ -819,19 +941,24 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
   function telHref(p) { return "tel:" + String(p).replace(/[^+\d]/g, ""); }
   function waHref(n) { return "https://wa.me/" + String(n).replace(/\D/g, ""); }
 
-  function card(b) {
+  function card(b, opts) {
+    opts = opts || {};
+    var cover = b.cover && find2(b.images || [], b.cover);
+    var thumb = cover ? '<a class="thumb-link" href="' + link("/b/" + b.id) + '"><img class="thumb" src="' + imgSrc(cover.id) + '" alt="' + esc(L(b.name)) + '" width="' + cover.w + '" height="' + cover.h + '" loading="lazy"></a>' : "";
     var cat = window.CATEGORIES.filter(function (c) { return c.id === b.cat; })[0];
     var city = window.CITIES.filter(function (c) { return c.id === b.city; })[0];
-    return '<article class="card">' +
+    return '<article class="card">' + thumb +
       "<h3>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") +
-      (b.status === "pending" ? ' <span class="badge warn">' + t("pending") + "</span>" : b.status === "rejected" ? ' <span class="badge bad">' + t("rejected") + "</span>" : "") + "</h3>" +
+      (b.status === "pending" ? ' <span class="badge warn">' + t("pending") + "</span>" : b.status === "rejected" ? ' <span class="badge bad">' + t("rejected") + "</span>" : "") +
+      (b.edit ? ' <span class="badge warn">' + t("badge_edit") + "</span>" : "") + "</h3>" +
       '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
       "<p>" + esc(L(b.desc)) + "</p>" +
       (b.reviews ? '<div class="meta"><span class="stars">★ ' + esc(b.rating) + "</span> (" + esc(b.reviews) + " " + t("reviews") + ")</div>" : "") +
       '<div class="actions">' +
       '<a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
       '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a>" +
-      '<a class="btn ghost" href="' + link("/b/" + b.id) + '">' + t("details") + "</a></div></article>";
+      (b.status === "approved" || opts.mine ? '<a class="btn ghost" href="' + link("/b/" + b.id) + '">' + t("details") + "</a>" : "") +
+      (opts.mine ? '<a class="btn" href="' + link("/edit/" + b.id) + '">✎ ' + t("edit_btn") + "</a>" : "") + "</div></article>";
   }
 
   function viewHome() {
@@ -845,7 +972,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       window.CATEGORIES.map(function (c) {
         return '<a class="cat" href="' + link("/category/" + c.id) + '"><span class="ico">' + c.icon + "</span>" + esc(L(c)) + "</a>";
       }).join("") + '</div></section><section class="block"><h2>' + t("featured") + '</h2><div class="grid">' +
-      verified.map(card).join("") + "</div></section></div>";
+      verified.map(function (b) { return card(b); }).join("") + "</div></section></div>";
   }
 
   function viewBrowse(params, heading) {
@@ -874,7 +1001,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       (params.verified === "1" ? " checked" : "") + "> " + t("verified_only") + "</label>" +
       '<button class="btn" type="submit">' + t("search") + "</button></form>" +
       "<div>" + (heading || "") + "<p class=\"meta\">" + list.length + " " + t("results") + "</p>" +
-      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_results") + "</p>") +
+      (list.length ? '<div class="grid">' + list.map(function (b) { return card(b); }).join("") + "</div>" : '<p class="empty">' + t("no_results") + "</p>") +
       "</div></div></div>";
   }
 
@@ -886,6 +1013,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     return '<div class="container">' + crumbs([[t("brand"), link("/")], [cat ? L(cat) : "", cat ? link("/category/" + b.cat) : link("/browse")], [L(b.name), link("/b/" + b.id)]]) + '<div class="detail"><div><a class="btn ghost" href="' + link("/browse") + '">← ' + t("back") + "</a></div>" +
       "<h1>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") + "</h1>" +
       '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
+      ((b.images || []).length ? '<div class="gallery">' + b.images.map(function (i, n) { return '<img class="gallery-img" src="' + imgSrc(i.id) + '" alt="' + esc(L(b.name)) + '" width="' + i.w + '" height="' + i.h + '"' + (n ? ' loading="lazy"' : "") + ">"; }).join("") + "</div>" : "") +
       "<p>" + esc(L(b.desc)) + "</p><dl>" +
       "<dt>" + t("area") + "</dt><dd>" + esc(b.area ? L(b.area) : "") + "</dd>" +
       (b.hours ? "<dt>" + t("hours") + "</dt><dd>" + esc(L(b.hours)) + "</dd>" : "") +
@@ -896,17 +1024,42 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       viewReviews(b, reviews || []) + "</div>";
   }
 
+  function listingFields(v) {
+    return "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80" value="' + esc(v.name_ar || "") + '"></label>' +
+      "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80" value="' + esc(v.name_en && v.name_en !== v.name_ar ? v.name_en : "") + '"></label>' +
+      "<label>" + t("category") + '<select name="cat" required>' + opts(window.CATEGORIES, "—", v.cat) + "</select></label>" +
+      "<label>" + t("city") + '<select name="city" required>' + opts(window.CITIES, "—", v.city) + "</select></label>" +
+      "<label>" + t("f_area") + '<input name="area" maxlength="80" value="' + esc(v.area || "") + '"></label>' +
+      "<label>" + t("f_hours") + '<input name="hours" maxlength="80" value="' + esc(v.hours || "") + '"></label>' +
+      "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required value="' + esc(v.phone || "") + '"></label>' +
+      "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300">' + esc(v.desc || "") + "</textarea></label>";
+  }
+  function readListing(fd) {
+    return { name_ar: fd.get("name_ar"), name_en: fd.get("name_en"), cat: fd.get("cat"), city: fd.get("city"), area: fd.get("area"),
+      hours: fd.get("hours"), phone: String(fd.get("phone")).replace(/\s/g, ""), desc: fd.get("desc") };
+  }
+
+  function viewEdit(data) {
+    var b = data.business, hint = b.status === "rejected" ? "edit_hint_rejected" : b.status === "approved" ? (b.edit ? "edit_hint_pending" : "edit_hint_live") : "edit_hint_new";
+    var tiles = (b.images || []).map(function (i) {
+      return '<div class="tile"><img src="' + imgSrc(i.id) + '" alt="" width="' + i.w + '" height="' + i.h + '">' + statusBadge(i.status) +
+        ' <button class="btn ghost" type="button" data-delimg="' + i.id + '">' + t("photo_del") + "</button></div>";
+    }).join("");
+    var full = (b.images || []).filter(function (i) { return i.status !== "rejected"; }).length >= data.maxImages;
+    return '<div class="container"><p><a class="link" href="' + link("/mine") + '">' + t("back_mine") + '</a></p>' +
+      '<form class="form" id="editForm" data-id="' + b.id + '" novalidate><h2>' + t("edit_title") + ": " + esc(L(b.name)) + '</h2><p class="meta">' + t(hint) + "</p>" +
+      listingFields(data.form) + '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("edit_save") + "</button></form>" +
+      '<section class="form" id="photos" data-id="' + b.id + '"><h3>' + t("photos_title") + '</h3><p class="meta">' + t("photos_hint") + "</p>" +
+      (tiles ? '<div class="tiles">' + tiles + "</div>" : '<p class="empty">' + t("photos_none") + "</p>") +
+      (full ? "" : '<label class="btn ghost filebtn">+ ' + t("photos_add") + '<input id="imgInput" type="file" accept="image/*" multiple hidden></label>') +
+      '<div id="imgMsg" role="status"></div></section></div>';
+  }
+
   function viewAdd() {
     if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="' + link("/login") + '">' + t("login") + "</a></div></div>";
     if (needsVerify()) return '<div class="container"><div class="form">' + verifyPrompt() + "</div></div>";
     return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
-      "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
-      "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
-      "<label>" + t("category") + '<select name="cat" required>' + opts(window.CATEGORIES, "—") + "</select></label>" +
-      "<label>" + t("city") + '<select name="city" required>' + opts(window.CITIES, "—") + "</select></label>" +
-      "<label>" + t("f_area") + '<input name="area" maxlength="80"></label>' +
-      "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required></label>' +
-      "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300"></textarea></label>' +
+      listingFields({}) +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("submit") + "</button></form></div>";
   }
 
@@ -992,7 +1145,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
 
   function viewMine(list) {
     return '<div class="container"><section class="block"><h2>' + t("my_listings") + "</h2>" +
-      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
+      (list.length ? '<div class="grid">' + list.map(function (b) { return card(b, { mine: true }); }).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
       '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
       '<section class="block"><h2>' + t("acct_title") + "</h2>" +
       (state.user ? '<p class="meta">' + t("acct_email") + ': <strong dir="ltr">' + esc(state.user.email) + "</strong> · " +
@@ -1016,10 +1169,31 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     var tabs = ["pending", "approved", "rejected"].map(function (st) {
       return '<a class="btn' + (st === status ? "" : " ghost") + '" href="' + link("/admin") + '?status=' + st + '">' + t("status_" + st) + "</a>";
     }).join(" ");
+    function changes(b) {
+      if (!b.edit) return "";
+      var live = { name_ar: b.name.ar, name_en: b.name.en, cat: b.cat, city: b.city, desc: b.desc.ar, area: b.area.ar, hours: b.hours.ar, phone: String(b.phone).replace("+974", "") };
+      var labels = { name_ar: "f_name_ar", name_en: "f_name_en", cat: "category", city: "city", desc: "f_desc", area: "f_area", hours: "f_hours", phone: "f_phone" };
+      var rows = Object.keys(labels).filter(function (k) { return String(live[k] || "") !== String(b.edit[k] || ""); }).map(function (k) {
+        return "<li><strong>" + t(labels[k]) + ':</strong> <del>' + esc(live[k] || "—") + "</del> → <ins>" + esc(b.edit[k] || "—") + "</ins></li>";
+      }).join("");
+      return '<div class="diff"><strong>' + t("changes") + "</strong><ul>" + rows + "</ul></div>";
+    }
+    function imgs(b) {
+      var pending = (b.images || []).filter(function (i) { return i.status === "pending"; });
+      if (!pending.length) return "";
+      return '<div class="tiles">' + pending.map(function (i) {
+        return '<div class="tile"><a href="' + imgSrc(i.id) + '" target="_blank" rel="noopener"><img src="' + imgSrc(i.id) + '" alt="" width="' + i.w + '" height="' + i.h + '"></a>' +
+          '<button class="btn" type="button" data-imgact="approve" data-imgid="' + i.id + '">' + t("img_ok") + "</button> " +
+          '<button class="btn ghost" type="button" data-imgact="reject" data-imgid="' + i.id + '">' + t("img_no") + "</button></div>";
+      }).join("") + "</div>";
+    }
     var rows = list.map(function (b) {
-      return '<div class="card"><h3>' + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + '</p><div class="actions">' +
-        (b.status !== "approved" ? '<button class="btn" data-act="approve" data-id="' + b.id + '">' + t("approve") + "</button>" : "") +
-        (b.status !== "rejected" ? '<button class="btn ghost" data-act="reject" data-id="' + b.id + '">' + t("reject") + "</button>" : "") +
+      var inQueue = !!b.review;                                     // something waits for a decision
+      var tag = inQueue ? '<span class="badge warn">' + t(b.review === "new" ? "rev_new" : b.review === "edit" ? "rev_edit" : "rev_images") + "</span> " : "";
+      return '<div class="card"><h3>' + tag + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + "</p>" +
+        changes(b) + imgs(b) + '<div class="actions">' +
+        (inQueue || b.status !== "approved" ? '<button class="btn" data-act="approve" data-id="' + b.id + '">' + t("approve") + "</button>" : "") +
+        ((inQueue || b.status !== "approved") && b.status !== "rejected" ? '<button class="btn ghost" data-act="reject" data-id="' + b.id + '">' + t("reject") + "</button>" : "") +
         (b.status === "approved" ? '<button class="btn ghost" data-act="' + (b.verified ? "unverify" : "verify") + '" data-id="' + b.id + '">' + t(b.verified ? "unverify" : "verify") + "</button>" : "") +
         "</div></div>";
     }).join("");
@@ -1072,10 +1246,12 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     lb.setAttribute("href", altPath === "/en/" + __vl.search ? "/en" + __vl.search : altPath);
     lb.textContent = lang === "ar" ? "EN" : "عربي";
 
+    var editM = r.path.match(/^\/edit\/(\d+)$/);
     var catM = r.path.match(/^\/category\/([a-z]+)(?:\/([a-z]+))?$/);
     var jobs = [api("GET", "/api/businesses").then(function (j) { state.businesses = j.businesses; })];
     var extra = null;
     if (r.path.indexOf("/b/") === 0) extra = api("GET", "/api/businesses/" + encodeURIComponent(r.path.slice(3)) + "/reviews").catch(function () { return { reviews: [] }; });
+    if (editM && state.user) extra = api("GET", "/api/businesses/" + editM[1] + "/manage");
     if (r.path === "/mine" && state.user) extra = api("GET", "/api/my/businesses");
     if (r.path === "/admin" && state.user && state.user.role === "admin") extra = api("GET", "/api/admin/businesses?status=" + encodeURIComponent(r.params.status || "pending"));
 
@@ -1100,6 +1276,8 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
         if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
           head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
         else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (editM) {
+        html = state.user ? viewEdit(data) : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"];
       } else if (r.path === "/verify") {
         // keep the token in memory only and remove it from the address bar / history
         if (r.params.token) { state.verifyToken = r.params.token; __vl.replaceState(null, "", __vl.pathname); }
@@ -1126,6 +1304,45 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     }).catch(function (e) {
       if (seq !== renderSeq) return;
       app.innerHTML = '<div class="container"><p class="empty">' + (e && e.code === "auth_required" ? t("e_auth_required") : t("load_err")) + "</p></div>";
+    });
+  }
+
+  // Resize and re-encode in the browser: smaller uploads, camera/GPS data never leaves the device, every format becomes JPEG.
+  function prepareImage(file) {
+    function fail() { var e = new Error("decode"); e.code = "img_decode"; return e; }
+    function draw(src, w, h) {
+      var k = Math.min(1, 1280 / Math.max(w, h)), cw = Math.max(1, Math.round(w * k)), ch = Math.max(1, Math.round(h * k));
+      var c = document.createElement("canvas"); c.width = cw; c.height = ch;
+      var x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, cw, ch); x.drawImage(src, 0, 0, cw, ch);
+      return new Promise(function (resolve, reject) {
+        var q = 0.85;
+        (function encode() {
+          c.toBlob(function (blob) {
+            if (!blob) return reject(fail());
+            if (blob.size > 1.8 * 1024 * 1024 && q > 0.45) { q -= 0.15; return encode(); }
+            resolve(blob);
+          }, "image/jpeg", q);
+        })();
+      });
+    }
+    if (window.createImageBitmap) {
+      return createImageBitmap(file).then(function (bmp) { return draw(bmp, bmp.width, bmp.height); }, function () { throw fail(); });
+    }
+    return new Promise(function (resolve, reject) {
+      var u = URL.createObjectURL(file), img = new Image();
+      img.onload = function () { URL.revokeObjectURL(u); draw(img, img.naturalWidth, img.naturalHeight).then(resolve, reject); };
+      img.onerror = function () { URL.revokeObjectURL(u); reject(fail()); };
+      img.src = u;
+    });
+  }
+  function uploadImage(businessId, blob) {
+    return fetch("/api/businesses/" + businessId + "/images", {
+      method: "POST", credentials: "same-origin", headers: { "Content-Type": "image/jpeg", "X-Upload": "1" }, body: blob
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.error || "generic"); e.code = j.error || "generic"; throw e; }
+        return j;
+      });
     });
   }
 
@@ -1191,12 +1408,40 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     var af = document.getElementById("addForm");
     if (af) af.addEventListener("submit", function (e) {
       e.preventDefault();
-      var d = new FormData(af);
-      api("POST", "/api/businesses", {
-        name_ar: d.get("name_ar"), name_en: d.get("name_en"), cat: d.get("cat"), city: d.get("city"),
-        area: d.get("area"), phone: String(d.get("phone")).replace(/\s/g, ""), desc: d.get("desc")
-      }).then(function () { af.reset(); showMsg(true, t("sent")); })
+      api("POST", "/api/businesses", readListing(new FormData(af)))
+        .then(function (j) { state.flash = t("sent_photos"); navigate(link("/edit/" + j.id)); })
         .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
+    var ef = document.getElementById("editForm");
+    if (ef) ef.addEventListener("submit", function (e) {
+      e.preventDefault();
+      api("PATCH", "/api/businesses/" + ef.getAttribute("data-id"), readListing(new FormData(ef)))
+        .then(function (j) { state.flash = t(j.status === "edit_pending" ? "edit_saved_pending" : j.status === "unchanged" ? "edit_unchanged" : "edit_saved_updated"); render(); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var ph = document.getElementById("photos");
+    if (ph) {
+      var inp = document.getElementById("imgInput"), box = document.getElementById("imgMsg"), bid = ph.getAttribute("data-id");
+      if (inp) inp.addEventListener("change", function () {
+        var files = Array.prototype.slice.call(inp.files || []), uploaded = 0, lastStatus = "pending";
+        (function next() {
+          var f = files.shift();
+          if (!f) { if (uploaded) { state.flash = t(lastStatus === "approved" ? "photos_done_pub" : "photos_done"); } render(); return; }
+          box.className = "meta"; box.textContent = t("photos_uploading");
+          prepareImage(f).then(function (blob) { return uploadImage(bid, blob); })
+            .then(function (j) { uploaded++; lastStatus = j.status; next(); })
+            .catch(function (err) { box.className = "error"; box.textContent = errMsg(err); if (uploaded) setTimeout(render, 1500); });
+        })();
+      });
+      ph.querySelectorAll("[data-delimg]").forEach(function (btn) {
+        btn.addEventListener("click", function () { api("DELETE", "/api/images/" + btn.getAttribute("data-delimg")).then(render).catch(function (err) { box.className = "error"; box.textContent = errMsg(err); }); });
+      });
+    }
+    document.querySelectorAll("[data-imgact]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        api("POST", "/api/admin/images/" + btn.getAttribute("data-imgid") + "/" + btn.getAttribute("data-imgact"), {}).then(render).catch(function (err) { __demo.toast(errMsg(err)); });
+      });
     });
 
     bindResend();

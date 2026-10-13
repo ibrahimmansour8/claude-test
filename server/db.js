@@ -70,6 +70,18 @@ function openDb(file) {
       email TEXT NOT NULL,
       expires_at INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS business_images (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      mime TEXT NOT NULL CHECK (mime IN ('image/jpeg','image/png')),
+      data BLOB NOT NULL,
+      width INTEGER NOT NULL,
+      height INTEGER NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected')),
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_img_biz ON business_images(business_id, status);
     CREATE INDEX IF NOT EXISTS idx_rev_biz ON reviews(business_id);
     CREATE INDEX IF NOT EXISTS idx_biz_status ON businesses(status);
     CREATE INDEX IF NOT EXISTS idx_biz_owner ON businesses(owner_id);
@@ -78,6 +90,13 @@ function openDb(file) {
   const cols = db.prepare("PRAGMA table_info(users)").all().map((c) => c.name);
   if (!cols.includes("terms_accepted_at")) db.exec("ALTER TABLE users ADD COLUMN terms_accepted_at TEXT");
   if (!cols.includes("terms_version")) db.exec("ALTER TABLE users ADD COLUMN terms_version TEXT");
+  // listing edits wait for review in pending_edit (JSON) while the published version stays live
+  const bcols = db.prepare("PRAGMA table_info(businesses)").all().map((c) => c.name);
+  if (!bcols.includes("pending_edit")) db.exec("ALTER TABLE businesses ADD COLUMN pending_edit TEXT");
+  if (!bcols.includes("updated_at")) {
+    db.exec("ALTER TABLE businesses ADD COLUMN updated_at TEXT");
+    db.exec("UPDATE businesses SET updated_at = created_at");
+  }
   if (!cols.includes("email_verified_at")) {
     db.exec("ALTER TABLE users ADD COLUMN email_verified_at TEXT");
     // accounts that existed before e-mail verification was introduced are grandfathered as verified

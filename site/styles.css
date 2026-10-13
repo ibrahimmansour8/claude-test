@@ -91,3 +91,16 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .banner { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: rgba(217, 154, 0, .16); border-bottom: 1px solid var(--line); text-align: center; }
 .banner.flash { background: rgba(31, 122, 77, .16); }
 .banner .btn { padding: 4px 12px; }
+.thumb-link { display: block; margin: -16px -16px 4px; }
+.thumb { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; background: var(--line); }
+.gallery { display: flex; flex-wrap: wrap; gap: 8px; }
+.gallery-img { max-width: 100%; max-height: 360px; width: auto; height: auto; border-radius: 10px; object-fit: cover; background: var(--line); }
+.gallery-img:first-child { width: 100%; max-height: 420px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 8px 0; }
+.tile { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--line); }
+.tile .btn { padding: 4px 10px; font-size: .85rem; }
+.filebtn { cursor: pointer; justify-self: start; }
+.diff { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.diff ul { margin: 6px 0 0; padding-inline-start: 18px; line-height: 1.8; }
+.diff del { color: #c0392b; } .diff ins { color: var(--ok); text-decoration: none; font-weight: 600; }

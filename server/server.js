@@ -7,6 +7,7 @@ const zlib = require("node:zlib");
 const { openDb, seedIfEmpty, loadSeedData } = require("./db");
 const { createSeo } = require("./seo");
 const { LEGAL_VERSION } = require("./legal");
+const { inspect: inspectImage, ImageError, MAX_BYTES: MAX_IMG_BYTES } = require("./images");
 const { createMailer, resetEmail, changedEmail, verifyEmail, emailChangedNotice } = require("./mailer");
 
 const SITE_DIR = path.join(__dirname, "..", "site");
@@ -14,6 +15,7 @@ const SESSION_TTL_MS = 7 * 24 * 3600 * 1000;
 const MAX_BODY = 20 * 1024;
 const RESET_TTL_MS = 60 * 60 * 1000;
 const VERIFY_TTL_MS = 24 * 60 * 60 * 1000;
+const MAX_IMAGES_PER_BUSINESS = 6;
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon" };
 
 function createApp(opts = {}) {
@@ -154,20 +156,77 @@ function createApp(opts = {}) {
     });
   }
 
+  function readRaw(req, limit) {
+    return new Promise((resolve, reject) => {
+      if (Number(req.headers["content-length"]) > limit) { req.resume(); return reject({ status: 413, error: "image_too_big" }); }
+      let size = 0; const chunks = [];
+      req.on("data", (c) => { size += c.length; if (size > limit) { reject({ status: 413, error: "image_too_big" }); req.destroy(); } else chunks.push(c); });
+      req.on("end", () => resolve(Buffer.concat(chunks)));
+      req.on("error", () => reject({ status: 400, error: "bad_request" }));
+    });
+  }
+
   const str = (v, max) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
   // rating/review counts are always computed from real reviews (stored columns are unused)
   const BIZ_SELECT = `SELECT b.*, COALESCE(ROUND(AVG(r.rating),1),0) AS avg_rating, COUNT(r.id) AS review_count
     FROM businesses b LEFT JOIN reviews r ON r.business_id=b.id`;
 
-  function bizOut(r) {
+  function bizOut(r, images = []) {
+    const approved = images.filter((i) => i.status === "approved");
     return {
       id: r.id, cat: r.cat, city: r.city,
       name: { ar: r.name_ar, en: r.name_en }, desc: { ar: r.desc_ar, en: r.desc_en },
       area: { ar: r.area_ar, en: r.area_en }, hours: { ar: r.hours_ar, en: r.hours_en },
       phone: r.phone, whatsapp: r.whatsapp, rating: r.avg_rating, reviews: r.review_count,
-      verified: !!r.verified, status: r.status, mine: !!r._mine
+      verified: !!r.verified, status: r.status, mine: !!r._mine,
+      images, cover: approved.length ? approved[0].id : null
     };
+  }
+
+  // images per business: `all` = every status (owner/admin views), otherwise approved only (public)
+  function imagesByBusiness(ids, all) {
+    const map = new Map();
+    if (!ids.length) return map;
+    let rows;
+    if (ids.length > 500) { // avoid SQLite's bound-variable limit on very large listings: read once, filter in JS
+      const want = new Set(ids);
+      rows = db.prepare(`SELECT id,business_id,width,height,status FROM business_images ${all ? "" : "WHERE status='approved'"} ORDER BY id`).all().filter((i) => want.has(i.business_id));
+    } else {
+      rows = db.prepare(`SELECT id,business_id,width,height,status FROM business_images
+        WHERE business_id IN (${ids.map(() => "?").join(",")}) ${all ? "" : "AND status='approved'"} ORDER BY id`).all(...ids);
+    }
+    for (const i of rows) {
+      if (!map.has(i.business_id)) map.set(i.business_id, []);
+      map.get(i.business_id).push({ id: i.id, w: i.width, h: i.height, status: i.status });
+    }
+    return map;
+  }
+  const outWithImages = (rows, all, extra) => {
+    const map = imagesByBusiness(rows.map((r) => r.id), all);
+    return rows.map((r) => ({ ...bizOut(r, map.get(r.id) || []), ...(extra ? extra(r) : {}) }));
+  };
+  const editOf = (r) => (r.pending_edit ? JSON.parse(r.pending_edit) : null);
+
+  // ---- listing fields (shared by create and edit) ----
+  function validateListing(b) {
+    const f = {
+      cat: b.cat, city: b.city, name_ar: str(b.name_ar, 80), name_en: "", desc: str(b.desc, 300),
+      area: str(b.area, 80), hours: str(b.hours, 80), phone: str(b.phone, 20).replace(/\s/g, "")
+    };
+    f.name_en = str(b.name_en, 80) || f.name_ar;
+    if (!f.name_ar) return { error: "invalid_name" };
+    if (!CATS.has(f.cat)) return { error: "invalid_category" };
+    if (!CITIES.has(f.city)) return { error: "invalid_city" };
+    if (!/^[34567]\d{7}$/.test(f.phone)) return { error: "invalid_phone" };
+    return { f };
+  }
+  const liveFields = (r) => ({ cat: r.cat, city: r.city, name_ar: r.name_ar, name_en: r.name_en, desc: r.desc_ar, area: r.area_ar, hours: r.hours_ar, phone: r.phone.replace("+974", "") });
+  const sameFields = (a, b) => ["cat", "city", "name_ar", "name_en", "desc", "area", "hours", "phone"].every((k) => a[k] === b[k]);
+  function applyFields(id, f) {
+    db.prepare(`UPDATE businesses SET cat=?,city=?,name_ar=?,name_en=?,desc_ar=?,desc_en=?,area_ar=?,area_en=?,hours_ar=?,hours_en=?,
+      phone=?,whatsapp=?,pending_edit=NULL,updated_at=datetime('now') WHERE id=?`)
+      .run(f.cat, f.city, f.name_ar, f.name_en, f.desc, f.desc, f.area, f.area, f.hours, f.hours, "+974" + f.phone, "974" + f.phone, id);
   }
 
   // ---------- API routes ----------
@@ -356,13 +415,13 @@ function createApp(opts = {}) {
 
     if (m === "GET" && p === "/api/businesses") {
       const rows = db.prepare(BIZ_SELECT + " WHERE b.status='approved' GROUP BY b.id ORDER BY avg_rating DESC, review_count DESC, b.id").all();
-      return send(res, 200, { businesses: rows.map(bizOut) });
+      return send(res, 200, { businesses: outWithImages(rows, false) });
     }
 
     if (p === "/api/my/businesses" && m === "GET") {
       if (!user) return send(res, 401, { error: "auth_required" });
       const rows = db.prepare(BIZ_SELECT + " WHERE b.owner_id=? GROUP BY b.id ORDER BY b.id DESC").all(user.id);
-      return send(res, 200, { businesses: rows.map((r) => bizOut({ ...r, _mine: true })) });
+      return send(res, 200, { businesses: outWithImages(rows.map((r) => ({ ...r, _mine: true })), true, (r) => ({ edit: editOf(r) })) });
     }
 
     if (p === "/api/businesses" && m === "POST") {
@@ -370,17 +429,82 @@ function createApp(opts = {}) {
       if (needsVerification(user)) return send(res, 403, { error: "email_unverified" });
       if (limited(req, "biz", 20, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
       const b = await readJson(req);
-      const nameAr = str(b.name_ar, 80), nameEn = str(b.name_en, 80) || nameAr;
-      const desc = str(b.desc, 300), area = str(b.area, 80);
-      const phone = str(b.phone, 8).replace(/\s/g, "");
-      if (!nameAr) return send(res, 400, { error: "invalid_name" });
-      if (!CATS.has(b.cat)) return send(res, 400, { error: "invalid_category" });
-      if (!CITIES.has(b.city)) return send(res, 400, { error: "invalid_city" });
-      if (!/^[34567]\d{7}$/.test(phone)) return send(res, 400, { error: "invalid_phone" });
-      const r = db.prepare(`INSERT INTO businesses (owner_id,cat,city,name_ar,name_en,desc_ar,desc_en,area_ar,area_en,phone,whatsapp,status)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,'pending')`)
-        .run(user.id, b.cat, b.city, nameAr, nameEn, desc, desc, area, area, "+974" + phone, "974" + phone);
+      const v = validateListing(b);
+      if (v.error) return send(res, 400, { error: v.error });
+      const f = v.f;
+      const r = db.prepare(`INSERT INTO businesses (owner_id,cat,city,name_ar,name_en,desc_ar,desc_en,area_ar,area_en,hours_ar,hours_en,phone,whatsapp,status,updated_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'pending',datetime('now'))`)
+        .run(user.id, f.cat, f.city, f.name_ar, f.name_en, f.desc, f.desc, f.area, f.area, f.hours, f.hours, "+974" + f.phone, "974" + f.phone);
       return send(res, 201, { id: Number(r.lastInsertRowid), status: "pending" });
+    }
+
+    // ---- edit my listing (owner) or any listing (admin) ----
+    const bm = p.match(/^\/api\/businesses\/(\d+)$/);
+    const manageOwn = (id) => {
+      const row = db.prepare("SELECT * FROM businesses WHERE id=?").get(id);
+      if (!row) return { err: [404, "not_found"] };
+      if (row.owner_id !== user.id && user.role !== "admin") return { err: [403, "forbidden"] };
+      return { row };
+    };
+    if (bm && m === "PATCH") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      if (needsVerification(user)) return send(res, 403, { error: "email_unverified" });
+      if (limited(req, "edit", 30, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
+      const { row, err } = manageOwn(Number(bm[1]));
+      if (err) return send(res, err[0], { error: err[1] });
+      const v = validateListing(await readJson(req));
+      if (v.error) return send(res, 400, { error: v.error });
+      // a published listing keeps showing its reviewed version; the owner's change waits for the admin
+      if (row.status === "approved" && user.role !== "admin") {
+        if (sameFields(v.f, liveFields(row))) {
+          db.prepare("UPDATE businesses SET pending_edit=NULL WHERE id=?").run(row.id);
+          return send(res, 200, { status: "unchanged" });
+        }
+        db.prepare("UPDATE businesses SET pending_edit=? WHERE id=?").run(JSON.stringify(v.f), row.id);
+        return send(res, 200, { status: "edit_pending" });
+      }
+      applyFields(row.id, v.f);
+      if (row.status === "rejected" && user.role !== "admin") db.prepare("UPDATE businesses SET status='pending' WHERE id=?").run(row.id); // resubmit
+      return send(res, 200, { status: "updated" });
+    }
+    if (m === "GET" && p.match(/^\/api\/businesses\/\d+\/manage$/)) {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      const { row, err } = manageOwn(Number(p.split("/")[3]));
+      if (err) return send(res, err[0], { error: err[1] });
+      const full = db.prepare(BIZ_SELECT + " WHERE b.id=? GROUP BY b.id").get(row.id);
+      const [biz] = outWithImages([{ ...full, _mine: true }], true, (r) => ({ edit: editOf(r) }));
+      return send(res, 200, { business: biz, form: editOf(row) || liveFields(row), maxImages: MAX_IMAGES_PER_BUSINESS });
+    }
+
+    // ---- images ----
+    const imUp = p.match(/^\/api\/businesses\/(\d+)\/images$/);
+    if (imUp && m === "POST") {
+      const fail = (s2, e) => { req.resume(); return send(res, s2, { error: e }); };
+      if (!user) return fail(401, "auth_required");
+      if (needsVerification(user)) return fail(403, "email_unverified");
+      if (req.headers["x-upload"] !== "1") return fail(400, "bad_request"); // custom header: cannot be sent by a cross-site form
+      const ct = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
+      if (ct !== "image/jpeg" && ct !== "image/png") return fail(415, "unsupported_image_type");
+      if (limited(req, "img", 30, 60 * 60 * 1000)) return fail(429, "rate_limited");
+      const { row, err } = manageOwn(Number(imUp[1]));
+      if (err) return fail(err[0], err[1]);
+      if (db.prepare("SELECT COUNT(*) n FROM business_images WHERE business_id=? AND status!='rejected'").get(row.id).n >= MAX_IMAGES_PER_BUSINESS) return fail(400, "too_many_images");
+      const buf = await readRaw(req, MAX_IMG_BYTES);
+      let info;
+      try { info = inspectImage(buf); } catch (e) { if (e instanceof ImageError) return send(res, 400, { error: e.code }); throw e; }
+      const status = user.role === "admin" ? "approved" : "pending";
+      const r = db.prepare("INSERT INTO business_images (business_id,user_id,mime,data,width,height,status) VALUES (?,?,?,?,?,?,?)")
+        .run(row.id, user.id, info.type === "png" ? "image/png" : "image/jpeg", info.data, info.width, info.height, status);
+      return send(res, 201, { id: Number(r.lastInsertRowid), status, w: info.width, h: info.height });
+    }
+    const imDel = p.match(/^\/api\/images\/(\d+)$/);
+    if (imDel && m === "DELETE") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      const img = db.prepare("SELECT i.id, b.owner_id FROM business_images i JOIN businesses b ON b.id=i.business_id WHERE i.id=?").get(Number(imDel[1]));
+      if (!img) return send(res, 404, { error: "not_found" });
+      if (img.owner_id !== user.id && user.role !== "admin") return send(res, 403, { error: "forbidden" });
+      db.prepare("DELETE FROM business_images WHERE id=?").run(img.id);
+      return send(res, 200, { ok: true });
     }
 
     // ---- reviews ----
@@ -429,18 +553,36 @@ function createApp(opts = {}) {
       if (m === "GET" && p === "/api/admin/businesses") {
         const status = url.searchParams.get("status") || "pending";
         if (!["pending", "approved", "rejected"].includes(status)) return send(res, 400, { error: "invalid_status" });
-        const rows = db.prepare(BIZ_SELECT + " WHERE b.status=? GROUP BY b.id ORDER BY b.id DESC").all(status);
-        return send(res, 200, { businesses: rows.map(bizOut) });
+        const cond = status === "pending"
+          ? "(b.status='pending' OR b.pending_edit IS NOT NULL OR EXISTS (SELECT 1 FROM business_images i WHERE i.business_id=b.id AND i.status='pending'))"
+          : "b.status=?";
+        const rows = db.prepare(BIZ_SELECT + ` WHERE ${cond} GROUP BY b.id ORDER BY b.id DESC`).all(...(status === "pending" ? [] : [status]));
+        return send(res, 200, { businesses: outWithImages(rows, true, (r) => ({
+          edit: editOf(r), review: r.status === "pending" ? "new" : r.pending_edit ? "edit" : "images"
+        })) });
       }
       const mm = p.match(/^\/api\/admin\/businesses\/(\d+)\/(approve|reject|verify|unverify)$/);
       if (m === "POST" && mm) {
-        const id = Number(mm[1]);
-        if (!db.prepare("SELECT 1 FROM businesses WHERE id=?").get(id)) return send(res, 404, { error: "not_found" });
+        const id = Number(mm[1]), row = db.prepare("SELECT * FROM businesses WHERE id=?").get(id);
+        if (!row) return send(res, 404, { error: "not_found" });
         const act = mm[2];
-        if (act === "approve") db.prepare("UPDATE businesses SET status='approved' WHERE id=?").run(id);
-        else if (act === "reject") db.prepare("UPDATE businesses SET status='rejected' WHERE id=?").run(id);
-        else db.prepare("UPDATE businesses SET verified=? WHERE id=?").run(act === "verify" ? 1 : 0, id);
+        if (act === "approve") {
+          // approving a card approves everything shown on it: the listing (or its pending edit) and its pending photos
+          if (row.pending_edit) applyFields(id, JSON.parse(row.pending_edit));
+          else db.prepare("UPDATE businesses SET status='approved', updated_at=datetime('now') WHERE id=?").run(id);
+          db.prepare("UPDATE business_images SET status='approved' WHERE business_id=? AND status='pending'").run(id);
+        } else if (act === "reject") {
+          if (row.status === "approved") { // reject the changes, keep the published listing
+            db.prepare("UPDATE businesses SET pending_edit=NULL WHERE id=?").run(id);
+            db.prepare("UPDATE business_images SET status='rejected' WHERE business_id=? AND status='pending'").run(id);
+          } else db.prepare("UPDATE businesses SET status='rejected' WHERE id=?").run(id);
+        } else db.prepare("UPDATE businesses SET verified=? WHERE id=?").run(act === "verify" ? 1 : 0, id);
         return send(res, 200, { ok: true });
+      }
+      const ia = p.match(/^\/api\/admin\/images\/(\d+)\/(approve|reject)$/);
+      if (m === "POST" && ia) {
+        const r = db.prepare("UPDATE business_images SET status=? WHERE id=?").run(ia[2] === "approve" ? "approved" : "rejected", Number(ia[1]));
+        return send(res, r.changes ? 200 : 404, r.changes ? { ok: true } : { error: "not_found" });
       }
     }
 
@@ -448,14 +590,15 @@ function createApp(opts = {}) {
   }
 
   // ---------- SEO pages ----------
-  const rowOut = (r) => ({ ...bizOut(r), updated: String(r.created_at || "").slice(0, 10) });
+  const rowOut = (r, imgs) => ({ ...bizOut(r, imgs || []), updated: String(r.updated_at || r.created_at || "").slice(0, 10) });
+  const rowsOut = (rows) => { const map = imagesByBusiness(rows.map((r) => r.id), false); return rows.map((r) => rowOut(r, map.get(r.id))); };
   const seo = createSeo({
     cats: seed.CATEGORIES, cities: seed.CITIES,
     site: { operator: opts.operatorName || process.env.OPERATOR_NAME, contactEmail: opts.contactEmail || process.env.CONTACT_EMAIL },
     queries: {
-      approved: ({ cat, city } = {}) => db.prepare(BIZ_SELECT + ` WHERE b.status='approved' AND (? IS NULL OR b.cat=?) AND (? IS NULL OR b.city=?)
-        GROUP BY b.id ORDER BY avg_rating DESC, review_count DESC, b.id`).all(cat || null, cat || null, city || null, city || null).map(rowOut),
-      one: (id) => { const r = db.prepare(BIZ_SELECT + " WHERE b.id=? AND b.status='approved' GROUP BY b.id").get(id); return r && r.id ? rowOut(r) : null; },
+      approved: ({ cat, city } = {}) => rowsOut(db.prepare(BIZ_SELECT + ` WHERE b.status='approved' AND (? IS NULL OR b.cat=?) AND (? IS NULL OR b.city=?)
+        GROUP BY b.id ORDER BY avg_rating DESC, review_count DESC, b.id`).all(cat || null, cat || null, city || null, city || null)),
+      one: (id) => { const r = db.prepare(BIZ_SELECT + " WHERE b.id=? AND b.status='approved' GROUP BY b.id").get(id); return r && r.id ? rowsOut([r])[0] : null; },
       reviews: (id) => db.prepare(`SELECT r.rating,r.comment,u.name FROM reviews r JOIN users u ON u.id=r.user_id
         WHERE r.business_id=? ORDER BY r.updated_at DESC, r.id DESC LIMIT 5`).all(id)
     }
@@ -481,7 +624,7 @@ function createApp(opts = {}) {
   function reply(req, res, status, type, body, extra = {}) {
     const buf = Buffer.from(body);
     const headers = { "Content-Type": type, "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer", "Vary": "Accept-Encoding", ...hsts, ...extra };
-    if (/^(text|application\/(xml|json|javascript))/.test(type)) headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; frame-ancestors 'none'";
+    if (/^(text|application\/(xml|json|javascript))/.test(type)) headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'";
     if (buf.length > 1024 && /gzip/.test(req.headers["accept-encoding"] || "") && /^(text|application)/.test(type)) {
       const z = zlib.gzipSync(buf); headers["Content-Encoding"] = "gzip"; headers["Content-Length"] = z.length;
       res.writeHead(status, headers); return res.end(z);
@@ -500,6 +643,23 @@ function createApp(opts = {}) {
     if (pathname === "/sitemap.xml") return reply(req, res, 200, "application/xml; charset=utf-8", seo.sitemap(base), { "Cache-Control": "public, max-age=3600" });
     if (pathname === "/robots.txt") return reply(req, res, 200, "text/plain; charset=utf-8", seo.robots(base), { "Cache-Control": "public, max-age=3600" });
     if (pathname === "/data.js") return reply(req, res, 200, MIME[".js"], clientData, { "Cache-Control": ASSET_CACHE });
+    const imgm = pathname.match(/^\/img\/(\d+)$/);
+    if (imgm) {
+      const row = db.prepare(`SELECT i.mime,i.data,i.status AS istatus,b.status AS bstatus,b.owner_id FROM business_images i
+        JOIN businesses b ON b.id=i.business_id WHERE i.id=?`).get(Number(imgm[1]));
+      const u = row && currentUser(req);
+      const isPublic = row && row.istatus === "approved" && row.bstatus === "approved";
+      if (!row || (!isPublic && !(u && (u.id === row.owner_id || u.role === "admin")))) {
+        res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", "X-Content-Type-Options": "nosniff" }); return res.end("Not found");
+      }
+      const buf = Buffer.from(row.data);
+      res.writeHead(200, {
+        "Content-Type": row.mime, "Content-Length": buf.length, "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer", ...hsts,
+        "Content-Security-Policy": "default-src 'none'; sandbox", // an upload can never run as a page, whatever its bytes are
+        "Cache-Control": isPublic ? "public, max-age=86400" : "private, no-store"
+      });
+      return res.end(buf);
+    }
     if (pathname === "/index.html") { res.writeHead(301, { Location: "/" }); return res.end(); }
 
     // real files in /site (css, js, svg, png)
