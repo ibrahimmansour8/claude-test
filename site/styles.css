@@ -10,8 +10,9 @@
   --radius: 14px;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #161214; --card: #211b1e; --text: #f3ecee; --muted: #a79da1; --line: #342b2f; --maroon: #c2325c; --maroon-dark: #a02348; }
+  :root:not([data-theme="light"]) { --bg: #161214; --card: #211b1e; --text: #f3ecee; --muted: #a79da1; --line: #342b2f; --maroon: #c2325c; --maroon-dark: #a02348; color-scheme: dark; }
 }
+:root[data-theme="dark"] { --bg: #161214; --card: #211b1e; --text: #f3ecee; --muted: #a79da1; --line: #342b2f; --maroon: #c2325c; --maroon-dark: #a02348; color-scheme: dark; }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 a { color: inherit; text-decoration: none; }

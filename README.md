@@ -4,7 +4,10 @@ test repository for claude
 ## دليل قطر / Qatar Business Guide
 دليل أعمال وخدمات ثنائي اللغة (عربي/إنجليزي) للسوق القطري. واجهة ثابتة + خادم Node بدون أي مكتبات خارجية + SQLite.
 
-### جرّبه الآن (نقرتان)
+### جرّبه الآن
+**بدون تثبيت:** افتح `demo/qatar-guide-demo.html` في أي متصفح (نسخة محاكاة تعمل داخل المتصفح، البيانات عندك فقط).
+
+**الخادم الحقيقي (نقرتان):**
 ثبّت [Node.js 22.9+](https://nodejs.org) ثم شغّل `start-demo.bat` (Windows) أو `start-demo.command` (macOS) أو `sh start-demo.sh` (Linux).
 أو من الطرفية: `npm run demo` ← يُفتح `http://localhost:8000` ببيانات تجريبية. التفاصيل: **[QUICKSTART.md](QUICKSTART.md)**.
 
@@ -22,7 +25,7 @@ test repository for claude
 تسجيل/دخول/خروج، **استعادة كلمة المرور بالبريد وتغييرها**، إضافة نشاط (يبقى قيد المراجعة)، لوحة أدمن، تقييمات حقيقية، بحث وفلترة، اتصال وواتساب، عربي/إنجليزي بروابط منفصلة، SEO، صفحتا الخصوصية والشروط، تنزيل البيانات وحذف الحساب، وضع داكن.
 
 ### الأوامر
-`npm run demo` · `npm run dev` (يقرأ `.env`) · `npm start` · `npm test` · `npm run backup`
+`npm run demo` · `npm run build:demo` · `npm run dev` (يقرأ `.env`) · `npm start` · `npm test` · `npm run backup`
 
 ### الأمان
 كلمات المرور بـ scrypt + salt، جلسات بتوكن مُجزّأ في كوكي HttpOnly/SameSite، حد للمحاولات، رفض الطلبات غير JSON، CSP صارم، `Referrer-Policy: no-referrer`، حماية من path traversal.

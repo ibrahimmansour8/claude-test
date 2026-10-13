@@ -1,0 +1,1146 @@
+<title>Qatar Guide</title>
+<style>
+:root {
+  --maroon: #8a1538;
+  --maroon-dark: #6b0f2b;
+  --bg: #faf7f5;
+  --card: #ffffff;
+  --text: #1f1a1c;
+  --muted: #6b6366;
+  --line: #e8e1e3;
+  --ok: #1f7a4d;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #161214; --card: #211b1e; --text: #f3ecee; --muted: #a79da1; --line: #342b2f; --maroon: #c2325c; --maroon-dark: #a02348; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #161214; --card: #211b1e; --text: #f3ecee; --muted: #a79da1; --line: #342b2f; --maroon: #c2325c; --maroon-dark: #a02348; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+main { min-height: 70vh; outline: none; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+.topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--maroon); color: #fff; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.15rem; }
+.nav { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: .95rem; }
+.nav a { opacity: .9; } .nav a:hover, .nav a.active { opacity: 1; text-decoration: underline; }
+.lang-btn { background: rgba(255,255,255,.18); color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; padding: 4px 10px; cursor: pointer; font: inherit; }
+
+.hero { background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); color: #fff; padding: 48px 16px 56px; text-align: center; }
+.hero h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 4vw, 2.4rem); }
+.hero p { margin: 0 auto 24px; max-width: 560px; opacity: .92; }
+.search { display: flex; flex-wrap: wrap; gap: 8px; max-width: 760px; margin: 0 auto; background: var(--card); padding: 8px; border-radius: var(--radius); }
+.search input, .search select { flex: 1 1 160px; border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 10px; padding: 10px 12px; font: inherit; min-width: 0; }
+.btn { background: var(--maroon); color: #fff; border: 0; border-radius: 10px; padding: 10px 18px; font: inherit; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { background: var(--maroon-dark); }
+.btn.ghost { background: transparent; color: var(--maroon); border: 1px solid var(--maroon); }
+.btn.wa { background: #1f9d55; }
+
+section.block { padding: 32px 0; }
+h2 { margin: 0 0 16px; font-size: 1.3rem; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.cat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; text-align: center; transition: transform .15s, border-color .15s; }
+.cat:hover { transform: translateY(-2px); border-color: var(--maroon); }
+.cat .ico { font-size: 1.9rem; display: block; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.card h3 { margin: 0; font-size: 1.05rem; }
+.meta { color: var(--muted); font-size: .88rem; }
+.badge { display: inline-block; font-size: .75rem; padding: 2px 8px; border-radius: 99px; background: rgba(31,122,77,.14); color: var(--ok); }
+.stars { color: #d99a00; font-weight: 600; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+
+.layout { display: grid; gap: 20px; grid-template-columns: 250px 1fr; padding: 24px 0; }
+.filters { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; height: fit-content; display: grid; gap: 12px; }
+.filters label { font-size: .85rem; color: var(--muted); display: grid; gap: 4px; }
+.filters input[type=text], .filters select { border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 8px; padding: 8px; font: inherit; }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; }
+
+.detail { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 24px 0; display: grid; gap: 12px; }
+.detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+.detail dt { color: var(--muted); }
+
+form.form { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 24px 0; display: grid; gap: 14px; }
+form.form label { display: grid; gap: 4px; font-size: .9rem; }
+form.form input, form.form select, form.form textarea { border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 8px; padding: 10px; font: inherit; }
+.notice { background: rgba(31,122,77,.12); color: var(--ok); padding: 10px 14px; border-radius: 10px; }
+.footer { text-align: center; color: var(--muted); padding: 24px 16px; border-top: 1px solid var(--line); font-size: .85rem; }
+
+@media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+
+.badge.warn { background: rgba(217,154,0,.15); color: #a87400; }
+.badge.bad { background: rgba(192,57,43,.14); color: #c0392b; }
+.filters .check { display: flex; gap: 8px; align-items: center; }
+.ltr { text-align: start; }
+.error { color: #c0392b; }
+.form.narrow { max-width: 440px; margin-inline: auto; }
+.user-nav { display: inline-flex; gap: 10px; align-items: center; }
+.link { color: var(--maroon); text-decoration: underline; }
+.review { margin-bottom: 10px; }
+.review p { margin: 4px 0; white-space: pre-wrap; }
+.block h3 { margin: 0; }
+.crumbs { font-size: .85rem; color: var(--muted); padding: 14px 0 0; }
+.crumbs a { color: var(--maroon); }
+.lang-btn { display: inline-block; text-decoration: none; }
+.legal { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 16px 0 32px; max-width: 820px; }
+.legal h2 { margin: 24px 0 8px; font-size: 1.1rem; }
+.legal p, .legal li { line-height: 1.9; }
+.legal-links a { text-decoration: underline; }
+.check-line { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; }
+.danger { border-color: #c0392b; }
+.btn.danger-btn { background: #c0392b; }
+
+/* demo-only additions */
+[hidden] { display: none !important; }
+body { font-size: 16px; padding-bottom: 72px; }
+.topbar { top: env(safe-area-inset-top, 0px); }
+.demo-bar { position: fixed; inset-inline: 0; bottom: 0; z-index: 60; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); background: var(--card); border-top: 1px solid var(--line); }
+.demo-btn { font: inherit; font-size: .85rem; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.demo-btn:hover:not(:disabled) { border-color: var(--maroon); }
+.demo-btn:disabled { opacity: .45; cursor: default; }
+.demo-btn:focus-visible, .demo-x:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
+.demo-toast { position: fixed; inset-inline: 16px; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); z-index: 70; margin-inline: auto; max-width: 420px;
+  background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; text-align: center; }
+.demo-panel { position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, .5); }
+.demo-card { width: 100%; max-width: 560px; max-height: 85%; display: flex; flex-direction: column; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius); }
+.demo-card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.demo-card-body { padding: 16px; overflow: auto; min-width: 0; }
+.demo-card-body ol { padding-inline-start: 20px; line-height: 1.9; }
+.demo-x { font: inherit; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 1.1rem; }
+.demo-cred { display: grid; gap: 6px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 12px 0; }
+.demo-cred span { color: var(--muted); font-size: .85rem; margin-inline-end: 8px; }
+.demo-cred code { user-select: all; overflow-wrap: anywhere; }
+.demo-note { color: var(--muted); font-size: .88rem; }
+.demo-mail { display: grid; gap: 6px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.demo-mail p { margin: 0; line-height: 1.7; }
+.demo-mail-to { color: var(--muted); font-size: .85rem; }
+.demo-pre { max-width: 100%; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .8rem; margin: 0 0 12px; user-select: all; }
+
+</style>
+<header class="topbar">
+    <a class="brand" href="/" data-nav data-path="/">
+      <span class="brand-mark">◆</span>
+      <span data-i18n="brand">دليل قطر</span>
+    </a>
+    <nav class="nav">
+      <a href="/" data-nav data-path="/" data-i18n="nav_home">الرئيسية</a>
+      <a href="/browse" data-nav data-path="/browse" data-i18n="nav_browse">تصفح الدليل</a>
+      <a href="/add" data-nav data-path="/add" data-i18n="nav_add">أضف نشاطك</a>
+      <span id="userNav" class="user-nav"></span>
+      <a id="langBtn" class="lang-btn" href="/en" hreflang="en">EN</a>
+    </nav>
+  </header>
+
+  <main id="app" tabindex="-1"><section class="hero"><h1>كل ما تحتاجه في قطر، في مكان واحد</h1><p>ابحث عن مطاعم وعقارات وعيادات وخدمات في قطر، واتصل بالأنشطة مباشرة واطلع على تقييمات حقيقية من المستخدمين.</p></section><div class="container"><section class="block"><h2>التصنيفات</h2><div class="grid"><a class="cat" href="/category/restaurants"><span class="ico">🍽️</span>مطاعم وكافيهات</a><a class="cat" href="/category/realestate"><span class="ico">🏢</span>عقارات</a><a class="cat" href="/category/cars"><span class="ico">🚗</span>سيارات وصيانة</a><a class="cat" href="/category/health"><span class="ico">🏥</span>صحة وعيادات</a><a class="cat" href="/category/home"><span class="ico">🛠️</span>صيانة منزلية</a><a class="cat" href="/category/education"><span class="ico">🎓</span>تعليم وتدريب</a><a class="cat" href="/category/beauty"><span class="ico">💇</span>تجميل وعناية</a><a class="cat" href="/category/legal"><span class="ico">⚖️</span>خدمات قانونية ومالية</a><a class="cat" href="/category/events"><span class="ico">🎉</span>مناسبات وسفر</a><a class="cat" href="/category/tech"><span class="ico">💻</span>تقنية وبرمجة</a></div></section><section class="block"><h2>أنشطة موثّقة</h2><div class="grid"><article class="card"><h3><a href="/b/1">مطعم نسيم الخليج</a> <span class="badge">✓ موثّق</span></h3><div class="meta">مطاعم وكافيهات · الدوحة</div><p>مأكولات خليجية وبحرية في أجواء عائلية مع جلسات خارجية.</p><div class="actions"><a class="btn" href="tel:+97444000001">اتصال</a><a class="btn ghost" href="/b/1">التفاصيل</a></div></article><article class="card"><h3><a href="/b/3">الدوحة للعقارات</a> <span class="badge">✓ موثّق</span></h3><div class="meta">عقارات · الدوحة</div><p>بيع وتأجير الشقق والفلل وإدارة الأملاك للمقيمين والمستثمرين.</p><div class="actions"><a class="btn" href="tel:+97444000003">اتصال</a><a class="btn ghost" href="/b/3">التفاصيل</a></div></article><article class="card"><h3><a href="/b/4">ورشة المحرك الذهبي</a> <span class="badge">✓ موثّق</span></h3><div class="meta">سيارات وصيانة · الريان</div><p>صيانة دورية وفحص كمبيوتر وتغيير زيوت لجميع أنواع السيارات.</p><div class="actions"><a class="btn" href="tel:+97444000004">اتصال</a><a class="btn ghost" href="/b/4">التفاصيل</a></div></article><article class="card"><h3><a href="/b/5">عيادة الشفاء التخصصية</a> <span class="badge">✓ موثّق</span></h3><div class="meta">صحة وعيادات · الدوحة</div><p>أسنان وجلدية وباطنية بمواعيد سريعة وفريق متعدد اللغات.</p><div class="actions"><a class="btn" href="tel:+97444000005">اتصال</a><a class="btn ghost" href="/b/5">التفاصيل</a></div></article><article class="card"><h3><a href="/b/7">أكاديمية المستقبل</a> <span class="badge">✓ موثّق</span></h3><div class="meta">تعليم وتدريب · الدوحة</div><p>دورات لغة إنجليزية وبرمجة ومراجعات للمراحل المدرسية.</p><div class="actions"><a class="btn" href="tel:+97444000007">اتصال</a><a class="btn ghost" href="/b/7">التفاصيل</a></div></article><article class="card"><h3><a href="/b/9">مكتب العدل للاستشارات</a> <span class="badge">✓ موثّق</span></h3><div class="meta">خدمات قانونية ومالية · الدوحة</div><p>استشارات قانونية وتأسيس شركات وخدمات محاسبية.</p><div class="actions"><a class="btn" href="tel:+97444000009">اتصال</a><a class="btn ghost" href="/b/9">التفاصيل</a></div></article></div></section></div></main>
+
+  <footer class="footer">
+    <p data-i18n="footer">دليل الأعمال والخدمات في قطر. © دليل قطر</p>
+    <p class="legal-links"><a href="/privacy" data-path="/privacy" data-i18n="privacy">سياسة الخصوصية</a> · <a href="/terms" data-path="/terms" data-i18n="terms">شروط الاستخدام</a></p>
+  </footer>
+<script>
+// بيانات تجريبية (أسماء وأرقام وهمية) - استبدلها ببيانات حقيقية أو بقاعدة بيانات لاحقًا
+// Demo data (fictional names/numbers) - replace with real data or a database later
+
+window.CATEGORIES = [
+  { id: "restaurants", icon: "🍽️", ar: "مطاعم وكافيهات", en: "Restaurants & Cafés" },
+  { id: "realestate", icon: "🏢", ar: "عقارات", en: "Real Estate" },
+  { id: "cars", icon: "🚗", ar: "سيارات وصيانة", en: "Cars & Maintenance" },
+  { id: "health", icon: "🏥", ar: "صحة وعيادات", en: "Health & Clinics" },
+  { id: "home", icon: "🛠️", ar: "صيانة منزلية", en: "Home Services" },
+  { id: "education", icon: "🎓", ar: "تعليم وتدريب", en: "Education & Training" },
+  { id: "beauty", icon: "💇", ar: "تجميل وعناية", en: "Beauty & Care" },
+  { id: "legal", icon: "⚖️", ar: "خدمات قانونية ومالية", en: "Legal & Financial" },
+  { id: "events", icon: "🎉", ar: "مناسبات وسفر", en: "Events & Travel" },
+  { id: "tech", icon: "💻", ar: "تقنية وبرمجة", en: "Tech & IT" }
+];
+
+window.CITIES = [
+  { id: "doha", ar: "الدوحة", en: "Doha" },
+  { id: "rayyan", ar: "الريان", en: "Al Rayyan" },
+  { id: "wakrah", ar: "الوكرة", en: "Al Wakrah" },
+  { id: "khor", ar: "الخور", en: "Al Khor" },
+  { id: "lusail", ar: "لوسيل", en: "Lusail" },
+  { id: "shamal", ar: "الشمال", en: "Al Shamal" },
+  { id: "dukhan", ar: "دخان", en: "Dukhan" },
+  { id: "umm", ar: "أم صلال", en: "Umm Salal" }
+];
+
+window.BUSINESSES = [
+  { id: 1, cat: "restaurants", city: "doha",
+    name: { ar: "مطعم نسيم الخليج", en: "Naseem Al Khaleej Restaurant" },
+    desc: { ar: "مأكولات خليجية وبحرية في أجواء عائلية مع جلسات خارجية.", en: "Gulf and seafood dishes in a family setting with outdoor seating." },
+    phone: "+97444000001", whatsapp: "97444000001", area: { ar: "كورنيش الدوحة", en: "Doha Corniche" },
+    hours: { ar: "يوميًا 11 ص - 12 م", en: "Daily 11am - 12am" }, rating: 4.6, reviews: 128, verified: true, tags: ["delivery", "family"] },
+  { id: 2, cat: "restaurants", city: "lusail",
+    name: { ar: "كافيه الواحة", en: "Al Waha Café" },
+    desc: { ar: "قهوة مختصة وحلويات ومساحة عمل هادئة بإنترنت سريع.", en: "Specialty coffee, desserts and a quiet workspace with fast Wi-Fi." },
+    phone: "+97444000002", whatsapp: "97444000002", area: { ar: "مارينا لوسيل", en: "Lusail Marina" },
+    hours: { ar: "يوميًا 7 ص - 1 ص", en: "Daily 7am - 1am" }, rating: 4.4, reviews: 76, verified: false, tags: ["wifi"] },
+  { id: 3, cat: "realestate", city: "doha",
+    name: { ar: "الدوحة للعقارات", en: "Doha Properties" },
+    desc: { ar: "بيع وتأجير الشقق والفلل وإدارة الأملاك للمقيمين والمستثمرين.", en: "Sales, rentals and property management for residents and investors." },
+    phone: "+97444000003", whatsapp: "97444000003", area: { ar: "الدفنة", en: "West Bay" },
+    hours: { ar: "الأحد - الخميس 8 ص - 6 م", en: "Sun - Thu 8am - 6pm" }, rating: 4.7, reviews: 211, verified: true, tags: [] },
+  { id: 4, cat: "cars", city: "rayyan",
+    name: { ar: "ورشة المحرك الذهبي", en: "Golden Engine Garage" },
+    desc: { ar: "صيانة دورية وفحص كمبيوتر وتغيير زيوت لجميع أنواع السيارات.", en: "Routine service, computer diagnostics and oil change for all makes." },
+    phone: "+97444000004", whatsapp: "97444000004", area: { ar: "المنطقة الصناعية", en: "Industrial Area" },
+    hours: { ar: "السبت - الخميس 7 ص - 8 م", en: "Sat - Thu 7am - 8pm" }, rating: 4.3, reviews: 95, verified: true, tags: ["pickup"] },
+  { id: 5, cat: "health", city: "doha",
+    name: { ar: "عيادة الشفاء التخصصية", en: "Al Shifa Specialty Clinic" },
+    desc: { ar: "أسنان وجلدية وباطنية بمواعيد سريعة وفريق متعدد اللغات.", en: "Dental, dermatology and internal medicine with quick appointments." },
+    phone: "+97444000005", whatsapp: "97444000005", area: { ar: "السد", en: "Al Sadd" },
+    hours: { ar: "يوميًا 8 ص - 10 م", en: "Daily 8am - 10pm" }, rating: 4.8, reviews: 342, verified: true, tags: ["insurance"] },
+  { id: 6, cat: "home", city: "wakrah",
+    name: { ar: "فنيو المنزل", en: "Home Technicians" },
+    desc: { ar: "سباكة وكهرباء وتكييف وصيانة عامة، خدمة طوارئ على مدار الساعة.", en: "Plumbing, electrical, A/C and general repairs with 24/7 emergency service." },
+    phone: "+97444000006", whatsapp: "97444000006", area: { ar: "الوكرة", en: "Al Wakrah" },
+    hours: { ar: "24 ساعة", en: "24 hours" }, rating: 4.2, reviews: 57, verified: false, tags: ["emergency"] },
+  { id: 7, cat: "education", city: "doha",
+    name: { ar: "أكاديمية المستقبل", en: "Future Academy" },
+    desc: { ar: "دورات لغة إنجليزية وبرمجة ومراجعات للمراحل المدرسية.", en: "English, coding and school-level tutoring courses." },
+    phone: "+97444000007", whatsapp: "97444000007", area: { ar: "المطار القديم", en: "Old Airport" },
+    hours: { ar: "السبت - الخميس 2 م - 9 م", en: "Sat - Thu 2pm - 9pm" }, rating: 4.5, reviews: 88, verified: true, tags: ["online"] },
+  { id: 8, cat: "beauty", city: "rayyan",
+    name: { ar: "صالون لمسة", en: "Lamsa Salon" },
+    desc: { ar: "قص وصبغ وعناية بالبشرة وتجهيز العرائس.", en: "Haircuts, colouring, skincare and bridal packages." },
+    phone: "+97444000008", whatsapp: "97444000008", area: { ar: "الغرافة", en: "Al Gharrafa" },
+    hours: { ar: "يوميًا 10 ص - 10 م", en: "Daily 10am - 10pm" }, rating: 4.6, reviews: 164, verified: false, tags: ["women"] },
+  { id: 9, cat: "legal", city: "doha",
+    name: { ar: "مكتب العدل للاستشارات", en: "Al Adl Consultancy" },
+    desc: { ar: "استشارات قانونية وتأسيس شركات وخدمات محاسبية.", en: "Legal advice, company formation and accounting services." },
+    phone: "+97444000009", whatsapp: "97444000009", area: { ar: "الدفنة", en: "West Bay" },
+    hours: { ar: "الأحد - الخميس 8 ص - 4 م", en: "Sun - Thu 8am - 4pm" }, rating: 4.7, reviews: 63, verified: true, tags: [] },
+  { id: 10, cat: "tech", city: "doha",
+    name: { ar: "بايت سوفت", en: "ByteSoft" },
+    desc: { ar: "تصميم مواقع وتطبيقات جوال وحلول متاجر إلكترونية.", en: "Websites, mobile apps and e-commerce solutions." },
+    phone: "+97444000010", whatsapp: "97444000010", area: { ar: "منطقة الخليج الغربي", en: "West Bay Lagoon" },
+    hours: { ar: "الأحد - الخميس 9 ص - 5 م", en: "Sun - Thu 9am - 5pm" }, rating: 4.9, reviews: 41, verified: true, tags: ["online"] },
+  { id: 11, cat: "events", city: "lusail",
+    name: { ar: "رحلات المرجان", en: "Marjan Travel" },
+    desc: { ar: "حجوزات طيران وفنادق وتنظيم مناسبات وحفلات.", en: "Flights, hotels and event/party organisation." },
+    phone: "+97444000011", whatsapp: "97444000011", area: { ar: "لوسيل", en: "Lusail" },
+    hours: { ar: "السبت - الخميس 9 ص - 7 م", en: "Sat - Thu 9am - 7pm" }, rating: 4.4, reviews: 72, verified: false, tags: [] },
+  { id: 12, cat: "cars", city: "khor",
+    name: { ar: "غسيل وتلميع النخبة", en: "Elite Car Care" },
+    desc: { ar: "غسيل ولمعان وحماية سيراميك مع خدمة الاستلام من المنزل.", en: "Wash, polish and ceramic coating with home pickup." },
+    phone: "+97444000012", whatsapp: "97444000012", area: { ar: "الخور", en: "Al Khor" },
+    hours: { ar: "يوميًا 8 ص - 9 م", en: "Daily 8am - 9pm" }, rating: 4.1, reviews: 39, verified: false, tags: ["pickup"] }
+];
+
+;
+window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>سياسة الخصوصية\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>سياسة الخصوصية\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. من نحن\u003c/h2>\u003cp>يُدير هذا الموقع «Qatar Guide (demo)» (ويُشار إليه بـ«نحن»). هو دليل للأنشطة التجارية والخدمات في دولة قطر. للتواصل بخصوص خصوصيتك: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. البيانات التي نجمعها\u003c/h2>\u003cul>\u003cli>\u003cstrong>بيانات الحساب:\u003c/strong> الاسم والبريد الإلكتروني وكلمة المرور. لا نحفظ كلمة المرور نفسها، بل نحفظ بصمة مشفّرة (مملّحة) لا نستطيع قراءتها.\u003c/li>\u003cli>\u003cstrong>بيانات الأنشطة التي تضيفها:\u003c/strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.\u003c/li>\u003cli>\u003cstrong>التقييمات:\u003c/strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.\u003c/li>\u003cli>\u003cstrong>سجل الموافقة:\u003c/strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.\u003c/li>\u003cli>\u003cstrong>رمز استعادة كلمة المرور:\u003c/strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.\u003c/li>\u003cli>\u003cstrong>بيانات تقنية:\u003c/strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. لماذا نستخدم بياناتك\u003c/h2>\u003cul>\u003cli>إنشاء حسابك وتسجيل دخولك وحمايته.\u003c/li>\u003cli>نشر الأنشطة والتقييمات بعد المراجعة، وإدارة المحتوى ومنع إساءة الاستخدام.\u003c/li>\u003cli>تحسين ظهور الدليل في محركات البحث (للأنشطة والتقييمات المنشورة فقط).\u003c/li>\u003c/ul>\u003cp>أساس المعالجة هو موافقتك عند التسجيل وتقديمنا للخدمة التي طلبتها. لا نستخدم بياناتك للإعلانات ولا نبيعها.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. ما يكون عامًّا\u003c/h2>\u003cp>بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته ورقم هاتفه. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك معلومات شخصية لا تريد نشرها.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. ملفات تعريف الارتباط (الكوكيز)\u003c/h2>\u003cp>نستخدم كوكي واحدًا ضروريًا للتشغيل باسم \u003ccode>sid\u003c/code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. مشاركة البيانات\u003c/h2>\u003cp>لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.\u003c/p>\u003cp>نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (استعادة كلمة المرور وإشعار تغييرها). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.\u003c/p>\u003cp>أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. مدة الاحتفاظ\u003c/h2>\u003cp>نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. حقوقك\u003c/h2>\u003cp>وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:\u003c/p>\u003cul>\u003cli>\u003cstrong>تنزيل بياناتك\u003c/strong> وحذف حسابك مباشرة من صفحة «حسابي» داخل الموقع.\u003c/li>\u003cli>طلب تصحيح أي بيانات أو ممارسة أي حق آخر بمراسلتنا على \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>تقديم شكوى إلى الجهة المختصة في دولة قطر إن رأيت أن بياناتك عولجت بشكل مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. الأمان\u003c/h2>\u003cp>نطبّق إجراءات معقولة: تشفير كلمات المرور، وجلسات محمية، وتحديد محاولات الدخول، واتصال مشفّر. لا توجد حماية مطلقة، وتقع عليك مسؤولية سرية كلمة مرورك.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. الأطفال\u003c/h2>\u003cp>الموقع غير موجّه لمن هم دون 18 عامًا، ولا نجمع بياناتهم عن علم. إذا علمنا بحساب لقاصر نحذفه.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات على هذه السياسة\u003c/h2>\u003cp>قد نحدّث هذه السياسة، وسيظهر تاريخ آخر تحديث أدناه. للتغييرات الجوهرية نبلّغك بوسيلة مناسبة.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"شروط الاستخدام","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>شروط الاستخدام\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>شروط الاستخدام\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. القبول\u003c/h2>\u003cp>باستخدامك الموقع أو إنشاء حساب فيه فإنك توافق على هذه الشروط وعلى سياسة الخصوصية. إن لم توافق فلا تستخدم الموقع.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. طبيعة الخدمة\u003c/h2>\u003cp>الموقع دليل معلومات يعرض أنشطة وخدمات يضيفها مستخدمون. لسنا طرفًا في أي اتفاق أو تعامل بينك وبين أي نشاط، ولا نضمن دقة المعلومات أو جودة الخدمات أو توفّرها. تحقّق بنفسك قبل التعامل.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. الحسابات\u003c/h2>\u003cul>\u003cli>يجب أن تكون 18 عامًا أو أكثر وأن تقدّم معلومات صحيحة.\u003c/li>\u003cli>أنت مسؤول عن سرية كلمة مرورك وعن كل ما يجري عبر حسابك.\u003c/li>\u003cli>يجوز لنا تعليق الحساب أو إغلاقه عند مخالفة هذه الشروط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. إضافة الأنشطة\u003c/h2>\u003cul>\u003cli>لا تضف إلا نشاطًا تملكه أو مخوّلًا بتمثيله، وبمعلومات صحيحة غير مضلّلة، ورقم هاتف قطري يخصّه.\u003c/li>\u003cli>يُمنع إدراج أنشطة أو سلع أو خدمات مخالفة لقوانين دولة قطر أو الآداب العامة.\u003c/li>\u003cli>تخضع الأنشطة لمراجعتنا؛ ولنا قبولها أو رفضها أو تعديلها أو إزالتها في أي وقت دون التزام بإبداء الأسباب.\u003c/li>\u003cli>شارة «موثّق» تعني أننا راجعنا بعض المعلومات؛ وهي ليست ضمانًا ولا توصية بالنشاط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. التقييمات\u003c/h2>\u003cul>\u003cli>اكتب تقييمًا عن تجربة حقيقية فقط. يُمنع التقييم المزوّر أو المدفوع أو تقييم نشاطك أو منافسك للإضرار به.\u003c/li>\u003cli>يُسمح بتقييم واحد لكل نشاط لكل مستخدم، ويمكنك تعديله أو حذفه.\u003c/li>\u003cli>يُمنع في التعليقات السبّ والتشهير والتحريض ونشر بيانات شخصية للآخرين والإعلانات والروابط المزعجة.\u003c/li>\u003cli>لنا إزالة أي تقييم مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. سلوك محظور\u003c/h2>\u003cul>\u003cli>محاولة اختراق الموقع أو تعطيله أو تجاوز حدود الاستخدام.\u003c/li>\u003cli>انتحال شخصية أو جهة.\u003c/li>\u003cli>جمع بيانات الموقع آليًا بشكل مفرط أو إعادة نشرها دون إذن.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. المحتوى الذي تنشره\u003c/h2>\u003cp>تبقى حقوق المحتوى الذي تضيفه لك. وبنشره تمنحنا ترخيصًا غير حصري ومجانيًّا لعرضه وتخزينه وتهيئته للعرض في الموقع وفي نتائج محركات البحث ما دام منشورًا. وتقرّ بأن لك حق نشره.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. إخلاء المسؤولية وحدودها\u003c/h2>\u003cp>تُقدَّم الخدمة «كما هي» دون ضمانات من أي نوع. وفي الحدود التي يسمح بها القانون لا نتحمّل مسؤولية عن خسائر غير مباشرة أو تبعية أو عن تعاملك مع الأنشطة المدرجة. لا يستبعد هذا النص أي مسؤولية لا يجوز استبعادها نظامًا.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. إنهاء الاستخدام\u003c/h2>\u003cp>يمكنك حذف حسابك في أي وقت من صفحة «حسابي». وللموقع إيقاف الخدمة أو تعديلها.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. القانون المطبّق\u003c/h2>\u003cp>تخضع هذه الشروط لقوانين دولة قطر، وتختص محاكمها بالنظر في أي نزاع ينشأ عنها.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات والتواصل\u003c/h2>\u003cp>قد نعدّل هذه الشروط، واستمرارك في الاستخدام بعد التعديل يعني قبولك. للاستفسار: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}},"en":{"privacy":{"title":"Privacy Policy","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Privacy Policy\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Privacy Policy\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Who we are\u003c/h2>\u003cp>This website is operated by “Qatar Guide (demo)” (“we”). It is a directory of businesses and services in the State of Qatar. Privacy contact: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. Data we collect\u003c/h2>\u003cul>\u003cli>\u003cstrong>Account data:\u003c/strong> name, e-mail and password. We never store the password itself, only a salted cryptographic hash that we cannot read.\u003c/li>\u003cli>\u003cstrong>Listings you submit:\u003c/strong> business name, category, city, area, description and phone number.\u003c/li>\u003cli>\u003cstrong>Reviews:\u003c/strong> the star rating and comment you write, displayed with your name.\u003c/li>\u003cli>\u003cstrong>Consent record:\u003c/strong> when you accepted the Terms and Privacy Policy and which version of the text.\u003c/li>\u003cli>\u003cstrong>Password-reset token:\u003c/strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.\u003c/li>\u003cli>\u003cstrong>Technical data:\u003c/strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. Why we use your data\u003c/h2>\u003cul>\u003cli>To create, secure and sign you in to your account.\u003c/li>\u003cli>To publish listings and reviews after moderation, run the site and prevent abuse.\u003c/li>\u003cli>To make published listings and reviews discoverable in search engines.\u003c/li>\u003c/ul>\u003cp>Our basis is your consent at sign-up and providing the service you requested. We do not use your data for advertising and we do not sell it.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. What is public\u003c/h2>\u003cp>Once a listing is approved, its name, description, area and phone number are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing or review.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. Cookies\u003c/h2>\u003cp>We use one strictly necessary cookie, \u003ccode>sid\u003c/code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. Sharing\u003c/h2>\u003cp>We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.\u003c/p>\u003cp>We use an e-mail delivery provider only to send account e-mails (password reset and a notice when it changes). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.\u003c/p>\u003cp>The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. Retention\u003c/h2>\u003cp>We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Backup copies may remain for a limited time until replaced in the normal backup cycle.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Your rights\u003c/h2>\u003cp>Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:\u003c/p>\u003cul>\u003cli>\u003cstrong>Download your data\u003c/strong> and delete your account directly from the “My account” page.\u003c/li>\u003cli>Ask us to correct data or exercise any other right at \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>Complain to the competent authority in the State of Qatar if you believe your data was handled unlawfully.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. Security\u003c/h2>\u003cp>We apply reasonable measures: password hashing, protected sessions, login rate limiting and encrypted connections. No system is perfectly secure, and keeping your password confidential is your responsibility.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Children\u003c/h2>\u003cp>The site is not directed to anyone under 18 and we do not knowingly collect their data. If we learn of an account held by a minor we delete it.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes\u003c/h2>\u003cp>We may update this policy; the last-updated date appears below. For material changes we will notify you by suitable means.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"Terms of Use","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Terms of Use\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Terms of Use\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Acceptance\u003c/h2>\u003cp>By using the site or creating an account you agree to these Terms and to the Privacy Policy. If you do not agree, do not use the site.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. The service\u003c/h2>\u003cp>The site is an information directory showing businesses and services submitted by users. We are not a party to any agreement or dealing between you and any business, and we do not guarantee the accuracy of information or the quality or availability of services. Do your own checks before dealing with anyone.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. Accounts\u003c/h2>\u003cul>\u003cli>You must be 18 or older and provide accurate information.\u003c/li>\u003cli>You are responsible for keeping your password confidential and for everything done through your account.\u003c/li>\u003cli>We may suspend or close an account that breaches these Terms.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. Listing a business\u003c/h2>\u003cul>\u003cli>Only list a business you own or are authorised to represent, with accurate, non-misleading information and its own Qatar phone number.\u003c/li>\u003cli>Listings of businesses, goods or services that break the laws of the State of Qatar or public morals are prohibited.\u003c/li>\u003cli>Listings are subject to our review; we may approve, reject, edit or remove them at any time without giving reasons.\u003c/li>\u003cli>The “Verified” badge means we checked some information. It is not a guarantee or endorsement.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. Reviews\u003c/h2>\u003cul>\u003cli>Write a review only about a genuine experience. Fake, paid, self-reviews or reviews of competitors meant to harm them are prohibited.\u003c/li>\u003cli>One review per business per user; you may edit or delete yours.\u003c/li>\u003cli>Comments must not contain abuse, defamation, incitement, other people’s personal data, advertising or spam links.\u003c/li>\u003cli>We may remove any review that breaches these rules.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. Prohibited conduct\u003c/h2>\u003cul>\u003cli>Attempting to hack, disrupt or bypass the limits of the site.\u003c/li>\u003cli>Impersonating a person or organisation.\u003c/li>\u003cli>Excessive automated scraping or republishing the site’s data without permission.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. Content you post\u003c/h2>\u003cp>You keep the rights to content you post. By posting it you grant us a non-exclusive, free licence to display, store and format it on the site and in search-engine results while it is published. You confirm you have the right to post it.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Disclaimer and liability\u003c/h2>\u003cp>The service is provided “as is” without warranties of any kind. To the extent permitted by law we are not liable for indirect or consequential losses or for your dealings with listed businesses. Nothing here excludes liability that cannot lawfully be excluded.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. Ending use\u003c/h2>\u003cp>You can delete your account at any time from the “My account” page. We may change or discontinue the service.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Governing law\u003c/h2>\u003cp>These Terms are governed by the laws of the State of Qatar and its courts have jurisdiction over any dispute arising from them.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes and contact\u003c/h2>\u003cp>We may amend these Terms; continuing to use the site after a change means you accept it. Questions: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}}};
+;
+/* In-browser stand-in for the Node API, used only by the single-file demo (scripts/build-demo.js).
+   Same endpoints and rules as server/server.js, minus rate limiting. Data lives in this browser only. */
+(function () {
+  "use strict";
+  var KEY = "qg_demo_v1", ADMIN = { email: "admin@demo.local", password: "demo-admin-1234" };
+  var CATS = window.CATEGORIES.map(function (c) { return c.id; }), CITIES = window.CITIES.map(function (c) { return c.id; });
+  var memory = null; // used when localStorage is unavailable
+
+  function rnd(n) { var a = new Uint8Array(n); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach(function (_, i) { a[i] = Math.floor(Math.random() * 256); }); return Array.prototype.map.call(a, function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }
+  function hash(pw, salt) {
+    var data = new TextEncoder().encode(salt + ":" + pw);
+    if (window.crypto && crypto.subtle) return crypto.subtle.digest("SHA-256", data).then(function (d) { return Array.prototype.map.call(new Uint8Array(d), function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); });
+    return Promise.resolve(btoa(unescape(encodeURIComponent(salt + ":" + pw)))); // demo fallback
+  }
+
+  function seed() {
+    var S = { users: [], businesses: [], reviews: [], resets: [], mails: [], me: null, seq: { u: 1, b: 1, r: 1 } };
+    window.BUSINESSES.forEach(function (b) {
+      S.businesses.push({ id: S.seq.b++, owner_id: null, cat: b.cat, city: b.city, name: b.name, desc: b.desc, area: b.area, hours: b.hours,
+        phone: b.phone, whatsapp: b.whatsapp, verified: !!b.verified, status: "approved", created_at: new Date().toISOString() });
+    });
+    return S;
+  }
+  var S;
+  function load() {
+    try { var raw = localStorage.getItem(KEY); if (raw) { S = JSON.parse(raw); return; } } catch (e) {}
+    S = memory || seed();
+  }
+  function save() { memory = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  var ready = load(), adminReady = null;
+
+  function ensureAdmin() {
+    if (adminReady) return adminReady;
+    adminReady = Promise.resolve().then(function () {
+      if (S.users.some(function (u) { return u.role === "admin"; })) return;
+      var salt = rnd(8);
+      return hash(ADMIN.password, salt).then(function (h) {
+        S.users.push({ id: S.seq.u++, email: ADMIN.email, name: "Admin", role: "admin", salt: salt, hash: h, accepted: new Date().toISOString() }); save();
+      });
+    });
+    return adminReady;
+  }
+
+  function stats(id) {
+    var rs = S.reviews.filter(function (r) { return r.business_id === id; });
+    var avg = rs.length ? Math.round(rs.reduce(function (a, r) { return a + r.rating; }, 0) / rs.length * 10) / 10 : 0;
+    return { rating: avg, reviews: rs.length };
+  }
+  function out(b) {
+    var st = stats(b.id);
+    return { id: b.id, cat: b.cat, city: b.city, name: b.name, desc: b.desc, area: b.area, hours: b.hours || { ar: "", en: "" },
+      phone: b.phone, whatsapp: b.whatsapp, rating: st.rating, reviews: st.reviews, verified: b.verified, status: b.status, mine: false };
+  }
+  function byRating(a, b) { return b.rating - a.rating || b.reviews - a.reviews || a.id - b.id; }
+  function me() { return S.me ? S.users.filter(function (u) { return u.id === S.me; })[0] || null : null; }
+  function pub(u) { return u ? { id: u.id, email: u.email, name: u.name, role: u.role } : null; }
+  function str(v, n) { return typeof v === "string" ? v.trim().slice(0, n) : ""; }
+  function R(status, json) { return { status: status, json: json }; }
+  function mail(to, lang, kind, name, link) {
+    var ar = lang !== "en", brand = ar ? "دليل قطر" : "Qatar Guide";
+    var m = kind === "reset"
+      ? { subject: ar ? "استعادة كلمة المرور – " + brand : "Reset your password – " + brand,
+          text: ar ? "مرحبًا " + name + "،\nافتح الرابط لاختيار كلمة مرور جديدة (صالح ساعة، مرة واحدة)." : "Hello " + name + ",\nOpen the link to choose a new password (valid for one hour, works once).", link: link }
+      : { subject: ar ? "تم تغيير كلمة مرورك – " + brand : "Your password was changed – " + brand,
+          text: ar ? "مرحبًا " + name + "،\nتم للتو تغيير كلمة مرور حسابك وتسجيل الخروج من الأجهزة الأخرى." : "Hello " + name + ",\nYour account password was just changed and other devices were signed out." };
+    m.to = to; m.at = new Date().toISOString(); S.mails.unshift(m); S.mails = S.mails.slice(0, 20);
+    window.dispatchEvent(new CustomEvent("demo-mail"));
+  }
+
+  function handle(method, path, query, body) {
+    var u = me(), m;
+    if (method === "GET" && path === "/api/health") return R(200, { ok: true });
+    if (method === "GET" && path === "/api/me") return R(200, { user: pub(u), features: { passwordReset: true } });
+
+    if (method === "POST" && path === "/api/register") {
+      var email = str(body.email, 120).toLowerCase(), name = str(body.name, 60), pw = typeof body.password === "string" ? body.password : "";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return R(400, { error: "invalid_email" });
+      if (!name) return R(400, { error: "invalid_name" });
+      if (pw.length < 8 || pw.length > 128) return R(400, { error: "weak_password" });
+      if (body.accept !== true) return R(400, { error: "terms_required" });
+      if (S.users.some(function (x) { return x.email === email; })) return R(409, { error: "email_taken" });
+      var salt = rnd(8);
+      return hash(pw, salt).then(function (h) {
+        var nu = { id: S.seq.u++, email: email, name: name, role: "user", salt: salt, hash: h, accepted: new Date().toISOString() };
+        S.users.push(nu); S.me = nu.id; save(); return R(201, { user: pub(nu) });
+      });
+    }
+    if (method === "POST" && path === "/api/login") {
+      var e2 = str(body.email, 120).toLowerCase(), p2 = typeof body.password === "string" ? body.password.slice(0, 128) : "";
+      var row = S.users.filter(function (x) { return x.email === e2; })[0];
+      return hash(p2, row ? row.salt : "x").then(function (h) {
+        if (!row || h !== row.hash) return R(401, { error: "bad_credentials" });
+        S.me = row.id; save(); return R(200, { user: pub(row) });
+      });
+    }
+    if (method === "POST" && path === "/api/logout") { S.me = null; save(); return R(200, { ok: true }); }
+
+    if (method === "POST" && path === "/api/forgot") {
+      var fe = str(body.email, 120).toLowerCase(), fl = body.lang === "en" ? "en" : "ar";
+      var fu = S.users.filter(function (x) { return x.email === fe; })[0];
+      if (fu && fu.role !== "admin") {
+        var token = rnd(32);
+        S.resets = S.resets.filter(function (r) { return r.user_id !== fu.id; });
+        S.resets.push({ token: token, user_id: fu.id, expires: Date.now() + 3600000 });
+        mail(fe, fl, "reset", fu.name, (fl === "en" ? "/en" : "") + "/reset?token=" + token);
+        save();
+      }
+      return R(200, { ok: true }); // same answer whether or not the account exists
+    }
+    if (method === "POST" && path === "/api/reset") {
+      var tk = typeof body.token === "string" ? body.token : "", np = typeof body.password === "string" ? body.password : "";
+      var rr = S.resets.filter(function (r) { return r.token === tk; })[0];
+      if (!rr || rr.expires < Date.now()) return R(400, { error: "invalid_token" });
+      if (np.length < 8 || np.length > 128) return R(400, { error: "weak_password" });
+      var tu = S.users.filter(function (x) { return x.id === rr.user_id; })[0], s2 = rnd(8);
+      return hash(np, s2).then(function (h) {
+        tu.salt = s2; tu.hash = h; S.resets = S.resets.filter(function (r) { return r.user_id !== tu.id; });
+        if (S.me === tu.id) S.me = null; // signed out everywhere
+        mail(tu.email, body.lang === "en" ? "en" : "ar", "changed", tu.name); save(); return R(200, { ok: true });
+      });
+    }
+    if (method === "POST" && path === "/api/me/password") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.role === "admin") return R(403, { error: "admin_use_env" });
+      return hash(typeof body.current === "string" ? body.current : "", u.salt).then(function (h) {
+        if (h !== u.hash) return R(401, { error: "bad_credentials" });
+        var nx = typeof body.next === "string" ? body.next : "";
+        if (nx.length < 8 || nx.length > 128) return R(400, { error: "weak_password" });
+        var s3 = rnd(8);
+        return hash(nx, s3).then(function (h2) { u.salt = s3; u.hash = h2; mail(u.email, body.lang === "en" ? "en" : "ar", "changed", u.name); save(); return R(200, { ok: true }); });
+      });
+    }
+
+    if (method === "GET" && path === "/api/me/export") {
+      if (!u) return R(401, { error: "auth_required" });
+      return R(200, { exported_at: new Date().toISOString(),
+        profile: { id: u.id, email: u.email, name: u.name, role: u.role, terms_accepted_at: u.accepted },
+        businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return { id: b.id, cat: b.cat, city: b.city, name_ar: b.name.ar, phone: b.phone, status: b.status, verified: b.verified }; }),
+        reviews: S.reviews.filter(function (r) { return r.user_id === u.id; }).map(function (r) { return { business_id: r.business_id, rating: r.rating, comment: r.comment }; }) });
+    }
+    if (method === "DELETE" && path === "/api/me") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.role === "admin") return R(403, { error: "admin_cannot_delete" });
+      return hash(typeof body.password === "string" ? body.password : "", u.salt).then(function (h) {
+        if (h !== u.hash) return R(401, { error: "bad_credentials" });
+        var mine = S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return b.id; });
+        S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; });
+        S.reviews = S.reviews.filter(function (r) { return r.user_id !== u.id && mine.indexOf(r.business_id) < 0; });
+        S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
+      });
+    }
+
+    if (method === "GET" && path === "/api/businesses") return R(200, { businesses: S.businesses.filter(function (b) { return b.status === "approved"; }).map(out).sort(byRating) });
+    if (method === "GET" && path === "/api/my/businesses") {
+      if (!u) return R(401, { error: "auth_required" });
+      return R(200, { businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { var o = out(b); o.mine = true; return o; }).sort(function (a, b) { return b.id - a.id; }) });
+    }
+    if (method === "POST" && path === "/api/businesses") {
+      if (!u) return R(401, { error: "auth_required" });
+      var nameAr = str(body.name_ar, 80), nameEn = str(body.name_en, 80) || nameAr, desc = str(body.desc, 300), area = str(body.area, 80), phone = str(body.phone, 8).replace(/\s/g, "");
+      if (!nameAr) return R(400, { error: "invalid_name" });
+      if (CATS.indexOf(body.cat) < 0) return R(400, { error: "invalid_category" });
+      if (CITIES.indexOf(body.city) < 0) return R(400, { error: "invalid_city" });
+      if (!/^[34567]\d{7}$/.test(phone)) return R(400, { error: "invalid_phone" });
+      var nb = { id: S.seq.b++, owner_id: u.id, cat: body.cat, city: body.city, name: { ar: nameAr, en: nameEn }, desc: { ar: desc, en: desc }, area: { ar: area, en: area },
+        hours: { ar: "", en: "" }, phone: "+974" + phone, whatsapp: "974" + phone, verified: false, status: "pending", created_at: new Date().toISOString() };
+      S.businesses.push(nb); save(); return R(201, { id: nb.id, status: "pending" });
+    }
+
+    if ((m = path.match(/^\/api\/businesses\/(\d+)\/reviews$/))) {
+      var bid = Number(m[1]), biz = S.businesses.filter(function (b) { return b.id === bid && b.status === "approved"; })[0];
+      if (!biz) return R(404, { error: "not_found" });
+      if (method === "GET") {
+        return R(200, { reviews: S.reviews.filter(function (r) { return r.business_id === bid; }).sort(function (a, b) { return b.id - a.id; }).map(function (r) {
+          var au = S.users.filter(function (x) { return x.id === r.user_id; })[0];
+          return { id: r.id, rating: r.rating, comment: r.comment, name: au ? au.name : "—", created_at: r.created_at, mine: !!u && r.user_id === u.id };
+        }) });
+      }
+      if (method === "POST") {
+        if (!u) return R(401, { error: "auth_required" });
+        if (biz.owner_id === u.id) return R(403, { error: "own_business" });
+        var rating = Number(body.rating);
+        if (!Number.isInteger(rating) || rating < 1 || rating > 5) return R(400, { error: "invalid_rating" });
+        var ex = S.reviews.filter(function (r) { return r.business_id === bid && r.user_id === u.id; })[0], cm = str(body.comment, 500);
+        if (ex) { ex.rating = rating; ex.comment = cm; } else S.reviews.push({ id: S.seq.r++, business_id: bid, user_id: u.id, rating: rating, comment: cm, created_at: new Date().toISOString().slice(0, 10) });
+        save(); return R(201, { ok: true });
+      }
+    }
+    if ((m = path.match(/^\/api\/reviews\/(\d+)$/)) && method === "DELETE") {
+      if (!u) return R(401, { error: "auth_required" });
+      var rv = S.reviews.filter(function (r) { return r.id === Number(m[1]); })[0];
+      if (!rv) return R(404, { error: "not_found" });
+      if (rv.user_id !== u.id && u.role !== "admin") return R(403, { error: "forbidden" });
+      S.reviews = S.reviews.filter(function (r) { return r !== rv; }); save(); return R(200, { ok: true });
+    }
+
+    if (path.indexOf("/api/admin/") === 0) {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.role !== "admin") return R(403, { error: "forbidden" });
+      if (method === "GET" && path === "/api/admin/businesses") {
+        var stt = query.status || "pending";
+        if (["pending", "approved", "rejected"].indexOf(stt) < 0) return R(400, { error: "invalid_status" });
+        return R(200, { businesses: S.businesses.filter(function (b) { return b.status === stt; }).map(out).sort(function (a, b) { return b.id - a.id; }) });
+      }
+      if (method === "POST" && (m = path.match(/^\/api\/admin\/businesses\/(\d+)\/(approve|reject|verify|unverify)$/))) {
+        var tb = S.businesses.filter(function (b) { return b.id === Number(m[1]); })[0];
+        if (!tb) return R(404, { error: "not_found" });
+        if (m[2] === "approve") tb.status = "approved"; else if (m[2] === "reject") tb.status = "rejected"; else tb.verified = m[2] === "verify";
+        save(); return R(200, { ok: true });
+      }
+    }
+    return R(404, { error: "not_found" });
+  }
+
+  var realFetch = window.fetch ? window.fetch.bind(window) : null;
+  window.fetch = function (url, opt) {
+    if (typeof url !== "string" || url.indexOf("/api/") !== 0) return realFetch ? realFetch(url, opt) : Promise.reject(new Error("offline"));
+    var qi = url.indexOf("?"), path = qi < 0 ? url : url.slice(0, qi), query = {};
+    if (qi >= 0) new URLSearchParams(url.slice(qi + 1)).forEach(function (v, k) { query[k] = v; });
+    var body = {}; try { body = opt && opt.body ? JSON.parse(opt.body) : {}; } catch (e) {}
+    return ensureAdmin().then(function () { return handle(((opt && opt.method) || "GET").toUpperCase(), path, query, body); }).then(function (r) {
+      return new Response(JSON.stringify(r.json), { status: r.status, headers: { "Content-Type": "application/json" } });
+    });
+  };
+
+  window.__demoStore = {
+    mails: function () { return S.mails; },
+    reset: function () { memory = null; try { localStorage.removeItem(KEY); } catch (e) {} S = seed(); adminReady = null; save(); },
+    admin: ADMIN
+  };
+})();
+
+;
+/* Demo-only layer: virtual router (no real URL changes inside the sandboxed page), toast, mailbox, guide, data-export viewer. */
+(function () {
+  "use strict";
+  var stack = [{ p: "/", s: "" }], idx = 0, pops = [];
+  function parse(u) { var i = u.indexOf("?"), p = i < 0 ? u : u.slice(0, i); return { p: p || "/", s: i < 0 ? "" : u.slice(i) }; }
+  function changed() { window.dispatchEvent(new CustomEvent("demo-nav")); }
+  window.__vl = {
+    get pathname() { return stack[idx].p; }, get search() { return stack[idx].s; }, hash: "", origin: "https://demo.local",
+    pushState: function (_a, _b, u) { stack = stack.slice(0, idx + 1); stack.push(parse(u)); idx++; changed(); },
+    replaceState: function (_a, _b, u) { stack[idx] = parse(u); changed(); },
+    back: function () { if (idx > 0) { idx--; changed(); pops.forEach(function (f) { f(); }); } },
+    canBack: function () { return idx > 0; },
+    reload: function () { pops.forEach(function (f) { f(); }); },
+    onpop: function (f) { pops.push(f); }
+  };
+
+  function en() { return document.documentElement.lang === "en"; }
+  function T(ar, e) { return en() ? e : ar; }
+  function el(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  // ---- toast (the viewer never shows alert dialogs) ----
+  var toastBox;
+  function toast(msg) {
+    if (!toastBox) { toastBox = el("div", "demo-toast"); toastBox.setAttribute("role", "status"); document.body.appendChild(toastBox); }
+    toastBox.textContent = msg; toastBox.hidden = false;
+    clearTimeout(toast.t); toast.t = setTimeout(function () { toastBox.hidden = true; }, 3500);
+  }
+  window.__demo = { toast: toast, confirm: function () { return true; } }; // the delete form already asks for the password
+
+  // ---- generic panel ----
+  var panel, panelBody, panelTitle;
+  function openPanel(title, node) {
+    if (!panel) {
+      panel = el("div", "demo-panel"); panel.hidden = true;
+      var card = el("div", "demo-card"), head = el("div", "demo-card-head");
+      panelTitle = el("strong"); var close = el("button", "demo-x", "✕"); close.type = "button"; close.setAttribute("aria-label", "Close");
+      close.addEventListener("click", function () { panel.hidden = true; });
+      head.appendChild(panelTitle); head.appendChild(close); panelBody = el("div", "demo-card-body");
+      card.appendChild(head); card.appendChild(panelBody); panel.appendChild(card); document.body.appendChild(panel);
+      panel.addEventListener("click", function (e) { if (e.target === panel) panel.hidden = true; });
+    }
+    panelTitle.textContent = title; panelBody.innerHTML = ""; panelBody.appendChild(node); panel.hidden = false;
+  }
+  function copyBtn(getText) {
+    var b = el("button", "btn ghost demo-copy", T("نسخ", "Copy")); b.type = "button";
+    b.addEventListener("click", function () {
+      var txt = getText();
+      (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast(T("تم النسخ", "Copied")); }, function () {
+        var r = document.createRange(), n = b.previousElementSibling; if (n) { r.selectNodeContents(n); var s = getSelection(); s.removeAllRanges(); s.addRange(r); toast(T("حدّد النص وانسخه", "Text selected, copy it")); }
+      });
+    });
+    return b;
+  }
+
+  // ---- guide ----
+  function guide() {
+    var a = window.__demoStore.admin, box = el("div");
+    box.innerHTML = "<p>" + T("هذه نسخة تجريبية كاملة من المنصة تعمل داخل المتصفح. البيانات محفوظة في متصفحك أنت فقط ولا يراها أحد غيرك.", "This is a full demo of the platform running inside your browser. Data stays in your browser only; nobody else sees it.") + "</p>" +
+      "<ol>" +
+      "<li>" + T("تصفّح التصنيفات وافتح نشاطًا وجرّب البحث وتبديل اللغة.", "Browse categories, open a business, try search and the language switch.") + "</li>" +
+      "<li>" + T("أنشئ حسابًا (يلزم قبول الشروط) ثم أضف نشاطًا: يبقى «قيد المراجعة».", "Create an account (terms acceptance required) and add a business: it stays pending.") + "</li>" +
+      "<li>" + T("سجّل الخروج وادخل كأدمن لقبوله، ثم قيّم نشاطًا من حساب آخر.", "Log out and sign in as admin to approve it, then rate a business from another account.") + "</li>" +
+      "<li>" + T("جرّب «نسيت كلمة المرور؟» ثم افتح «البريد التجريبي» أسفل الشاشة لتجد الرسالة.", "Try “Forgot your password?”, then open the demo mailbox below to find the message.") + "</li></ol>";
+    var cred = el("div", "demo-cred");
+    cred.innerHTML = "<div><span>" + T("بريد الأدمن", "Admin e-mail") + "</span> <code dir=\"ltr\">" + esc(a.email) + "</code></div><div><span>" + T("كلمة المرور", "Password") + "</span> <code dir=\"ltr\">" + esc(a.password) + "</code></div>";
+    box.appendChild(cred);
+    box.appendChild(el("p", "demo-note", T("هذه محاكاة: لا يوجد خادم حقيقي ولا إرسال بريد فعلي ولا حدّ لعدد المحاولات. الاتصال والواتساب يعملان كروابط عادية.", "This is a simulation: no real server, no real e-mail and no rate limits. Call and WhatsApp work as normal links.")));
+    openPanel(T("دليل التجربة", "Demo guide"), box);
+  }
+
+  // ---- mailbox ----
+  function mailbox() {
+    var mails = window.__demoStore.mails(), box = el("div");
+    if (!mails.length) box.appendChild(el("p", "demo-note", T("لا توجد رسائل بعد. اطلب استعادة كلمة المرور من صفحة الدخول.", "No messages yet. Request a password reset from the login page.")));
+    mails.forEach(function (m) {
+      var c = el("div", "demo-mail");
+      c.innerHTML = "<div class=\"demo-mail-to\">" + T("إلى", "To") + ": <span dir=\"ltr\">" + esc(m.to) + "</span></div><strong>" + esc(m.subject) + "</strong><p>" + esc(m.text).replace(/\n/g, "<br>") + "</p>";
+      if (m.link) {
+        var open = el("a", "btn", T("فتح الرابط", "Open the link")); open.href = m.link;
+        open.addEventListener("click", function () { panel.hidden = true; });
+        c.appendChild(open);
+      }
+      box.appendChild(c);
+    });
+    openPanel(T("البريد التجريبي", "Demo mailbox"), box);
+  }
+
+  // ---- data export viewer (downloads are blocked in the viewer) ----
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href="/api/me/export"]');
+    if (!a) return;
+    e.preventDefault(); e.stopPropagation();
+    fetch("/api/me/export").then(function (r) { return r.json(); }).then(function (j) {
+      var box = el("div"), pre = el("pre", "demo-pre"); pre.textContent = JSON.stringify(j, null, 2); pre.dir = "ltr";
+      box.appendChild(pre); box.appendChild(copyBtn(function () { return pre.textContent; }));
+      openPanel(T("بياناتي (JSON)", "My data (JSON)"), box);
+    });
+  }, true);
+
+  // ---- bottom bar ----
+  function bar() {
+    var b = el("div", "demo-bar"); b.setAttribute("role", "toolbar");
+    var back = el("button", "demo-btn", ""), mail = el("button", "demo-btn", ""), gd = el("button", "demo-btn", ""), rs = el("button", "demo-btn", ""), armed = false;
+    [back, mail, gd, rs].forEach(function (x) { x.type = "button"; b.appendChild(x); });
+    function labels() {
+      back.textContent = "↩ " + T("رجوع", "Back"); back.disabled = !window.__vl.canBack();
+      mail.textContent = "✉ " + T("البريد التجريبي", "Demo mailbox") + " (" + window.__demoStore.mails().length + ")";
+      gd.textContent = "ℹ " + T("دليل التجربة", "Guide");
+      rs.textContent = armed ? T("اضغط للتأكيد", "Tap to confirm") : "⟲ " + T("إعادة ضبط", "Reset");
+    }
+    back.addEventListener("click", function () { window.__vl.back(); });
+    mail.addEventListener("click", mailbox);
+    gd.addEventListener("click", guide);
+    rs.addEventListener("click", function () {
+      if (!armed) { armed = true; labels(); setTimeout(function () { armed = false; labels(); }, 3000); return; }
+      armed = false; window.__demoStore.reset(); window.__vl.pushState(null, "", "/"); toast(T("أُعيدت البيانات التجريبية", "Demo data reset")); labels();
+    });
+    window.addEventListener("demo-nav", labels); window.addEventListener("demo-mail", function () { labels(); toast(T("وصلتك رسالة في البريد التجريبي", "A message arrived in the demo mailbox")); });
+    new MutationObserver(labels).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    labels(); document.body.appendChild(b);
+  }
+
+  function init() {
+    bar();
+    var seen = false; try { seen = localStorage.getItem("qg_demo_seen") === "1"; localStorage.setItem("qg_demo_seen", "1"); } catch (e) {}
+    if (!seen) setTimeout(guide, 400);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})();
+
+;
+(function () {
+  "use strict";
+
+
+  var T = {
+    ar: {
+      forgot_link: "نسيت كلمة المرور؟", forgot_title: "استعادة كلمة المرور", forgot_sub: "أدخل بريدك وسنرسل لك رابطًا لاختيار كلمة مرور جديدة.",
+      forgot_send: "إرسال الرابط", forgot_done: "إن كان هذا البريد مسجّلًا لدينا فقد أرسلنا إليه رابط الاستعادة (صالح ساعة واحدة). تحقق من صندوق الوارد والبريد المزعج.",
+      forgot_off: "استعادة كلمة المرور غير مفعّلة حاليًا. تواصل معنا عبر بريد الموقع.", reset_title: "اختر كلمة مرور جديدة", reset_new: "كلمة المرور الجديدة (8 أحرف على الأقل)",
+      reset_confirm: "أعد كتابة كلمة المرور", reset_save: "حفظ كلمة المرور", reset_done: "تم تغيير كلمة المرور. يمكنك الآن تسجيل الدخول.", reset_mismatch: "كلمتا المرور غير متطابقتين.",
+      e_invalid_token: "الرابط غير صالح أو انتهت صلاحيته. اطلب رابطًا جديدًا.", e_email_disabled: "استعادة كلمة المرور غير مفعّلة حاليًا.", e_admin_use_env: "كلمة مرور الأدمن تُغيَّر من إعدادات الخادم.",
+      chpw_title: "تغيير كلمة المرور", chpw_current: "كلمة المرور الحالية", chpw_new: "كلمة المرور الجديدة (8 أحرف على الأقل)", chpw_save: "تغيير", chpw_done: "تم تغيير كلمة المرور وتسجيل الخروج من الأجهزة الأخرى.",
+      privacy: "سياسة الخصوصية", terms: "شروط الاستخدام", agree_pre: "أوافق على", agree_and: "و",
+      e_terms_required: "يجب الموافقة على شروط الاستخدام وسياسة الخصوصية.", e_admin_cannot_delete: "لا يمكن حذف حساب الأدمن من هنا.",
+      acct_title: "حسابي", acct_export: "تنزيل بياناتي (JSON)", acct_delete: "حذف حسابي نهائيًا", acct_pw: "كلمة المرور للتأكيد",
+      acct_warn: "يحذف حسابك وتقييماتك وكل الأنشطة التي أضفتها، ولا يمكن التراجع.", acct_confirm: "هل أنت متأكد من حذف حسابك نهائيًا؟",
+      home_title: "دليل قطر | دليل الأعمال والخدمات في قطر",
+      home_desc: "ابحث عن مطاعم وعقارات وعيادات وخدمات في قطر، واتصل بالأنشطة مباشرة واطلع على تقييمات حقيقية من المستخدمين.",
+      browse_h1: "كل الأنشطة والخدمات في قطر", browse_desc: "قائمة كاملة بالأنشطة التجارية والخدمات في قطر مع أرقام التواصل والتقييمات.",
+      brand: "دليل قطر", nav_home: "الرئيسية", nav_browse: "تصفح الدليل", nav_add: "أضف نشاطك",
+      footer: "دليل الأعمال والخدمات في قطر. © دليل قطر",
+      hero_title: "كل ما تحتاجه في قطر، في مكان واحد",
+      hero_sub: "ابحث عن المطاعم والعقارات والعيادات والخدمات واتصل بهم مباشرة.",
+      search_ph: "ابحث عن نشاط أو خدمة…", all_cities: "كل المدن", all_cats: "كل التصنيفات", search: "بحث",
+      categories: "التصنيفات", featured: "أنشطة موثّقة", city: "المدينة", category: "التصنيف", keyword: "كلمة البحث",
+      verified_only: "الأنشطة الموثّقة فقط", sort: "الترتيب", sort_rating: "الأعلى تقييمًا", sort_name: "الاسم",
+      results: "نتيجة", no_results: "لا توجد نتائج مطابقة.", call: "اتصال", whatsapp: "واتساب", details: "التفاصيل",
+      verified: "موثّق", reviews: "تقييم", back: "رجوع", area: "المنطقة", hours: "ساعات العمل", phone: "الهاتف",
+      not_found: "النشاط غير موجود.",
+      add_title: "أضف نشاطك التجاري", add_sub: "سيظهر نشاطك بعد المراجعة. (في هذه النسخة التجريبية يُحفظ في متصفحك فقط).",
+      f_name_ar: "اسم النشاط بالعربية", f_name_en: "اسم النشاط بالإنجليزية (اختياري)", f_desc: "وصف مختصر",
+      f_phone: "رقم الهاتف (8 أرقام قطرية)", f_area: "المنطقة / العنوان", submit: "إرسال",
+      phone_err: "أدخل رقمًا قطريًا صحيحًا من 8 أرقام (يبدأ بـ 3 أو 4 أو 5 أو 6 أو 7).",
+      sent: "تم الإرسال! نشاطك قيد المراجعة وسيظهر في الدليل بعد الموافقة.", pending: "قيد المراجعة",
+      rejected: "مرفوض", login: "تسجيل الدخول", register: "إنشاء حساب", logout: "خروج", email: "البريد الإلكتروني",
+      password: "كلمة المرور (8 أحرف على الأقل)", your_name: "الاسم", need_login: "سجّل الدخول أولًا لإضافة نشاطك.",
+      my_listings: "أنشطتي", admin: "لوحة الإدارة", approve: "قبول", reject: "رفض", verify: "توثيق", unverify: "إلغاء التوثيق",
+      no_pending: "لا توجد طلبات.", hello: "مرحبًا", have_account: "لديك حساب؟", no_account: "ليس لديك حساب؟", load_err: "تعذّر تحميل البيانات.",
+      status_pending: "قيد المراجعة", status_approved: "مقبول", status_rejected: "مرفوض",
+      e_invalid_email: "البريد الإلكتروني غير صحيح.", e_invalid_name: "الاسم مطلوب.", e_weak_password: "كلمة المرور يجب أن تكون 8 أحرف على الأقل.",
+      e_email_taken: "هذا البريد مسجّل مسبقًا.", e_bad_credentials: "البريد أو كلمة المرور غير صحيحة.", e_rate_limited: "محاولات كثيرة، حاول لاحقًا.",
+      e_invalid_category: "اختر التصنيف.", e_invalid_city: "اختر المدينة.", e_invalid_phone: "أدخل رقمًا قطريًا صحيحًا من 8 أرقام.",
+      e_auth_required: "يلزم تسجيل الدخول.",
+      rev_title: "التقييمات", rev_write: "قيّم هذا النشاط", rev_rating: "تقييمك", rev_comment: "تعليقك (اختياري)", rev_post: "نشر التقييم",
+      rev_delete: "حذف", rev_none: "لا توجد تقييمات بعد. كن أول من يقيّم!", rev_login: "سجّل الدخول لتضيف تقييمك.", rev_saved: "تم حفظ تقييمك.",
+      rev_mine: "تقييمك", rev_update_hint: "لديك تقييم سابق، إرسال جديد سيحدّثه.",
+      e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
+    },
+    en: {
+      forgot_link: "Forgot your password?", forgot_title: "Reset your password", forgot_sub: "Enter your e-mail and we will send you a link to choose a new password.",
+      forgot_send: "Send link", forgot_done: "If this e-mail is registered with us, a reset link was sent (valid for one hour). Check your inbox and spam folder.",
+      forgot_off: "Password reset is not enabled right now. Please contact us at the site's e-mail.", reset_title: "Choose a new password", reset_new: "New password (min 8 characters)",
+      reset_confirm: "Repeat the password", reset_save: "Save password", reset_done: "Your password was changed. You can log in now.", reset_mismatch: "The passwords do not match.",
+      e_invalid_token: "This link is invalid or has expired. Request a new one.", e_email_disabled: "Password reset is not enabled right now.", e_admin_use_env: "The admin password is changed in the server settings.",
+      chpw_title: "Change password", chpw_current: "Current password", chpw_new: "New password (min 8 characters)", chpw_save: "Change", chpw_done: "Password changed. Other devices were signed out.",
+      privacy: "Privacy Policy", terms: "Terms of Use", agree_pre: "I agree to the", agree_and: "and the",
+      e_terms_required: "You must accept the Terms of Use and Privacy Policy.", e_admin_cannot_delete: "Admin accounts cannot be deleted here.",
+      acct_title: "My account", acct_export: "Download my data (JSON)", acct_delete: "Delete my account permanently", acct_pw: "Password to confirm",
+      acct_warn: "Deletes your account, your reviews and every listing you submitted. This cannot be undone.", acct_confirm: "Are you sure you want to permanently delete your account?",
+      home_title: "Qatar Guide | Business & Services Directory in Qatar",
+      home_desc: "Find restaurants, real estate, clinics and services in Qatar, contact businesses directly and read genuine user reviews.",
+      browse_h1: "All businesses & services in Qatar", browse_desc: "A complete list of businesses and services in Qatar with contact details and reviews.",
+      brand: "Qatar Guide", nav_home: "Home", nav_browse: "Browse", nav_add: "List your business",
+      footer: "Business & services directory in Qatar. © Qatar Guide",
+      hero_title: "Everything you need in Qatar, in one place",
+      hero_sub: "Find restaurants, real estate, clinics and services, and contact them directly.",
+      search_ph: "Search a business or service…", all_cities: "All cities", all_cats: "All categories", search: "Search",
+      categories: "Categories", featured: "Verified businesses", city: "City", category: "Category", keyword: "Keyword",
+      verified_only: "Verified only", sort: "Sort by", sort_rating: "Top rated", sort_name: "Name",
+      results: "results", no_results: "No matching results.", call: "Call", whatsapp: "WhatsApp", details: "Details",
+      verified: "Verified", reviews: "reviews", back: "Back", area: "Area", hours: "Hours", phone: "Phone",
+      not_found: "Business not found.",
+      add_title: "List your business", add_sub: "Your listing appears after review. (In this demo it is saved in your browser only.)",
+      f_name_ar: "Business name (Arabic)", f_name_en: "Business name (English, optional)", f_desc: "Short description",
+      f_phone: "Phone (8-digit Qatar number)", f_area: "Area / address", submit: "Submit",
+      phone_err: "Enter a valid 8-digit Qatar number (starting with 3, 4, 5, 6 or 7).",
+      sent: "Submitted! Your listing is pending review and will appear once approved.", pending: "Pending review",
+      rejected: "Rejected", login: "Log in", register: "Sign up", logout: "Log out", email: "Email",
+      password: "Password (min 8 characters)", your_name: "Name", need_login: "Log in first to list your business.",
+      my_listings: "My listings", admin: "Admin", approve: "Approve", reject: "Reject", verify: "Verify", unverify: "Unverify",
+      no_pending: "Nothing here.", hello: "Hello", have_account: "Have an account?", no_account: "No account yet?", load_err: "Could not load data.",
+      status_pending: "Pending", status_approved: "Approved", status_rejected: "Rejected",
+      e_invalid_email: "Invalid email.", e_invalid_name: "Name is required.", e_weak_password: "Password must be at least 8 characters.",
+      e_email_taken: "This email is already registered.", e_bad_credentials: "Wrong email or password.", e_rate_limited: "Too many attempts, try later.",
+      e_invalid_category: "Choose a category.", e_invalid_city: "Choose a city.", e_invalid_phone: "Enter a valid 8-digit Qatar number.",
+      e_auth_required: "Please log in.",
+      rev_title: "Reviews", rev_write: "Rate this business", rev_rating: "Your rating", rev_comment: "Your comment (optional)", rev_post: "Post review",
+      rev_delete: "Delete", rev_none: "No reviews yet. Be the first!", rev_login: "Log in to leave a review.", rev_saved: "Your review was saved.",
+      rev_mine: "Your review", rev_update_hint: "You already reviewed this; submitting again updates it.",
+      e_invalid_rating: "Pick a rating from 1 to 5.", e_own_business: "You cannot review your own business.", e_forbidden: "Not allowed.", e_generic: "Something went wrong, try again."
+    }
+  };
+
+  var lang = "ar";
+  function langFromPath() { return __vl.pathname === "/en" || __vl.pathname.indexOf("/en/") === 0 ? "en" : "ar"; }
+  function base() { return lang === "en" ? "/en" : ""; }
+  function link(path) { return path === "/" ? (base() || "/") : base() + path; }
+
+  function t(k) { return T[lang][k] || k; }
+  function L(o) { return o[lang] || o.ar; }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  var state = { user: null, businesses: [], features: { passwordReset: false }, resetToken: "" };
+
+  function api(method, url, body) {
+    return fetch(url, {
+      method: method, credentials: "same-origin",
+      headers: body ? { "Content-Type": "application/json" } : {},
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.error || "generic"); e.code = j.error || "generic"; throw e; }
+        return j;
+      });
+    });
+  }
+  function errMsg(e) { var k = "e_" + (e && e.code); return T[lang][k] ? t(k) : t("e_generic"); }
+  function allBusinesses() { return state.businesses; }
+
+  function setLang(l) {
+    lang = l;
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll("[data-path]").forEach(function (el) { el.setAttribute("href", link(el.getAttribute("data-path"))); });
+  }
+
+  // update <title>, description, robots and canonical on client-side navigation
+  function setHead(title, desc, robots) {
+    document.title = title;
+    function meta(name, val) {
+      var el = document.querySelector('meta[name="' + name + '"]');
+      if (!el) { el = document.createElement("meta"); el.setAttribute("name", name); document.head.appendChild(el); }
+      el.setAttribute("content", val);
+    }
+    meta("description", desc); meta("robots", robots || "index,follow");
+    var c = document.querySelector('link[rel="canonical"]');
+    if (!c) { c = document.createElement("link"); c.setAttribute("rel", "canonical"); document.head.appendChild(c); }
+    c.setAttribute("href", __vl.origin + __vl.pathname);
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(function (n) { n.remove(); });
+  }
+
+  function navigate(url) { __vl.pushState(null, "", url); render(); }
+
+  function opts(list, allLabel, selected) {
+    return '<option value="">' + esc(allLabel) + "</option>" + list.map(function (x) {
+      return '<option value="' + esc(x.id) + '"' + (x.id === selected ? " selected" : "") + ">" + esc(L(x)) + "</option>";
+    }).join("");
+  }
+
+  function telHref(p) { return "tel:" + String(p).replace(/[^+\d]/g, ""); }
+  function waHref(n) { return "https://wa.me/" + String(n).replace(/\D/g, ""); }
+
+  function card(b) {
+    var cat = window.CATEGORIES.filter(function (c) { return c.id === b.cat; })[0];
+    var city = window.CITIES.filter(function (c) { return c.id === b.city; })[0];
+    return '<article class="card">' +
+      "<h3>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") +
+      (b.status === "pending" ? ' <span class="badge warn">' + t("pending") + "</span>" : b.status === "rejected" ? ' <span class="badge bad">' + t("rejected") + "</span>" : "") + "</h3>" +
+      '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
+      "<p>" + esc(L(b.desc)) + "</p>" +
+      (b.reviews ? '<div class="meta"><span class="stars">★ ' + esc(b.rating) + "</span> (" + esc(b.reviews) + " " + t("reviews") + ")</div>" : "") +
+      '<div class="actions">' +
+      '<a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
+      '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a>" +
+      '<a class="btn ghost" href="' + link("/b/" + b.id) + '">' + t("details") + "</a></div></article>";
+  }
+
+  function viewHome() {
+    var verified = allBusinesses().filter(function (b) { return b.verified; }).slice(0, 6);
+    return '<section class="hero"><h1>' + t("hero_title") + "</h1><p>" + t("hero_sub") + "</p>" +
+      '<form class="search" id="homeSearch">' +
+      '<input name="q" placeholder="' + esc(t("search_ph")) + '">' +
+      '<select name="city">' + opts(window.CITIES, t("all_cities")) + "</select>" +
+      '<button class="btn" type="submit">🔍 ' + t("search") + "</button></form></section>" +
+      '<div class="container"><section class="block"><h2>' + t("categories") + '</h2><div class="grid">' +
+      window.CATEGORIES.map(function (c) {
+        return '<a class="cat" href="' + link("/category/" + c.id) + '"><span class="ico">' + c.icon + "</span>" + esc(L(c)) + "</a>";
+      }).join("") + '</div></section><section class="block"><h2>' + t("featured") + '</h2><div class="grid">' +
+      verified.map(card).join("") + "</div></section></div>";
+  }
+
+  function viewBrowse(params, heading) {
+    var q = (params.q || "").trim().toLowerCase();
+    var list = allBusinesses().filter(function (b) {
+      if (params.cat && b.cat !== params.cat) return false;
+      if (params.city && b.city !== params.city) return false;
+      if (params.verified === "1" && !b.verified) return false;
+      if (q) {
+        var hay = [b.name.ar, b.name.en, b.desc.ar, b.desc.en, b.area && b.area.ar, b.area && b.area.en].join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    list.sort(params.sort === "name"
+      ? function (a, b) { return L(a.name).localeCompare(L(b.name), lang); }
+      : function (a, b) { return (b.rating || 0) - (a.rating || 0); });
+
+    return '<div class="container"><div class="layout"><form class="filters" id="filters">' +
+      "<label>" + t("keyword") + '<input type="text" name="q" value="' + esc(params.q || "") + '"></label>' +
+      "<label>" + t("category") + '<select name="cat">' + opts(window.CATEGORIES, t("all_cats"), params.cat) + "</select></label>" +
+      "<label>" + t("city") + '<select name="city">' + opts(window.CITIES, t("all_cities"), params.city) + "</select></label>" +
+      "<label>" + t("sort") + '<select name="sort"><option value="rating">' + t("sort_rating") + '</option><option value="name"' +
+      (params.sort === "name" ? " selected" : "") + ">" + t("sort_name") + "</option></select></label>" +
+      '<label class="check"><input type="checkbox" name="verified" value="1"' +
+      (params.verified === "1" ? " checked" : "") + "> " + t("verified_only") + "</label>" +
+      '<button class="btn" type="submit">' + t("search") + "</button></form>" +
+      "<div>" + (heading || "") + "<p class=\"meta\">" + list.length + " " + t("results") + "</p>" +
+      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_results") + "</p>") +
+      "</div></div></div>";
+  }
+
+  function viewDetail(id, reviews) {
+    var b = allBusinesses().filter(function (x) { return String(x.id) === String(id); })[0];
+    if (!b) return '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn ghost" href="' + link("/browse") + '">' + t("back") + "</a></div>";
+    var cat = window.CATEGORIES.filter(function (c) { return c.id === b.cat; })[0];
+    var city = window.CITIES.filter(function (c) { return c.id === b.city; })[0];
+    return '<div class="container">' + crumbs([[t("brand"), link("/")], [cat ? L(cat) : "", cat ? link("/category/" + b.cat) : link("/browse")], [L(b.name), link("/b/" + b.id)]]) + '<div class="detail"><div><a class="btn ghost" href="' + link("/browse") + '">← ' + t("back") + "</a></div>" +
+      "<h1>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") + "</h1>" +
+      '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
+      "<p>" + esc(L(b.desc)) + "</p><dl>" +
+      "<dt>" + t("area") + "</dt><dd>" + esc(b.area ? L(b.area) : "") + "</dd>" +
+      (b.hours ? "<dt>" + t("hours") + "</dt><dd>" + esc(L(b.hours)) + "</dd>" : "") +
+      "<dt>" + t("phone") + '</dt><dd dir="ltr" class="ltr">' + esc(b.phone) + "</dd></dl>" +
+      (b.reviews ? '<div class="meta"><span class="stars">★ ' + esc(b.rating) + "</span> (" + esc(b.reviews) + " " + t("reviews") + ")</div>" : "") +
+      '<div class="actions"><a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
+      '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a></div></div>" +
+      viewReviews(b, reviews || []) + "</div>";
+  }
+
+  function viewAdd() {
+    if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="' + link("/login") + '">' + t("login") + "</a></div></div>";
+    return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
+      "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
+      "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
+      "<label>" + t("category") + '<select name="cat" required>' + opts(window.CATEGORIES, "—") + "</select></label>" +
+      "<label>" + t("city") + '<select name="city" required>' + opts(window.CITIES, "—") + "</select></label>" +
+      "<label>" + t("f_area") + '<input name="area" maxlength="80"></label>' +
+      "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required></label>' +
+      "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300"></textarea></label>' +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("submit") + "</button></form></div>";
+  }
+
+  function crumbs(items) {
+    return '<nav class="crumbs" aria-label="breadcrumb">' + items.map(function (i, n) {
+      return n < items.length - 1 ? '<a href="' + esc(i[1]) + '">' + esc(i[0]) + "</a> › " : "<span>" + esc(i[0]) + "</span>";
+    }).join("") + "</nav>";
+  }
+  function find(list, id) { return list.filter(function (x) { return x.id === id; })[0]; }
+  function catH1(cat, city) {
+    var c = L(cat), k = city ? L(city) : "";
+    return city ? (lang === "ar" ? c + " في " + k : c + " in " + k + ", Qatar") : (lang === "ar" ? c + " في قطر" : c + " in Qatar");
+  }
+
+  function stars(n) { return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); }
+
+  function viewReviews(b, reviews) {
+    var mine = reviews.filter(function (r) { return r.mine; })[0];
+    var form;
+    if (!state.user) form = '<p class="meta">' + t("rev_login") + ' <a class="link" href="' + link("/login") + '">' + t("login") + "</a></p>";
+    else form = '<form class="form" id="reviewForm" data-biz="' + esc(b.id) + '" novalidate><h3>' + t("rev_write") + "</h3>" +
+      (mine ? '<p class="meta">' + t("rev_update_hint") + "</p>" : "") +
+      "<label>" + t("rev_rating") + '<select name="rating">' + [5, 4, 3, 2, 1].map(function (n) {
+        return '<option value="' + n + '"' + (mine && mine.rating === n ? " selected" : "") + ">" + stars(n) + " (" + n + ")</option>";
+      }).join("") + "</select></label>" +
+      "<label>" + t("rev_comment") + '<textarea name="comment" rows="3" maxlength="500">' + esc(mine ? mine.comment : "") + "</textarea></label>" +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("rev_post") + "</button></form>";
+    return '<section class="block"><h2>' + t("rev_title") + "</h2>" + form +
+      (reviews.length ? reviews.map(function (r) {
+        return '<article class="card review"><div><span class="stars">' + stars(r.rating) + "</span> <strong>" + esc(r.name) + "</strong>" +
+          (r.mine ? ' <span class="badge">' + t("rev_mine") + "</span>" : "") + ' <span class="meta">' + esc(String(r.created_at).slice(0, 10)) + "</span></div>" +
+          (r.comment ? "<p>" + esc(r.comment) + "</p>" : "") +
+          (r.mine || (state.user && state.user.role === "admin") ? '<div class="actions"><button class="btn ghost" data-delrev="' + esc(r.id) + '">' + t("rev_delete") + "</button></div>" : "") +
+          "</article>";
+      }).join("") : '<p class="empty">' + t("rev_none") + "</p>") + "</section>";
+  }
+
+  function viewAuth(mode) {
+    var reg = mode === "register";
+    return '<div class="container"><form class="form narrow" id="authForm" data-mode="' + mode + '" novalidate><h2>' + t(reg ? "register" : "login") + "</h2>" +
+      (reg ? "<label>" + t("your_name") + '<input name="name" maxlength="60" autocomplete="name" required></label>' : "") +
+      "<label>" + t("email") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
+      "<label>" + t("password") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="' + (reg ? "new-password" : "current-password") + '" required></label>' +
+      (reg ? '<label class="check-line"><input type="checkbox" name="accept" required> <span>' + t("agree_pre") + ' <a class="link" href="' + link("/terms") + '">' + t("terms") + "</a> " + t("agree_and") + ' <a class="link" href="' + link("/privacy") + '">' + t("privacy") + "</a></span></label>" : "") +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t(reg ? "register" : "login") + "</button>" +
+      (!reg && state.features.passwordReset ? '<p class="meta"><a class="link" href="' + link("/forgot") + '">' + t("forgot_link") + "</a></p>" : "") +
+      '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="' + link(reg ? "/login" : "/register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
+  }
+
+  function viewForgot() {
+    if (!state.features.passwordReset) return '<div class="container"><div class="form narrow"><p>' + t("forgot_off") + "</p></div></div>";
+    return '<div class="container"><form class="form narrow" id="forgotForm" novalidate><h2>' + t("forgot_title") + '</h2><p class="meta">' + t("forgot_sub") + "</p>" +
+      "<label>" + t("email") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("forgot_send") + "</button>" +
+      '<p class="meta"><a class="link" href="' + link("/login") + '">' + t("login") + "</a></p></form></div>";
+  }
+
+  function viewReset() {
+    if (!state.resetToken) return '<div class="container"><div class="form narrow"><p class="error">' + t("e_invalid_token") + '</p><a class="btn" href="' + link("/forgot") + '">' + t("forgot_link") + "</a></div></div>";
+    return '<div class="container"><form class="form narrow" id="resetForm" novalidate><h2>' + t("reset_title") + "</h2>" +
+      "<label>" + t("reset_new") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
+      "<label>" + t("reset_confirm") + '<input name="again" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("reset_save") + "</button></form></div>";
+  }
+
+  function viewMine(list) {
+    return '<div class="container"><section class="block"><h2>' + t("my_listings") + "</h2>" +
+      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
+      '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
+      '<section class="block"><h2>' + t("acct_title") + "</h2>" +
+      '<p><a class="btn ghost" href="/api/me/export">' + t("acct_export") + "</a></p>" +
+      (state.user && state.user.role !== "admin" ? '<form class="form" id="chpwForm" novalidate><h3>' + t("chpw_title") + "</h3>" +
+        "<label>" + t("chpw_current") + '<input name="current" type="password" dir="ltr" autocomplete="current-password" required></label>' +
+        "<label>" + t("chpw_new") + '<input name="next" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
+        '<div id="chpwMsg" role="status"></div><button class="btn" type="submit">' + t("chpw_save") + "</button></form>" : "") +
+      (state.user && state.user.role !== "admin" ? '<form class="form danger" id="deleteForm" novalidate><p>' + t("acct_warn") + "</p>" +
+        "<label>" + t("acct_pw") + '<input name="password" type="password" dir="ltr" autocomplete="current-password" required></label>' +
+        '<div id="formMsg" role="status"></div><button class="btn danger-btn" type="submit">' + t("acct_delete") + "</button></form>" : "") +
+      "</section></div>";
+  }
+
+  function viewAdmin(list, status) {
+    var tabs = ["pending", "approved", "rejected"].map(function (st) {
+      return '<a class="btn' + (st === status ? "" : " ghost") + '" href="' + link("/admin") + '?status=' + st + '">' + t("status_" + st) + "</a>";
+    }).join(" ");
+    var rows = list.map(function (b) {
+      return '<div class="card"><h3>' + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + '</p><div class="actions">' +
+        (b.status !== "approved" ? '<button class="btn" data-act="approve" data-id="' + b.id + '">' + t("approve") + "</button>" : "") +
+        (b.status !== "rejected" ? '<button class="btn ghost" data-act="reject" data-id="' + b.id + '">' + t("reject") + "</button>" : "") +
+        (b.status === "approved" ? '<button class="btn ghost" data-act="' + (b.verified ? "unverify" : "verify") + '" data-id="' + b.id + '">' + t(b.verified ? "unverify" : "verify") + "</button>" : "") +
+        "</div></div>";
+    }).join("");
+    return '<div class="container"><section class="block"><h2>' + t("admin") + '</h2><div class="actions">' + tabs + "</div><br>" +
+      (list.length ? '<div class="grid">' + rows + "</div>" : '<p class="empty">' + t("no_pending") + "</p>") + "</section></div>";
+  }
+
+  function parseLocation() {
+    var path = __vl.pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+    if (path.length > 1) path = path.replace(/\/+$/, "");
+    var params = {};
+    new URLSearchParams(__vl.search).forEach(function (v, k) { params[k] = v; });
+    return { path: path, params: params };
+  }
+
+  function toQuery(form) {
+    var p = new URLSearchParams();
+    new FormData(form).forEach(function (v, k) { if (String(v).trim() !== "") p.set(k, v); });
+    return p.toString();
+  }
+
+  function renderUserNav() {
+    var el = document.getElementById("userNav");
+    if (!state.user) { el.innerHTML = '<a href="' + link("/login") + '">' + t("login") + "</a>"; return; }
+    el.innerHTML = '<a href="' + link("/mine") + '">' + esc(state.user.name) + "</a>" +
+      (state.user.role === "admin" ? ' <a href="' + link("/admin") + '">' + t("admin") + "</a>" : "") +
+      ' <button id="logoutBtn" class="lang-btn" type="button">' + t("logout") + "</button>";
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      api("POST", "/api/logout", {}).then(function () { state.user = null; navigate(link("/")); });
+    });
+  }
+
+  var renderSeq = 0, legalShown = false;
+  function render() {
+    var seq = ++renderSeq;
+    var app = document.getElementById("app");
+    setLang(langFromPath());
+    var r = parseLocation();
+    renderUserNav();
+
+    var altPath = (lang === "ar" ? "/en" : "") + r.path + (r.path === "/reset" ? "" : __vl.search); // never copy the reset token into a link
+    if (r.path === "/privacy" || r.path === "/terms") {
+      var L0 = window.__LEGAL[lang][r.path.slice(1)];
+      document.getElementById("app").innerHTML = L0.html; setHead(L0.title + " | " + t("brand"), L0.title, "index,follow");
+      var lb0 = document.getElementById("langBtn"); lb0.setAttribute("href", altPath); lb0.textContent = lang === "ar" ? "EN" : "عربي";
+      bind(); window.scrollTo(0, 0);
+      return;
+    }
+    var lb = document.getElementById("langBtn");
+    lb.setAttribute("href", altPath === "/en/" + __vl.search ? "/en" + __vl.search : altPath);
+    lb.textContent = lang === "ar" ? "EN" : "عربي";
+
+    var catM = r.path.match(/^\/category\/([a-z]+)(?:\/([a-z]+))?$/);
+    var jobs = [api("GET", "/api/businesses").then(function (j) { state.businesses = j.businesses; })];
+    var extra = null;
+    if (r.path.indexOf("/b/") === 0) extra = api("GET", "/api/businesses/" + encodeURIComponent(r.path.slice(3)) + "/reviews").catch(function () { return { reviews: [] }; });
+    if (r.path === "/mine" && state.user) extra = api("GET", "/api/my/businesses");
+    if (r.path === "/admin" && state.user && state.user.role === "admin") extra = api("GET", "/api/admin/businesses?status=" + encodeURIComponent(r.params.status || "pending"));
+
+    Promise.all([Promise.all(jobs), extra]).then(function (res) {
+      if (seq !== renderSeq) return;
+      var data = res[1];
+      var html, head = [t("home_title"), t("home_desc"), "index,follow"];
+      var cat = catM && find(window.CATEGORIES, catM[1]), city = catM && catM[2] && find(window.CITIES, catM[2]);
+      if (r.path === "/browse") {
+        html = viewBrowse(r.params);
+        head = [t("browse_h1") + " | " + t("brand"), t("browse_desc"), Object.keys(r.params).length ? "noindex,follow" : "index,follow"];
+      } else if (catM && cat) {
+        var h1 = catH1(cat, city);
+        var items = [[t("brand"), link("/")], [L(cat), link("/category/" + cat.id)]];
+        if (city) items.push([L(city), link("/category/" + cat.id + "/" + city.id)]);
+        var p2 = Object.assign({}, r.params, { cat: cat.id, city: city ? city.id : r.params.city });
+        html = viewBrowse(p2, crumbs(items) + "<h1>" + esc(h1) + "</h1>");
+        head = [h1 + " | " + t("brand"), h1, "index,follow"];
+      } else if (r.path.indexOf("/b/") === 0) {
+        html = viewDetail(decodeURIComponent(r.path.slice(3)), data && data.reviews);
+        var bz = find(allBusinesses(), Number(r.path.slice(3)));
+        if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
+          head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
+        else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (r.path === "/forgot") { html = viewForgot(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/reset") {
+        // keep the token in memory only and remove it from the address bar / history
+        if (r.params.token) { state.resetToken = r.params.token; __vl.replaceState(null, "", __vl.pathname); }
+        html = viewReset(); head = [t("brand"), t("home_desc"), "noindex,nofollow"];
+      } else if (r.path === "/add") { html = viewAdd(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/login") { html = viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/register") { html = viewAuth("register"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/mine") { html = state.user ? viewMine(data.businesses) : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/admin") { html = state.user && state.user.role === "admin" ? viewAdmin(data.businesses, r.params.status || "pending") : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/") html = viewHome();
+      else { html = '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn" href="' + link("/") + '">' + t("nav_home") + "</a></div>"; head = [t("not_found"), t("not_found"), "noindex,follow"]; }
+      app.innerHTML = html;
+      setHead(head[0], head[1], head[2]);
+      document.querySelectorAll("[data-nav]").forEach(function (a) {
+        a.classList.toggle("active", a.getAttribute("href") === link(r.path));
+      });
+      bind();
+      window.scrollTo(0, 0);
+    }).catch(function (e) {
+      if (seq !== renderSeq) return;
+      app.innerHTML = '<div class="container"><p class="empty">' + (e && e.code === "auth_required" ? t("e_auth_required") : t("load_err")) + "</p></div>";
+    });
+  }
+
+  function showMsg(ok, text) {
+    var msg = document.getElementById("formMsg");
+    msg.className = ok ? "notice" : "error"; msg.textContent = text;
+  }
+
+  function bind() {
+    var hs = document.getElementById("homeSearch");
+    if (hs) hs.addEventListener("submit", function (e) { e.preventDefault(); navigate(link("/browse") + "?" + toQuery(hs)); });
+    var f = document.getElementById("filters");
+    if (f) f.addEventListener("submit", function (e) { e.preventDefault(); navigate(link("/browse") + "?" + toQuery(f)); });
+
+    var au = document.getElementById("authForm");
+    if (au) au.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(au), mode = au.getAttribute("data-mode");
+      var body = { email: d.get("email"), password: d.get("password") };
+      if (mode === "register") { body.name = d.get("name"); body.accept = d.get("accept") === "on"; }
+      api("POST", mode === "register" ? "/api/register" : "/api/login", body).then(function (j) {
+        state.user = j.user; navigate(link("/mine"));
+      }).catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
+    var af = document.getElementById("addForm");
+    if (af) af.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(af);
+      api("POST", "/api/businesses", {
+        name_ar: d.get("name_ar"), name_en: d.get("name_en"), cat: d.get("cat"), city: d.get("city"),
+        area: d.get("area"), phone: String(d.get("phone")).replace(/\s/g, ""), desc: d.get("desc")
+      }).then(function () { af.reset(); showMsg(true, t("sent")); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
+    var ff = document.getElementById("forgotForm");
+    if (ff) ff.addEventListener("submit", function (e) {
+      e.preventDefault();
+      api("POST", "/api/forgot", { email: new FormData(ff).get("email"), lang: lang })
+        .then(function () { ff.reset(); showMsg(true, t("forgot_done")); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var rsf = document.getElementById("resetForm");
+    if (rsf) rsf.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(rsf);
+      if (d.get("password") !== d.get("again")) return showMsg(false, t("reset_mismatch"));
+      api("POST", "/api/reset", { token: state.resetToken, password: d.get("password"), lang: lang })
+        .then(function () { state.resetToken = ""; rsf.reset(); showMsg(true, t("reset_done")); setTimeout(function () { navigate(link("/login")); }, 1500); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var cp = document.getElementById("chpwForm");
+    if (cp) cp.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(cp), box = document.getElementById("chpwMsg");
+      api("POST", "/api/me/password", { current: d.get("current"), next: d.get("next"), lang: lang })
+        .then(function () { cp.reset(); box.className = "notice"; box.textContent = t("chpw_done"); })
+        .catch(function (err) { box.className = "error"; box.textContent = errMsg(err); });
+    });
+    var df = document.getElementById("deleteForm");
+    if (df) df.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!__demo.confirm(t("acct_confirm"))) return;
+      api("DELETE", "/api/me", { password: new FormData(df).get("password") })
+        .then(function () { state.user = null; navigate(link("/")); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var rf = document.getElementById("reviewForm");
+    if (rf) rf.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(rf);
+      api("POST", "/api/businesses/" + rf.getAttribute("data-biz") + "/reviews", { rating: Number(d.get("rating")), comment: d.get("comment") })
+        .then(function () { render(); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    document.querySelectorAll("[data-delrev]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        api("DELETE", "/api/reviews/" + btn.getAttribute("data-delrev")).then(render).catch(function (err) { __demo.toast(errMsg(err)); });
+      });
+    });
+
+    document.querySelectorAll("[data-act]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        api("POST", "/api/admin/businesses/" + btn.getAttribute("data-id") + "/" + btn.getAttribute("data-act"), {})
+          .then(render).catch(function (err) { __demo.toast(errMsg(err)); });
+      });
+    });
+  }
+
+  // real links, SPA behaviour: intercept internal clicks
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest("a[href]");
+    if (!a || a.target === "_blank" || a.hasAttribute("download") || a.hasAttribute("data-native")) return;
+    var href = a.getAttribute("href");
+    if (!href || href.charAt(0) !== "/" || href.charAt(1) === "/" || href.indexOf("/api/") === 0) return;
+    if (/\.[a-z0-9]+(\?|$)/i.test(href.split("?")[0])) return; // files (xml, png...) are normal downloads
+    e.preventDefault();
+    navigate(href);
+  });
+  __vl.onpop(render);
+
+  // old hash links (#/b/5) -> real URLs
+  if (__vl.hash.indexOf("#/") === 0) __vl.replaceState(null, "", __vl.hash.slice(1));
+
+  setLang(langFromPath());
+  api("GET", "/api/me").then(function (j) { state.user = j.user; state.features = j.features || state.features; }).catch(function () {}).then(render);
+})();
+
+</script>
