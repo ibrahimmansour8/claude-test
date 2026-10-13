@@ -1,5 +1,7 @@
 # دليل النشر على Railway / Deploying to Railway
 
+> لتجربة المنصة على جهازك أولًا بنقرتين: [QUICKSTART.md](QUICKSTART.md)
+
 الموقع عبارة عن خادم Node واحد (يقدّم الواجهة والـ API) وقاعدة SQLite في ملف. لذلك تحتاج على Railway إلى **خدمة واحدة + Volume واحد**، بدون قاعدة بيانات خارجية.
 
 > ملاحظة: واجهة Railway تتغيّر أحيانًا، فقد تختلف أسماء بعض الأزرار قليلًا. الفكرة ثابتة.
@@ -42,6 +44,9 @@
 | `SITE_URL` | رابط موقعك الكامل بدون `/` أخيرة، مثل `https://example.qa` | يُبنى عليه الرابط الأساسي (canonical) وخريطة الموقع. **اضبطه بعد ربط النطاق وغيّره إذا تغيّر النطاق** |
 | `OPERATOR_NAME` | اسم الجهة المشغّلة | يظهر في سياسة الخصوصية |
 | `CONTACT_EMAIL` | بريد تراقبه فعلًا | يظهر في الصفحتين القانونيتين. إن غاب تظهر عبارة تنبيه |
+| `EMAIL_PROVIDER` | `resend` | بريد استعادة كلمة المرور (التفاصيل في [EMAIL.md](EMAIL.md)). بدونه تُعطَّل الاستعادة |
+| `RESEND_API_KEY` | مفتاح Resend | |
+| `EMAIL_FROM` | `Qatar Guide <no-reply@your-domain.example>` | من نطاق موثّق في Resend |
 | `NODE_ENV` | `production` | |
 
 لا تضع `PORT`؛ Railway يحدده تلقائيًا والخادم يقرؤه.
@@ -58,7 +63,9 @@ curl https://<your-domain>/api/health        # {"ok":true}
 ### 8) نطاق خاص (اختياري)
 **Settings ← Networking ← Custom Domain** وأضف سجل CNAME الذي يعرضه Railway عند مزوّد النطاق.
 
-## بعد النشر: محركات البحث
+## بعد النشر: البريد ومحركات البحث
+فعّل البريد من [EMAIL.md](EMAIL.md) (استعادة كلمة المرور).
+
 راجع [SEO.md](SEO.md) لتسجيل الموقع في Google Search Console وBing وفحص النتائج.
 
 ## قيود يجب أن تعرفها

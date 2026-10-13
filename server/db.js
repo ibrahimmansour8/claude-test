@@ -59,6 +59,11 @@ function openDb(file) {
       updated_at TEXT NOT NULL DEFAULT (datetime('now')),
       UNIQUE (business_id, user_id)
     );
+    CREATE TABLE IF NOT EXISTS password_resets (
+      token_hash TEXT PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      expires_at INTEGER NOT NULL
+    );
     CREATE INDEX IF NOT EXISTS idx_rev_biz ON reviews(business_id);
     CREATE INDEX IF NOT EXISTS idx_biz_status ON businesses(status);
     CREATE INDEX IF NOT EXISTS idx_biz_owner ON businesses(owner_id);

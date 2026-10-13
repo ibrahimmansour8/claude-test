@@ -7,10 +7,12 @@ const zlib = require("node:zlib");
 const { openDb, seedIfEmpty, loadSeedData } = require("./db");
 const { createSeo } = require("./seo");
 const { LEGAL_VERSION } = require("./legal");
+const { createMailer, resetEmail, changedEmail } = require("./mailer");
 
 const SITE_DIR = path.join(__dirname, "..", "site");
 const SESSION_TTL_MS = 7 * 24 * 3600 * 1000;
 const MAX_BODY = 20 * 1024;
+const RESET_TTL_MS = 60 * 60 * 1000;
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon" };
 
 function createApp(opts = {}) {
@@ -21,6 +23,8 @@ function createApp(opts = {}) {
   const CITIES = new Set(seed.CITIES.map((c) => c.id));
   if (opts.seed !== false && process.env.SEED_DEMO !== "0") seedIfEmpty(db);
 
+  const mailer = opts.mailer || createMailer();
+  if (mailer.name === "none") console.warn("WARNING: e-mail is not configured - password reset is disabled (set EMAIL_PROVIDER, RESEND_API_KEY, EMAIL_FROM).");
   const hsts = secureCookie ? { "Strict-Transport-Security": "max-age=31536000" } : {};
 
   // ---------- helpers ----------
@@ -91,13 +95,13 @@ function createApp(opts = {}) {
   }
 
   const hits = new Map(); // naive in-memory rate limit: ip -> [timestamps]
-  function limited(req, key, max = 10, windowMs = 15 * 60 * 1000) {
-    const k = key + ":" + clientIp(req);
+  function limitedKey(k, max, windowMs) {
     const now = Date.now();
     const arr = (hits.get(k) || []).filter((t) => now - t < windowMs);
     arr.push(now); hits.set(k, arr);
     return arr.length > max;
   }
+  function limited(req, key, max = 10, windowMs = 15 * 60 * 1000) { return limitedKey(key + ":" + clientIp(req), max, windowMs); }
 
   setInterval(() => {
     const now = Date.now();
@@ -106,7 +110,7 @@ function createApp(opts = {}) {
 
   function send(res, status, body) {
     const data = JSON.stringify(body);
-    res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", ...hsts });
+    res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer", ...hsts });
     res.end(data);
   }
 
@@ -145,7 +149,7 @@ function createApp(opts = {}) {
     }
     const user = currentUser(req);
 
-    if (m === "GET" && p === "/api/me") return send(res, 200, { user });
+    if (m === "GET" && p === "/api/me") return send(res, 200, { user, features: { passwordReset: mailer.name !== "none" } });
 
     if (m === "POST" && p === "/api/register") {
       if (limited(req, "reg", 10)) return send(res, 429, { error: "rate_limited" });
@@ -172,6 +176,68 @@ function createApp(opts = {}) {
       if (!ok) return send(res, 401, { error: "bad_credentials" });
       startSession(res, row.id);
       return send(res, 200, { user: { id: row.id, email: row.email, name: row.name, role: row.role } });
+    }
+
+    // ---- password reset by e-mail ----
+    if (m === "POST" && p === "/api/forgot") {
+      if (mailer.name === "none") return send(res, 503, { error: "email_disabled" });
+      if (limited(req, "forgot", 5, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
+      const b = await readJson(req);
+      const email = str(b.email, 120).toLowerCase(), lang = b.lang === "en" ? "en" : "ar";
+      const generic = () => send(res, 200, { ok: true }); // identical answer whether or not the account exists
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return generic();
+      if (limitedKey("forgot-email:" + email, 3, 60 * 60 * 1000)) return generic();
+      const row = db.prepare("SELECT id,name,role FROM users WHERE email=?").get(email);
+      // the admin password is owned by the ADMIN_PASSWORD env var (rotate it there)
+      if (row && row.role !== "admin") {
+        // Never build the link from the Host header (password-reset poisoning): SITE_URL only, Host only outside production.
+        const linkBase = siteUrl || (process.env.NODE_ENV === "production" ? "" : baseUrl(req));
+        if (!linkBase) console.error("password reset skipped: set SITE_URL so reset links can be built safely");
+        else {
+          const token = crypto.randomBytes(32).toString("hex");
+          db.prepare("DELETE FROM password_resets WHERE user_id=? OR expires_at<?").run(row.id, Date.now());
+          db.prepare("INSERT INTO password_resets (token_hash,user_id,expires_at) VALUES (?,?,?)").run(sha(token), row.id, Date.now() + RESET_TTL_MS);
+          const link = `${linkBase}${lang === "en" ? "/en" : ""}/reset?token=${token}`;
+          setImmediate(() => mailer.send({ to: email, ...resetEmail(lang, { name: row.name, link, minutes: RESET_TTL_MS / 60000 }) })
+            .catch((e) => console.error("reset e-mail failed:", e.message)));
+        }
+      }
+      return generic();
+    }
+
+    if (m === "POST" && p === "/api/reset") {
+      if (limited(req, "reset", 10)) return send(res, 429, { error: "rate_limited" });
+      const b = await readJson(req);
+      const token = typeof b.token === "string" ? b.token : "", password = typeof b.password === "string" ? b.password : "";
+      const lang = b.lang === "en" ? "en" : "ar";
+      const row = /^[0-9a-f]{64}$/.test(token)
+        ? db.prepare("SELECT r.user_id,r.expires_at,u.email,u.name FROM password_resets r JOIN users u ON u.id=r.user_id WHERE r.token_hash=?").get(sha(token)) : null;
+      if (!row || row.expires_at < Date.now()) return send(res, 400, { error: "invalid_token" });
+      if (password.length < 8 || password.length > 128) return send(res, 400, { error: "weak_password" });
+      const salt = crypto.randomBytes(16).toString("hex");
+      db.prepare("UPDATE users SET salt=?, pass_hash=? WHERE id=?").run(salt, hashPw(password, salt), row.user_id);
+      db.prepare("DELETE FROM password_resets WHERE user_id=?").run(row.user_id); // single use
+      db.prepare("DELETE FROM sessions WHERE user_id=?").run(row.user_id);        // sign out everywhere
+      setImmediate(() => mailer.send({ to: row.email, ...changedEmail(lang, { name: row.name }) }).catch((e) => console.error("notice e-mail failed:", e.message)));
+      return send(res, 200, { ok: true });
+    }
+
+    if (m === "POST" && p === "/api/me/password") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      if (user.role === "admin") return send(res, 403, { error: "admin_use_env" });
+      if (limited(req, "chpw", 10)) return send(res, 429, { error: "rate_limited" });
+      const b = await readJson(req);
+      const row = db.prepare("SELECT salt, pass_hash FROM users WHERE id=?").get(user.id);
+      const given = hashPw(typeof b.current === "string" ? b.current.slice(0, 128) : "", row.salt);
+      if (!crypto.timingSafeEqual(Buffer.from(given, "hex"), Buffer.from(row.pass_hash, "hex"))) return send(res, 401, { error: "bad_credentials" });
+      const next = typeof b.next === "string" ? b.next : "";
+      if (next.length < 8 || next.length > 128) return send(res, 400, { error: "weak_password" });
+      const salt = crypto.randomBytes(16).toString("hex");
+      db.prepare("UPDATE users SET salt=?, pass_hash=? WHERE id=?").run(salt, hashPw(next, salt), user.id);
+      db.prepare("DELETE FROM sessions WHERE user_id=? AND token_hash<>?").run(user.id, sha(parseCookies(req).sid || "")); // keep this device
+      const lang = b.lang === "en" ? "en" : "ar";
+      setImmediate(() => mailer.send({ to: user.email, ...changedEmail(lang, { name: user.name }) }).catch((e) => console.error("notice e-mail failed:", e.message)));
+      return send(res, 200, { ok: true });
     }
 
     // ---- data rights: export and delete my account ----
@@ -331,7 +397,7 @@ function createApp(opts = {}) {
 
   function reply(req, res, status, type, body, extra = {}) {
     const buf = Buffer.from(body);
-    const headers = { "Content-Type": type, "X-Content-Type-Options": "nosniff", "Vary": "Accept-Encoding", ...hsts, ...extra };
+    const headers = { "Content-Type": type, "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer", "Vary": "Accept-Encoding", ...hsts, ...extra };
     if (/^(text|application\/(xml|json|javascript))/.test(type)) headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; frame-ancestors 'none'";
     if (buf.length > 1024 && /gzip/.test(req.headers["accept-encoding"] || "") && /^(text|application)/.test(type)) {
       const z = zlib.gzipSync(buf); headers["Content-Encoding"] = "gzip"; headers["Content-Length"] = z.length;
@@ -392,7 +458,7 @@ module.exports = { createApp };
 if (require.main === module) {
   const port = Number(process.env.PORT) || 8000;
   const { server } = createApp();
-  server.listen(port, "0.0.0.0", () => console.log(`Qatar Guide running on port ${port}`));
+  server.listen(port, process.env.HOST || "0.0.0.0", () => console.log(`Qatar Guide running on port ${port}`));
   const stop = () => { console.log("shutting down"); server.close(() => process.exit(0)); setTimeout(() => process.exit(1), 8000).unref(); };
   process.on("SIGTERM", stop);
   process.on("SIGINT", stop);

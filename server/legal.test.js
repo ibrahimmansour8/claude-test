@@ -29,7 +29,7 @@ test("privacy and terms pages exist in both languages, indexable, with operator 
     assert.match(html, /content="index,follow"/);
     assert.match(html, new RegExp(`<html lang="${lang}"`));
     assert.ok(html.includes('href="mailto:privacy@example.qa"'), "contact e-mail shown");
-    assert.ok(html.includes(LEGAL_VERSION), "last updated shown");
+    assert.ok(html.includes(LEGAL_VERSION.split("-r")[0]) && !html.includes("2026-10-13-r"), "last updated date shown without the revision suffix");
     assert.ok(html.includes('hreflang="' + (lang === "ar" ? "en" : "ar") + '"'), "hreflang alternate");
   }
 });
@@ -51,6 +51,8 @@ test("policy text matches reality: states the cookie, hashing, and no advertisin
   assert.match(en, /salted cryptographic hash/);
   assert.match(en, /no advertising or analytics cookies/);
   assert.match(en, /delete your account/);
+  assert.match(en, /e-mail delivery provider/);
+  assert.match(en, /Password-reset token/);
 });
 
 test("footer links to both pages and legal pages are in the sitemap", async () => {

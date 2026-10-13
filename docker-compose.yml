@@ -1,0 +1,22 @@
+# Local copy with Docker:  docker compose up --build   ->  http://localhost:8000
+# For local use only (demo admin password, e-mails printed in the log). For the internet see DEPLOY.md.
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:${PORT:-8000}:8000"
+    environment:
+      PORT: "8000"
+      DB_FILE: /data/app.db
+      SITE_URL: ${SITE_URL:-http://localhost:8000}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@demo.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-demo-admin-1234}
+      EMAIL_PROVIDER: ${EMAIL_PROVIDER:-console}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      OPERATOR_NAME: ${OPERATOR_NAME:-Qatar Guide}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-contact@example.com}
+      SEED_DEMO: ${SEED_DEMO:-1}
+    volumes:
+      - ./data:/data
+    restart: unless-stopped

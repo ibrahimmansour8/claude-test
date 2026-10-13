@@ -3,7 +3,8 @@
 // The text describes what THIS software actually does. It is a template, not legal advice:
 // have a qualified lawyer review it before launch (see LEGAL.md).
 
-const LEGAL_VERSION = "2026-10-13";
+const LEGAL_VERSION = "2026-10-13-r2"; // bump on every change of the texts; "-rN" = revision within a day
+const shownDate = () => LEGAL_VERSION.split("-r")[0];
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -20,6 +21,7 @@ const TEXT = {
             "<strong>بيانات الأنشطة التي تضيفها:</strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.",
             "<strong>التقييمات:</strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.",
             "<strong>سجل الموافقة:</strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.",
+            "<strong>رمز استعادة كلمة المرور:</strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.",
             "<strong>بيانات تقنية:</strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة."
           ] }
         ]],
@@ -35,6 +37,7 @@ const TEXT = {
         ["ملفات تعريف الارتباط (الكوكيز)", ["نستخدم كوكي واحدًا ضروريًا للتشغيل باسم <code>sid</code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي."]],
         ["مشاركة البيانات", [
           "لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.",
+          "نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (استعادة كلمة المرور وإشعار تغييرها). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.",
           "أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها."
         ]],
         ["مدة الاحتفاظ", ["نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ."]],
@@ -102,6 +105,7 @@ const TEXT = {
             "<strong>Listings you submit:</strong> business name, category, city, area, description and phone number.",
             "<strong>Reviews:</strong> the star rating and comment you write, displayed with your name.",
             "<strong>Consent record:</strong> when you accepted the Terms and Privacy Policy and which version of the text.",
+            "<strong>Password-reset token:</strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.",
             "<strong>Technical data:</strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs."
           ] }
         ]],
@@ -117,6 +121,7 @@ const TEXT = {
         ["Cookies", ["We use one strictly necessary cookie, <code>sid</code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie."]],
         ["Sharing", [
           "We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.",
+          "We use an e-mail delivery provider only to send account e-mails (password reset and a notice when it changes). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.",
           "The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply."
         ]],
         ["Retention", ["We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Backup copies may remain for a limited time until replaced in the normal backup cycle."]],
@@ -187,7 +192,7 @@ function renderLegal(page, lang, { operator, contactEmail, homeHref }) {
     `<section><h2>${i + 1}. ${esc(h)}</h2>` + parts.map((p) =>
       typeof p === "string" ? `<p>${fill(p)}</p>` : `<ul>${p.ul.map((li) => `<li>${fill(li)}</li>`).join("")}</ul>`).join("") + "</section>").join("");
   const body = `<div class="container"><nav class="crumbs" aria-label="breadcrumb"><a href="${esc(homeHref)}">${esc(lang === "ar" ? "دليل قطر" : "Qatar Guide")}</a> › <span>${esc(doc.title)}</span></nav>` +
-    `<article class="legal"><h1>${esc(doc.title)}</h1><p class="meta">${esc(T.updated)}: ${LEGAL_VERSION}</p>${sections}</article></div>`;
+    `<article class="legal"><h1>${esc(doc.title)}</h1><p class="meta">${esc(T.updated)}: ${shownDate()}</p>${sections}</article></div>`;
   return { title: doc.title, description: doc.desc, body };
 }
 

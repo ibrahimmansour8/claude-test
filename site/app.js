@@ -4,6 +4,12 @@
 
   var T = {
     ar: {
+      forgot_link: "نسيت كلمة المرور؟", forgot_title: "استعادة كلمة المرور", forgot_sub: "أدخل بريدك وسنرسل لك رابطًا لاختيار كلمة مرور جديدة.",
+      forgot_send: "إرسال الرابط", forgot_done: "إن كان هذا البريد مسجّلًا لدينا فقد أرسلنا إليه رابط الاستعادة (صالح ساعة واحدة). تحقق من صندوق الوارد والبريد المزعج.",
+      forgot_off: "استعادة كلمة المرور غير مفعّلة حاليًا. تواصل معنا عبر بريد الموقع.", reset_title: "اختر كلمة مرور جديدة", reset_new: "كلمة المرور الجديدة (8 أحرف على الأقل)",
+      reset_confirm: "أعد كتابة كلمة المرور", reset_save: "حفظ كلمة المرور", reset_done: "تم تغيير كلمة المرور. يمكنك الآن تسجيل الدخول.", reset_mismatch: "كلمتا المرور غير متطابقتين.",
+      e_invalid_token: "الرابط غير صالح أو انتهت صلاحيته. اطلب رابطًا جديدًا.", e_email_disabled: "استعادة كلمة المرور غير مفعّلة حاليًا.", e_admin_use_env: "كلمة مرور الأدمن تُغيَّر من إعدادات الخادم.",
+      chpw_title: "تغيير كلمة المرور", chpw_current: "كلمة المرور الحالية", chpw_new: "كلمة المرور الجديدة (8 أحرف على الأقل)", chpw_save: "تغيير", chpw_done: "تم تغيير كلمة المرور وتسجيل الخروج من الأجهزة الأخرى.",
       privacy: "سياسة الخصوصية", terms: "شروط الاستخدام", agree_pre: "أوافق على", agree_and: "و",
       e_terms_required: "يجب الموافقة على شروط الاستخدام وسياسة الخصوصية.", e_admin_cannot_delete: "لا يمكن حذف حساب الأدمن من هنا.",
       acct_title: "حسابي", acct_export: "تنزيل بياناتي (JSON)", acct_delete: "حذف حسابي نهائيًا", acct_pw: "كلمة المرور للتأكيد",
@@ -41,6 +47,12 @@
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      forgot_link: "Forgot your password?", forgot_title: "Reset your password", forgot_sub: "Enter your e-mail and we will send you a link to choose a new password.",
+      forgot_send: "Send link", forgot_done: "If this e-mail is registered with us, a reset link was sent (valid for one hour). Check your inbox and spam folder.",
+      forgot_off: "Password reset is not enabled right now. Please contact us at the site's e-mail.", reset_title: "Choose a new password", reset_new: "New password (min 8 characters)",
+      reset_confirm: "Repeat the password", reset_save: "Save password", reset_done: "Your password was changed. You can log in now.", reset_mismatch: "The passwords do not match.",
+      e_invalid_token: "This link is invalid or has expired. Request a new one.", e_email_disabled: "Password reset is not enabled right now.", e_admin_use_env: "The admin password is changed in the server settings.",
+      chpw_title: "Change password", chpw_current: "Current password", chpw_new: "New password (min 8 characters)", chpw_save: "Change", chpw_done: "Password changed. Other devices were signed out.",
       privacy: "Privacy Policy", terms: "Terms of Use", agree_pre: "I agree to the", agree_and: "and the",
       e_terms_required: "You must accept the Terms of Use and Privacy Policy.", e_admin_cannot_delete: "Admin accounts cannot be deleted here.",
       acct_title: "My account", acct_export: "Download my data (JSON)", acct_delete: "Delete my account permanently", acct_pw: "Password to confirm",
@@ -92,7 +104,7 @@
     });
   }
 
-  var state = { user: null, businesses: [] };
+  var state = { user: null, businesses: [], features: { passwordReset: false }, resetToken: "" };
 
   function api(method, url, body) {
     return fetch(url, {
@@ -275,7 +287,24 @@
       "<label>" + t("password") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="' + (reg ? "new-password" : "current-password") + '" required></label>' +
       (reg ? '<label class="check-line"><input type="checkbox" name="accept" required> <span>' + t("agree_pre") + ' <a class="link" data-native target="_blank" rel="noopener" href="' + link("/terms") + '">' + t("terms") + "</a> " + t("agree_and") + ' <a class="link" data-native target="_blank" rel="noopener" href="' + link("/privacy") + '">' + t("privacy") + "</a></span></label>" : "") +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t(reg ? "register" : "login") + "</button>" +
+      (!reg && state.features.passwordReset ? '<p class="meta"><a class="link" href="' + link("/forgot") + '">' + t("forgot_link") + "</a></p>" : "") +
       '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="' + link(reg ? "/login" : "/register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
+  }
+
+  function viewForgot() {
+    if (!state.features.passwordReset) return '<div class="container"><div class="form narrow"><p>' + t("forgot_off") + "</p></div></div>";
+    return '<div class="container"><form class="form narrow" id="forgotForm" novalidate><h2>' + t("forgot_title") + '</h2><p class="meta">' + t("forgot_sub") + "</p>" +
+      "<label>" + t("email") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("forgot_send") + "</button>" +
+      '<p class="meta"><a class="link" href="' + link("/login") + '">' + t("login") + "</a></p></form></div>";
+  }
+
+  function viewReset() {
+    if (!state.resetToken) return '<div class="container"><div class="form narrow"><p class="error">' + t("e_invalid_token") + '</p><a class="btn" href="' + link("/forgot") + '">' + t("forgot_link") + "</a></div></div>";
+    return '<div class="container"><form class="form narrow" id="resetForm" novalidate><h2>' + t("reset_title") + "</h2>" +
+      "<label>" + t("reset_new") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
+      "<label>" + t("reset_confirm") + '<input name="again" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("reset_save") + "</button></form></div>";
   }
 
   function viewMine(list) {
@@ -284,6 +313,10 @@
       '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
       '<section class="block"><h2>' + t("acct_title") + "</h2>" +
       '<p><a class="btn ghost" href="/api/me/export" download="my-data.json">' + t("acct_export") + "</a></p>" +
+      (state.user && state.user.role !== "admin" ? '<form class="form" id="chpwForm" novalidate><h3>' + t("chpw_title") + "</h3>" +
+        "<label>" + t("chpw_current") + '<input name="current" type="password" dir="ltr" autocomplete="current-password" required></label>' +
+        "<label>" + t("chpw_new") + '<input name="next" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
+        '<div id="chpwMsg" role="status"></div><button class="btn" type="submit">' + t("chpw_save") + "</button></form>" : "") +
       (state.user && state.user.role !== "admin" ? '<form class="form danger" id="deleteForm" novalidate><p>' + t("acct_warn") + "</p>" +
         "<label>" + t("acct_pw") + '<input name="password" type="password" dir="ltr" autocomplete="current-password" required></label>' +
         '<div id="formMsg" role="status"></div><button class="btn danger-btn" type="submit">' + t("acct_delete") + "</button></form>" : "") +
@@ -338,7 +371,7 @@
     var r = parseLocation();
     renderUserNav();
 
-    var altPath = (lang === "ar" ? "/en" : "") + r.path + location.search;
+    var altPath = (lang === "ar" ? "/en" : "") + r.path + (r.path === "/reset" ? "" : location.search); // never copy the reset token into a link
     if (r.path === "/privacy" || r.path === "/terms") {
       if (legalShown) { location.reload(); return; }
       legalShown = true; // first load: the server already rendered this page; just wire up the header
@@ -377,6 +410,11 @@
         if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
           head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
         else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (r.path === "/forgot") { html = viewForgot(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
+      else if (r.path === "/reset") {
+        // keep the token in memory only and remove it from the address bar / history
+        if (r.params.token) { state.resetToken = r.params.token; history.replaceState(null, "", location.pathname); }
+        html = viewReset(); head = [t("brand"), t("home_desc"), "noindex,nofollow"];
       } else if (r.path === "/add") { html = viewAdd(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
       else if (r.path === "/login") { html = viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
       else if (r.path === "/register") { html = viewAuth("register"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
@@ -430,6 +468,30 @@
         .catch(function (err) { showMsg(false, errMsg(err)); });
     });
 
+    var ff = document.getElementById("forgotForm");
+    if (ff) ff.addEventListener("submit", function (e) {
+      e.preventDefault();
+      api("POST", "/api/forgot", { email: new FormData(ff).get("email"), lang: lang })
+        .then(function () { ff.reset(); showMsg(true, t("forgot_done")); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var rsf = document.getElementById("resetForm");
+    if (rsf) rsf.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(rsf);
+      if (d.get("password") !== d.get("again")) return showMsg(false, t("reset_mismatch"));
+      api("POST", "/api/reset", { token: state.resetToken, password: d.get("password"), lang: lang })
+        .then(function () { state.resetToken = ""; rsf.reset(); showMsg(true, t("reset_done")); setTimeout(function () { navigate(link("/login")); }, 1500); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    var cp = document.getElementById("chpwForm");
+    if (cp) cp.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(cp), box = document.getElementById("chpwMsg");
+      api("POST", "/api/me/password", { current: d.get("current"), next: d.get("next"), lang: lang })
+        .then(function () { cp.reset(); box.className = "notice"; box.textContent = t("chpw_done"); })
+        .catch(function (err) { box.className = "error"; box.textContent = errMsg(err); });
+    });
     var df = document.getElementById("deleteForm");
     if (df) df.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -477,5 +539,5 @@
   if (location.hash.indexOf("#/") === 0) history.replaceState(null, "", location.hash.slice(1));
 
   setLang(langFromPath());
-  api("GET", "/api/me").then(function (j) { state.user = j.user; }).catch(function () {}).then(render);
+  api("GET", "/api/me").then(function (j) { state.user = j.user; state.features = j.features || state.features; }).catch(function () {}).then(render);
 })();

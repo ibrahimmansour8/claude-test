@@ -35,7 +35,7 @@ const SCHEMA_TYPE = {
   legal: "LegalService", events: "TravelAgency", tech: "ProfessionalService"
 };
 
-const PRIVATE = new Set(["/add", "/login", "/register", "/mine", "/admin"]);
+const PRIVATE = new Set(["/add", "/login", "/register", "/mine", "/admin", "/forgot", "/reset"]);
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
