@@ -133,3 +133,46 @@ test("static files are served and path traversal is blocked", async () => {
   const bad = await fetch(base + "/..%2fpackage.json");
   assert.notEqual(bad.status, 200);
 });
+
+test("health endpoint needs no auth", async () => {
+  const r = await call("GET", "/api/health");
+  assert.equal(r.status, 200);
+  assert.equal(r.json.ok, true);
+});
+
+test("production guards: weak admin password is rejected, SEED_DEMO=0 starts empty", () => {
+  assert.throws(() => createApp({ dbFile: ":memory:", adminEmail: "a@b.co", adminPassword: "short" }), /at least 10/);
+  process.env.SEED_DEMO = "0";
+  try {
+    const { server: s2, db } = createApp({ dbFile: ":memory:" });
+    assert.equal(db.prepare("SELECT COUNT(*) n FROM businesses").get().n, 0);
+    s2.close();
+  } finally { delete process.env.SEED_DEMO; }
+});
+
+test("rate limit keys on proxy-provided client IP when TRUST_PROXY is on", async () => {
+  const { server: s3 } = createApp({ dbFile: ":memory:", trustProxy: true });
+  await new Promise((r) => s3.listen(0, r));
+  const url = "http://127.0.0.1:" + s3.address().port + "/api/login";
+  const tryLogin = (ip) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "X-Real-IP": ip }, body: JSON.stringify({ email: "x@y.co", password: "wrong-pass" }) }).then((r) => r.status);
+  let last; for (let i = 0; i < 12; i++) last = await tryLogin("203.0.113.5");
+  assert.equal(last, 429);                       // that IP is blocked...
+  assert.equal(await tryLogin("203.0.113.9"), 401); // ...a different client is not
+  s3.close();
+});
+
+test("changing ADMIN_PASSWORD and restarting rotates the admin password", async () => {
+  const os = require("node:os"), fs = require("node:fs"), path = require("node:path");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "qd-"));
+  const file = path.join(dir, "t.db");
+  const boot = async (pw) => {
+    const { server: sv, db } = createApp({ dbFile: file, seed: false, adminEmail: "root@test.qa", adminPassword: pw });
+    await new Promise((r) => sv.listen(0, r));
+    const res = await fetch(`http://127.0.0.1:${sv.address().port}/api/login`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: "root@test.qa", password: "first-password-1" }) });
+    await new Promise((r) => sv.close(r)); // closing also closes the db
+    return res.status;
+  };
+  assert.equal(await boot("first-password-1"), 200);
+  assert.equal(await boot("second-password-2"), 401); // old password no longer works
+  fs.rmSync(dir, { recursive: true, force: true });
+});

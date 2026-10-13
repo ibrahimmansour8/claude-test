@@ -22,3 +22,7 @@ npm test   # اختبارات الـ API
 ### الأمان
 كلمات المرور بـ scrypt + salt، الجلسات بتوكن عشوائي مخزّن مُجزّأ (SHA-256) في كوكي HttpOnly/SameSite،
 تحديد معدل المحاولات، رفض الطلبات غير JSON، رأس CSP صارم، حماية من path traversal.
+
+### النشر والحالة
+- النشر على Railway خطوة بخطوة: [DEPLOY.md](DEPLOY.md)
+- ما أُنجز وما بقي: [STATUS.md](STATUS.md)

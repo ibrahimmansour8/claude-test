@@ -16,7 +16,9 @@ function createApp(opts = {}) {
   const seed = loadSeedData();
   const CATS = new Set(seed.CATEGORIES.map((c) => c.id));
   const CITIES = new Set(seed.CITIES.map((c) => c.id));
-  if (opts.seed !== false) seedIfEmpty(db);
+  if (opts.seed !== false && process.env.SEED_DEMO !== "0") seedIfEmpty(db);
+
+  const hsts = secureCookie ? { "Strict-Transport-Security": "max-age=31536000" } : {};
 
   // ---------- helpers ----------
   const hashPw = (pw, salt) => crypto.scryptSync(pw, salt, 64).toString("hex");
@@ -33,9 +35,19 @@ function createApp(opts = {}) {
   const adminEmail = opts.adminEmail || process.env.ADMIN_EMAIL;
   const adminPass = opts.adminPassword || process.env.ADMIN_PASSWORD;
   if (adminEmail && adminPass) {
+    if (adminPass.length < 10) throw new Error("ADMIN_PASSWORD must be at least 10 characters");
     const row = db.prepare("SELECT id FROM users WHERE email=?").get(adminEmail.toLowerCase());
     if (!row) createUser(adminEmail.toLowerCase(), "Admin", adminPass, "admin");
-    else db.prepare("UPDATE users SET role='admin' WHERE id=?").run(row.id);
+    else {
+      // the env var is the source of truth: changing ADMIN_PASSWORD and redeploying rotates the password
+      const cur = db.prepare("SELECT salt, pass_hash FROM users WHERE id=?").get(row.id);
+      if (hashPw(adminPass, cur.salt) !== cur.pass_hash) {
+        const salt = crypto.randomBytes(16).toString("hex");
+        db.prepare("UPDATE users SET salt=?, pass_hash=? WHERE id=?").run(salt, hashPw(adminPass, salt), row.id);
+        db.prepare("DELETE FROM sessions WHERE user_id=?").run(row.id);
+      }
+      db.prepare("UPDATE users SET role='admin' WHERE id=?").run(row.id);
+    }
   }
 
   function parseCookies(req) {
@@ -64,18 +76,34 @@ function createApp(opts = {}) {
     res.setHeader("Set-Cookie", `sid=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_TTL_MS / 1000}${secureCookie ? "; Secure" : ""}`);
   }
 
+  const trustProxy = opts.trustProxy ?? process.env.TRUST_PROXY === "1";
+  function clientIp(req) {
+    if (trustProxy) {
+      const real = req.headers["x-real-ip"];
+      if (typeof real === "string" && real) return real.trim();
+      const xff = req.headers["x-forwarded-for"];
+      if (typeof xff === "string" && xff) return xff.split(",").pop().trim(); // last hop = added by our proxy
+    }
+    return req.socket.remoteAddress;
+  }
+
   const hits = new Map(); // naive in-memory rate limit: ip -> [timestamps]
   function limited(req, key, max = 10, windowMs = 15 * 60 * 1000) {
-    const k = key + ":" + req.socket.remoteAddress;
+    const k = key + ":" + clientIp(req);
     const now = Date.now();
     const arr = (hits.get(k) || []).filter((t) => now - t < windowMs);
     arr.push(now); hits.set(k, arr);
     return arr.length > max;
   }
 
+  setInterval(() => {
+    const now = Date.now();
+    for (const [k, arr] of hits) if (!arr.length || now - arr[arr.length - 1] > 3600 * 1000) hits.delete(k);
+  }, 10 * 60 * 1000).unref();
+
   function send(res, status, body) {
     const data = JSON.stringify(body);
-    res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" });
+    res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", ...hsts });
     res.end(data);
   }
 
@@ -107,8 +135,12 @@ function createApp(opts = {}) {
 
   // ---------- API routes ----------
   async function api(req, res, url) {
-    const user = currentUser(req);
     const m = req.method, p = url.pathname;
+    if (m === "GET" && p === "/api/health") {
+      db.prepare("SELECT 1").get();
+      return send(res, 200, { ok: true });
+    }
+    const user = currentUser(req);
 
     if (m === "GET" && p === "/api/me") return send(res, 200, { user });
 
@@ -246,7 +278,7 @@ function createApp(opts = {}) {
       if (err) { res.writeHead(404, { "Content-Type": "text/plain" }); return res.end("Not found"); }
       res.writeHead(200, {
         "Content-Type": MIME[path.extname(file)] || "application/octet-stream",
-        "X-Content-Type-Options": "nosniff",
+        "X-Content-Type-Options": "nosniff", ...hsts,
         "Content-Security-Policy": "default-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'"
       });
       res.end(buf);
@@ -274,5 +306,8 @@ module.exports = { createApp };
 if (require.main === module) {
   const port = Number(process.env.PORT) || 8000;
   const { server } = createApp();
-  server.listen(port, () => console.log(`Qatar Guide running on http://localhost:${port}`));
+  server.listen(port, "0.0.0.0", () => console.log(`Qatar Guide running on port ${port}`));
+  const stop = () => { console.log("shutting down"); server.close(() => process.exit(0)); setTimeout(() => process.exit(1), 8000).unref(); };
+  process.on("SIGTERM", stop);
+  process.on("SIGINT", stop);
 }
