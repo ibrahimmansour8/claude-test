@@ -29,7 +29,11 @@
       e_invalid_email: "البريد الإلكتروني غير صحيح.", e_invalid_name: "الاسم مطلوب.", e_weak_password: "كلمة المرور يجب أن تكون 8 أحرف على الأقل.",
       e_email_taken: "هذا البريد مسجّل مسبقًا.", e_bad_credentials: "البريد أو كلمة المرور غير صحيحة.", e_rate_limited: "محاولات كثيرة، حاول لاحقًا.",
       e_invalid_category: "اختر التصنيف.", e_invalid_city: "اختر المدينة.", e_invalid_phone: "أدخل رقمًا قطريًا صحيحًا من 8 أرقام.",
-      e_auth_required: "يلزم تسجيل الدخول.", e_generic: "حدث خطأ، حاول مرة أخرى."
+      e_auth_required: "يلزم تسجيل الدخول.",
+      rev_title: "التقييمات", rev_write: "قيّم هذا النشاط", rev_rating: "تقييمك", rev_comment: "تعليقك (اختياري)", rev_post: "نشر التقييم",
+      rev_delete: "حذف", rev_none: "لا توجد تقييمات بعد. كن أول من يقيّم!", rev_login: "سجّل الدخول لتضيف تقييمك.", rev_saved: "تم حفظ تقييمك.",
+      rev_mine: "تقييمك", rev_update_hint: "لديك تقييم سابق، إرسال جديد سيحدّثه.",
+      e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
       brand: "Qatar Guide", nav_home: "Home", nav_browse: "Browse", nav_add: "List your business",
@@ -55,7 +59,11 @@
       e_invalid_email: "Invalid email.", e_invalid_name: "Name is required.", e_weak_password: "Password must be at least 8 characters.",
       e_email_taken: "This email is already registered.", e_bad_credentials: "Wrong email or password.", e_rate_limited: "Too many attempts, try later.",
       e_invalid_category: "Choose a category.", e_invalid_city: "Choose a city.", e_invalid_phone: "Enter a valid 8-digit Qatar number.",
-      e_auth_required: "Please log in.", e_generic: "Something went wrong, try again."
+      e_auth_required: "Please log in.",
+      rev_title: "Reviews", rev_write: "Rate this business", rev_rating: "Your rating", rev_comment: "Your comment (optional)", rev_post: "Post review",
+      rev_delete: "Delete", rev_none: "No reviews yet. Be the first!", rev_login: "Log in to leave a review.", rev_saved: "Your review was saved.",
+      rev_mine: "Your review", rev_update_hint: "You already reviewed this; submitting again updates it.",
+      e_invalid_rating: "Pick a rating from 1 to 5.", e_own_business: "You cannot review your own business.", e_forbidden: "Not allowed.", e_generic: "Something went wrong, try again."
     }
   };
 
@@ -165,7 +173,7 @@
       "</div></div></div>";
   }
 
-  function viewDetail(id) {
+  function viewDetail(id, reviews) {
     var b = allBusinesses().filter(function (x) { return String(x.id) === String(id); })[0];
     if (!b) return '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn ghost" href="#/browse">' + t("back") + "</a></div>";
     var cat = window.CATEGORIES.filter(function (c) { return c.id === b.cat; })[0];
@@ -177,8 +185,10 @@
       "<dt>" + t("area") + "</dt><dd>" + esc(b.area ? L(b.area) : "") + "</dd>" +
       (b.hours ? "<dt>" + t("hours") + "</dt><dd>" + esc(L(b.hours)) + "</dd>" : "") +
       "<dt>" + t("phone") + '</dt><dd dir="ltr" class="ltr">' + esc(b.phone) + "</dd></dl>" +
+      (b.reviews ? '<div class="meta"><span class="stars">★ ' + esc(b.rating) + "</span> (" + esc(b.reviews) + " " + t("reviews") + ")</div>" : "") +
       '<div class="actions"><a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
-      '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a></div></div></div>";
+      '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a></div></div>" +
+      viewReviews(b, reviews || []) + "</div>";
   }
 
   function viewAdd() {
@@ -192,6 +202,29 @@
       "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required></label>' +
       "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300"></textarea></label>' +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("submit") + "</button></form></div>";
+  }
+
+  function stars(n) { return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); }
+
+  function viewReviews(b, reviews) {
+    var mine = reviews.filter(function (r) { return r.mine; })[0];
+    var form;
+    if (!state.user) form = '<p class="meta">' + t("rev_login") + ' <a class="link" href="#/login">' + t("login") + "</a></p>";
+    else form = '<form class="form" id="reviewForm" data-biz="' + esc(b.id) + '" novalidate><h3>' + t("rev_write") + "</h3>" +
+      (mine ? '<p class="meta">' + t("rev_update_hint") + "</p>" : "") +
+      "<label>" + t("rev_rating") + '<select name="rating">' + [5, 4, 3, 2, 1].map(function (n) {
+        return '<option value="' + n + '"' + (mine && mine.rating === n ? " selected" : "") + ">" + stars(n) + " (" + n + ")</option>";
+      }).join("") + "</select></label>" +
+      "<label>" + t("rev_comment") + '<textarea name="comment" rows="3" maxlength="500">' + esc(mine ? mine.comment : "") + "</textarea></label>" +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("rev_post") + "</button></form>";
+    return '<section class="block"><h2>' + t("rev_title") + "</h2>" + form +
+      (reviews.length ? reviews.map(function (r) {
+        return '<article class="card review"><div><span class="stars">' + stars(r.rating) + "</span> <strong>" + esc(r.name) + "</strong>" +
+          (r.mine ? ' <span class="badge">' + t("rev_mine") + "</span>" : "") + ' <span class="meta">' + esc(String(r.created_at).slice(0, 10)) + "</span></div>" +
+          (r.comment ? "<p>" + esc(r.comment) + "</p>" : "") +
+          (r.mine || (state.user && state.user.role === "admin") ? '<div class="actions"><button class="btn ghost" data-delrev="' + esc(r.id) + '">' + t("rev_delete") + "</button></div>" : "") +
+          "</article>";
+      }).join("") : '<p class="empty">' + t("rev_none") + "</p>") + "</section>";
   }
 
   function viewAuth(mode) {
@@ -259,6 +292,7 @@
 
     var jobs = [api("GET", "/api/businesses").then(function (j) { state.businesses = j.businesses; })];
     var extra = null;
+    if (r.path.indexOf("/b/") === 0) extra = api("GET", "/api/businesses/" + encodeURIComponent(r.path.slice(3)) + "/reviews").catch(function () { return { reviews: [] }; });
     if (r.path === "/mine" && state.user) extra = api("GET", "/api/my/businesses");
     if (r.path === "/admin" && state.user && state.user.role === "admin") extra = api("GET", "/api/admin/businesses?status=" + encodeURIComponent(r.params.status || "pending"));
 
@@ -267,7 +301,7 @@
       var data = res[1];
       var html;
       if (r.path === "/browse") html = viewBrowse(r.params);
-      else if (r.path.indexOf("/b/") === 0) html = viewDetail(decodeURIComponent(r.path.slice(3)));
+      else if (r.path.indexOf("/b/") === 0) html = viewDetail(decodeURIComponent(r.path.slice(3)), data && data.reviews);
       else if (r.path === "/add") html = viewAdd();
       else if (r.path === "/login") html = viewAuth("login");
       else if (r.path === "/register") html = viewAuth("register");
@@ -317,6 +351,20 @@
         area: d.get("area"), phone: String(d.get("phone")).replace(/\s/g, ""), desc: d.get("desc")
       }).then(function () { af.reset(); showMsg(true, t("sent")); })
         .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
+    var rf = document.getElementById("reviewForm");
+    if (rf) rf.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(rf);
+      api("POST", "/api/businesses/" + rf.getAttribute("data-biz") + "/reviews", { rating: Number(d.get("rating")), comment: d.get("comment") })
+        .then(function () { render(); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+    document.querySelectorAll("[data-delrev]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        api("DELETE", "/api/reviews/" + btn.getAttribute("data-delrev")).then(render).catch(function (err) { alert(errMsg(err)); });
+      });
     });
 
     document.querySelectorAll("[data-act]").forEach(function (btn) {

@@ -91,12 +91,16 @@ function createApp(opts = {}) {
 
   const str = (v, max) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
+  // rating/review counts are always computed from real reviews (stored columns are unused)
+  const BIZ_SELECT = `SELECT b.*, COALESCE(ROUND(AVG(r.rating),1),0) AS avg_rating, COUNT(r.id) AS review_count
+    FROM businesses b LEFT JOIN reviews r ON r.business_id=b.id`;
+
   function bizOut(r) {
     return {
       id: r.id, cat: r.cat, city: r.city,
       name: { ar: r.name_ar, en: r.name_en }, desc: { ar: r.desc_ar, en: r.desc_en },
       area: { ar: r.area_ar, en: r.area_en }, hours: { ar: r.hours_ar, en: r.hours_en },
-      phone: r.phone, whatsapp: r.whatsapp, rating: r.rating, reviews: r.reviews,
+      phone: r.phone, whatsapp: r.whatsapp, rating: r.avg_rating, reviews: r.review_count,
       verified: !!r.verified, status: r.status, mine: !!r._mine
     };
   }
@@ -142,13 +146,13 @@ function createApp(opts = {}) {
     }
 
     if (m === "GET" && p === "/api/businesses") {
-      const rows = db.prepare("SELECT * FROM businesses WHERE status='approved' ORDER BY rating DESC, id").all();
+      const rows = db.prepare(BIZ_SELECT + " WHERE b.status='approved' GROUP BY b.id ORDER BY avg_rating DESC, review_count DESC, b.id").all();
       return send(res, 200, { businesses: rows.map(bizOut) });
     }
 
     if (p === "/api/my/businesses" && m === "GET") {
       if (!user) return send(res, 401, { error: "auth_required" });
-      const rows = db.prepare("SELECT * FROM businesses WHERE owner_id=? ORDER BY id DESC").all(user.id);
+      const rows = db.prepare(BIZ_SELECT + " WHERE b.owner_id=? GROUP BY b.id ORDER BY b.id DESC").all(user.id);
       return send(res, 200, { businesses: rows.map((r) => bizOut({ ...r, _mine: true })) });
     }
 
@@ -169,6 +173,44 @@ function createApp(opts = {}) {
       return send(res, 201, { id: Number(r.lastInsertRowid), status: "pending" });
     }
 
+    // ---- reviews ----
+    const rm = p.match(/^\/api\/businesses\/(\d+)\/reviews$/);
+    if (rm && m === "GET") {
+      const bid = Number(rm[1]);
+      if (!db.prepare("SELECT 1 FROM businesses WHERE id=? AND status='approved'").get(bid)) return send(res, 404, { error: "not_found" });
+      const rows = db.prepare(`SELECT r.id,r.user_id,r.rating,r.comment,r.created_at,u.name FROM reviews r
+        JOIN users u ON u.id=r.user_id WHERE r.business_id=? ORDER BY r.updated_at DESC, r.id DESC LIMIT 100`).all(bid);
+      return send(res, 200, { reviews: rows.map((x) => ({
+        id: x.id, rating: x.rating, comment: x.comment, name: x.name, created_at: x.created_at,
+        mine: !!user && x.user_id === user.id
+      })) });
+    }
+    if (rm && m === "POST") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      if (limited(req, "rev", 30, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
+      const bid = Number(rm[1]);
+      const biz = db.prepare("SELECT owner_id FROM businesses WHERE id=? AND status='approved'").get(bid);
+      if (!biz) return send(res, 404, { error: "not_found" });
+      if (biz.owner_id === user.id) return send(res, 403, { error: "own_business" });
+      const b = await readJson(req);
+      const rating = Number(b.rating), comment = str(b.comment, 500);
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5) return send(res, 400, { error: "invalid_rating" });
+      // one review per user per business: posting again updates it
+      db.prepare(`INSERT INTO reviews (business_id,user_id,rating,comment) VALUES (?,?,?,?)
+        ON CONFLICT(business_id,user_id) DO UPDATE SET rating=excluded.rating, comment=excluded.comment, updated_at=datetime('now')`)
+        .run(bid, user.id, rating, comment);
+      return send(res, 201, { ok: true });
+    }
+    const dm = p.match(/^\/api\/reviews\/(\d+)$/);
+    if (dm && m === "DELETE") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      const rev = db.prepare("SELECT user_id FROM reviews WHERE id=?").get(Number(dm[1]));
+      if (!rev) return send(res, 404, { error: "not_found" });
+      if (rev.user_id !== user.id && user.role !== "admin") return send(res, 403, { error: "forbidden" });
+      db.prepare("DELETE FROM reviews WHERE id=?").run(Number(dm[1]));
+      return send(res, 200, { ok: true });
+    }
+
     // ---- admin ----
     if (p.startsWith("/api/admin/")) {
       if (!user) return send(res, 401, { error: "auth_required" });
@@ -176,7 +218,7 @@ function createApp(opts = {}) {
       if (m === "GET" && p === "/api/admin/businesses") {
         const status = url.searchParams.get("status") || "pending";
         if (!["pending", "approved", "rejected"].includes(status)) return send(res, 400, { error: "invalid_status" });
-        const rows = db.prepare("SELECT * FROM businesses WHERE status=? ORDER BY id DESC").all(status);
+        const rows = db.prepare(BIZ_SELECT + " WHERE b.status=? GROUP BY b.id ORDER BY b.id DESC").all(status);
         return send(res, 200, { businesses: rows.map(bizOut) });
       }
       const mm = p.match(/^\/api\/admin\/businesses\/(\d+)\/(approve|reject|verify|unverify)$/);

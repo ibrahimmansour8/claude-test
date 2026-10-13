@@ -87,6 +87,40 @@ test("admin endpoints are protected; admin can approve and verify", async () => 
   assert.equal((await call("POST", "/api/admin/businesses/9999/approve", {}, cookieAdmin)).status, 404);
 });
 
+test("reviews: rules, aggregation, update-in-place and deletion", async () => {
+  const biz = (await call("GET", "/api/businesses")).json.businesses;
+  assert.ok(biz.every((b) => b.reviews === 0 && b.rating === 0), "no fake ratings on seeded data");
+  const id = biz[0].id;
+  const path = `/api/businesses/${id}/reviews`;
+  assert.equal((await call("POST", path, { rating: 5 })).status, 401);
+  assert.equal((await call("POST", path, { rating: 9 }, cookieUser)).status, 400);
+  assert.equal((await call("POST", path, { rating: 4.5 }, cookieUser)).status, 400);
+  assert.equal((await call("POST", "/api/businesses/99999/reviews", { rating: 5 }, cookieUser)).status, 404);
+  assert.equal((await call("POST", path, { rating: 4, comment: "<b>جيد</b>" }, cookieUser)).status, 201);
+  // second post by same user updates, not duplicates
+  assert.equal((await call("POST", path, { rating: 2, comment: "تغيّر رأيي" }, cookieUser)).status, 201);
+  assert.equal((await call("POST", path, { rating: 5 }, cookieAdmin)).status, 201);
+  const list = (await call("GET", path, null, cookieUser)).json.reviews;
+  assert.equal(list.length, 2);
+  assert.equal(list.filter((r) => r.mine).length, 1);
+  const after = (await call("GET", "/api/businesses")).json.businesses.find((b) => b.id === id);
+  assert.equal(after.reviews, 2);
+  assert.equal(after.rating, 3.5);
+  // others cannot delete; owner of the review and admin can
+  const mineId = list.find((r) => r.mine).id;
+  const reg = await call("POST", "/api/register", { email: "other@test.qa", name: "Other", password: "password-2" });
+  assert.equal((await call("DELETE", `/api/reviews/${mineId}`, null, reg.cookie)).status, 403);
+  assert.equal((await call("DELETE", `/api/reviews/${mineId}`, null, cookieUser)).status, 200);
+  const adminRev = (await call("GET", path)).json.reviews[0].id;
+  assert.equal((await call("DELETE", `/api/reviews/${adminRev}`, null, cookieAdmin)).status, 200);
+  assert.equal((await call("GET", path)).json.reviews.length, 0);
+});
+
+test("owners cannot review their own business", async () => {
+  const mine = (await call("GET", "/api/my/businesses", null, cookieUser)).json.businesses[0];
+  assert.equal((await call("POST", `/api/businesses/${mine.id}/reviews`, { rating: 5 }, cookieUser)).status, 403);
+});
+
 test("logout invalidates the session", async () => {
   await call("POST", "/api/logout", {}, cookieUser);
   assert.equal((await call("GET", "/api/me", null, cookieUser)).json.user, null);

@@ -74,3 +74,6 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .form.narrow { max-width: 440px; margin-inline: auto; }
 .user-nav { display: inline-flex; gap: 10px; align-items: center; }
 .link { color: var(--maroon); text-decoration: underline; }
+.review { margin-bottom: 10px; }
+.review p { margin: 4px 0; white-space: pre-wrap; }
+.block h3 { margin: 0; }

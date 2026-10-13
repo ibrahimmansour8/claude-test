@@ -49,6 +49,17 @@ function openDb(file) {
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected')),
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
+    CREATE TABLE IF NOT EXISTS reviews (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+      comment TEXT NOT NULL DEFAULT '',
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+      UNIQUE (business_id, user_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_rev_biz ON reviews(business_id);
     CREATE INDEX IF NOT EXISTS idx_biz_status ON businesses(status);
     CREATE INDEX IF NOT EXISTS idx_biz_owner ON businesses(owner_id);
   `);
@@ -65,7 +76,7 @@ function seedIfEmpty(db) {
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'approved')`);
   for (const b of BUSINESSES) {
     ins.run(b.cat, b.city, b.name.ar, b.name.en, b.desc.ar, b.desc.en, b.area.ar, b.area.en,
-      b.hours.ar, b.hours.en, b.phone, b.whatsapp, b.rating, b.reviews, b.verified ? 1 : 0);
+      b.hours.ar, b.hours.en, b.phone, b.whatsapp, 0, 0, b.verified ? 1 : 0);
   }
   return BUSINESSES.length;
 }
