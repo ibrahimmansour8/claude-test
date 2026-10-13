@@ -53,6 +53,37 @@ function resetEmail(lang, { name, link, minutes }) {
   };
 }
 
+function verifyEmail(lang, { name, link, hours }) {
+  if (lang === "en") {
+    return {
+      subject: `Confirm your e-mail – ${BRAND.en}`,
+      text: `Hello ${name},\n\nWelcome to ${BRAND.en}. Confirm that this e-mail address is yours by opening the link below (valid for ${hours} hours):\n\n${link}\n\nIf you did not create this account, ignore this e-mail.`,
+      html: wrap("en", `<p>Hello ${esc(name)},</p><p>Welcome to ${BRAND.en}. Confirm that this e-mail address is yours. The link is valid for ${hours} hours.</p><p><a href="${esc(link)}" style="background:#8a1538;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Confirm my e-mail</a></p><p>Or copy this address into your browser:<br><span dir="ltr">${esc(link)}</span></p><p>If you did not create this account, ignore this e-mail.</p>`)
+    };
+  }
+  return {
+    subject: `فعّل بريدك الإلكتروني – ${BRAND.ar}`,
+    text: `مرحبًا ${name}،\n\nأهلًا بك في ${BRAND.ar}. أكّد أن هذا البريد لك بفتح الرابط التالي (صالح لمدة ${hours} ساعة):\n\n${link}\n\nإن لم تنشئ هذا الحساب فتجاهل هذه الرسالة.`,
+    html: wrap("ar", `<p>مرحبًا ${esc(name)}،</p><p>أهلًا بك في ${BRAND.ar}. أكّد أن هذا البريد لك. الرابط صالح لمدة ${hours} ساعة.</p><p><a href="${esc(link)}" style="background:#8a1538;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">تفعيل بريدي</a></p><p>أو انسخ هذا العنوان إلى المتصفح:<br><span dir="ltr">${esc(link)}</span></p><p>إن لم تنشئ هذا الحساب فتجاهل هذه الرسالة.</p>`)
+  };
+}
+
+// sent to the OLD address when the account e-mail is changed (account-takeover warning)
+function emailChangedNotice(lang, { name, newEmail }) {
+  if (lang === "en") {
+    return {
+      subject: `Your account e-mail was changed – ${BRAND.en}`,
+      text: `Hello ${name},\n\nThe e-mail of your ${BRAND.en} account was changed to ${newEmail}. If this was not you, contact us immediately.`,
+      html: wrap("en", `<p>Hello ${esc(name)},</p><p>The e-mail of your ${BRAND.en} account was changed to <span dir="ltr">${esc(newEmail)}</span>.</p><p>If this was not you, contact us immediately.</p>`)
+    };
+  }
+  return {
+    subject: `تم تغيير بريد حسابك – ${BRAND.ar}`,
+    text: `مرحبًا ${name}،\n\nتم تغيير بريد حسابك في ${BRAND.ar} إلى ${newEmail}. إن لم تكن أنت من فعل ذلك فتواصل معنا فورًا.`,
+    html: wrap("ar", `<p>مرحبًا ${esc(name)}،</p><p>تم تغيير بريد حسابك في ${BRAND.ar} إلى <span dir="ltr">${esc(newEmail)}</span>.</p><p>إن لم تكن أنت من فعل ذلك فتواصل معنا فورًا.</p>`)
+  };
+}
+
 function changedEmail(lang, { name }) {
   if (lang === "en") {
     return {
@@ -68,4 +99,4 @@ function changedEmail(lang, { name }) {
   };
 }
 
-module.exports = { createMailer, resetEmail, changedEmail };
+module.exports = { createMailer, resetEmail, changedEmail, verifyEmail, emailChangedNotice };

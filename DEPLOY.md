@@ -47,6 +47,7 @@
 | `EMAIL_PROVIDER` | `resend` | بريد استعادة كلمة المرور (التفاصيل في [EMAIL.md](EMAIL.md)). بدونه تُعطَّل الاستعادة |
 | `RESEND_API_KEY` | مفتاح Resend | |
 | `EMAIL_FROM` | `Qatar Guide <no-reply@your-domain.example>` | من نطاق موثّق في Resend |
+| `REQUIRE_VERIFIED_EMAIL` | `1` (الافتراضي) أو `0` | يلزم تفعيل البريد قبل إضافة نشاط أو تقييم. يعمل تلقائيًا عند ضبط البريد |
 | `NODE_ENV` | `production` | |
 
 لا تضع `PORT`؛ Railway يحدده تلقائيًا والخادم يقرؤه.

@@ -88,3 +88,6 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .check-line { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; }
 .danger { border-color: #c0392b; }
 .btn.danger-btn { background: #c0392b; }
+.banner { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: rgba(217, 154, 0, .16); border-bottom: 1px solid var(--line); text-align: center; }
+.banner.flash { background: rgba(31, 122, 77, .16); }
+.banner .btn { padding: 4px 12px; }

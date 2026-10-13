@@ -22,7 +22,7 @@ async function signup(email, pw = "old-password-1") {
 }
 
 test.before(async () => {
-  ({ server, db } = createApp({ dbFile: ":memory:", siteUrl: SITE, mailer, trustProxy: true, adminEmail: "a@reset.test", adminPassword: "admin-pass-123" }));
+  ({ server, db } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", siteUrl: SITE, mailer, trustProxy: true, adminEmail: "a@reset.test", adminPassword: "admin-pass-123" }));
   await new Promise((r) => server.listen(0, r));
   base = "http://127.0.0.1:" + server.address().port;
 });
@@ -127,7 +127,7 @@ test("in production without SITE_URL no link is ever built from the request", as
   const prev = process.env.NODE_ENV; process.env.NODE_ENV = "production";
   const box = []; const errs = []; const origErr = console.error; console.error = (...a) => errs.push(a.join(" "));
   try {
-    const { server: s2 } = createApp({ dbFile: ":memory:", trustProxy: true, mailer: { name: "test", async send(m) { box.push(m); } } });
+    const { server: s2 } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", trustProxy: true, mailer: { name: "test", async send(m) { box.push(m); } } });
     await new Promise((r) => s2.listen(0, r));
     const url = `http://127.0.0.1:${s2.address().port}`;
     const j = (p, b) => fetch(url + p, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(b) }).then((r) => r.status);
@@ -141,7 +141,7 @@ test("in production without SITE_URL no link is ever built from the request", as
 });
 
 test("when e-mail is not configured the feature is off and says so", async () => {
-  const { server: s3 } = createApp({ dbFile: ":memory:", mailer: { name: "none", async send() { throw new Error("x"); } } });
+  const { server: s3 } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", mailer: { name: "none", async send() { throw new Error("x"); } } });
   await new Promise((r) => s3.listen(0, r));
   const url = `http://127.0.0.1:${s3.address().port}`;
   const me = await (await fetch(url + "/api/me")).json();

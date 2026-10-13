@@ -12,7 +12,7 @@ async function api(method, p, body, cookie) {
 }
 
 test.before(async () => {
-  ({ server, db } = createApp({
+  ({ server, db } = createApp({ requireVerifiedEmail: false,
     dbFile: ":memory:", siteUrl: "https://qatarguide.example", operatorName: "شركة المثال <b>", contactEmail: "privacy@example.qa",
     adminEmail: "a@legal.test", adminPassword: "admin-pass-123"
   }));
@@ -37,7 +37,7 @@ test("privacy and terms pages exist in both languages, indexable, with operator 
 test("operator name is escaped; missing contact shows an explicit placeholder, not a fake address", async () => {
   const html = await (await get("/privacy")).text();
   assert.ok(html.includes("شركة المثال &lt;b&gt;") && !html.includes("شركة المثال <b>"));
-  const { server: s2 } = createApp({ dbFile: ":memory:", siteUrl: "https://x.example" });
+  const { server: s2 } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", siteUrl: "https://x.example" });
   await new Promise((r) => s2.listen(0, r));
   const bare = await (await fetch(`http://127.0.0.1:${s2.address().port}/en/terms`)).text();
   assert.match(bare, /contact e-mail not configured/);
@@ -53,6 +53,10 @@ test("policy text matches reality: states the cookie, hashing, and no advertisin
   assert.match(en, /delete your account/);
   assert.match(en, /e-mail delivery provider/);
   assert.match(en, /Password-reset token/);
+  assert.match(en, /E-mail confirmation/);
+  assert.match(en, /deleted automatically after 7 days/);
+  const ar = await (await get("/privacy")).text();
+  assert.ok(ar.includes("تفعيل البريد") && ar.includes("بعد 7 أيام"));
 });
 
 test("footer links to both pages and legal pages are in the sitemap", async () => {

@@ -14,7 +14,7 @@ const api = async (method, p, body, cookie) => {
 const jsonLd = (html) => [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map((m) => JSON.parse(m[1]));
 
 test.before(async () => {
-  ({ server } = createApp({ dbFile: ":memory:", siteUrl: SITE, adminEmail: "a@seo.test", adminPassword: "admin-pass-123" }));
+  ({ server } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", siteUrl: SITE, adminEmail: "a@seo.test", adminPassword: "admin-pass-123" }));
   await new Promise((r) => server.listen(0, r));
   base = "http://127.0.0.1:" + server.address().port;
   admin = (await api("POST", "/api/login", { email: "a@seo.test", password: "admin-pass-123" })).cookie;

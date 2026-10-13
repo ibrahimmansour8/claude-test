@@ -4,6 +4,14 @@
 
   var T = {
     ar: {
+      verify_banner: "فعّل بريدك الإلكتروني لتتمكن من إضافة الأنشطة والتقييمات. أرسلنا رابط التفعيل إلى {email}.", verify_resend: "إعادة إرسال الرابط",
+      verify_sent: "أُرسل رابط جديد. تحقق من بريدك ومن مجلد المزعج.", verify_need: "فعّل بريدك الإلكتروني أولًا بفتح الرابط الذي أرسلناه إليك.",
+      verify_working: "جارٍ تفعيل بريدك الإلكتروني…", verify_ok: "تم تفعيل بريدك الإلكتروني. يمكنك الآن إضافة الأنشطة والتقييمات.",
+      verify_fail: "رابط التفعيل غير صالح أو انتهت صلاحيته.", verify_go: "إلى حسابي", verify_login: "سجّل الدخول لطلب رابط جديد.",
+      chem_title: "تغيير البريد الإلكتروني", chem_hint: "أخطأت في كتابة بريدك؟ غيّره هنا وسنرسل رابط تفعيل إلى العنوان الجديد.", chem_new: "البريد الجديد",
+      chem_pw: "كلمة المرور الحالية", chem_save: "تغيير البريد", chem_done: "تم تغيير البريد. أرسلنا رابط تفعيل إلى العنوان الجديد.",
+      acct_email: "البريد", ev_on: "مفعّل", ev_off: "غير مفعّل",
+      e_email_unverified: "فعّل بريدك الإلكتروني أولًا (راجع بريدك).", e_same_email: "هذا هو بريدك الحالي.",
       forgot_link: "نسيت كلمة المرور؟", forgot_title: "استعادة كلمة المرور", forgot_sub: "أدخل بريدك وسنرسل لك رابطًا لاختيار كلمة مرور جديدة.",
       forgot_send: "إرسال الرابط", forgot_done: "إن كان هذا البريد مسجّلًا لدينا فقد أرسلنا إليه رابط الاستعادة (صالح ساعة واحدة). تحقق من صندوق الوارد والبريد المزعج.",
       forgot_off: "استعادة كلمة المرور غير مفعّلة حاليًا. تواصل معنا عبر بريد الموقع.", reset_title: "اختر كلمة مرور جديدة", reset_new: "كلمة المرور الجديدة (8 أحرف على الأقل)",
@@ -47,6 +55,14 @@
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      verify_banner: "Confirm your e-mail to add businesses and reviews. We sent the activation link to {email}.", verify_resend: "Resend the link",
+      verify_sent: "A new link was sent. Check your inbox and spam folder.", verify_need: "Confirm your e-mail first by opening the link we sent you.",
+      verify_working: "Confirming your e-mail…", verify_ok: "Your e-mail is confirmed. You can now add businesses and reviews.",
+      verify_fail: "This confirmation link is invalid or has expired.", verify_go: "Go to my account", verify_login: "Log in to request a new link.",
+      chem_title: "Change e-mail", chem_hint: "Mistyped your e-mail? Change it here and we will send an activation link to the new address.", chem_new: "New e-mail",
+      chem_pw: "Current password", chem_save: "Change e-mail", chem_done: "E-mail changed. We sent an activation link to the new address.",
+      acct_email: "E-mail", ev_on: "confirmed", ev_off: "not confirmed",
+      e_email_unverified: "Confirm your e-mail first (check your inbox).", e_same_email: "That is already your e-mail.",
       forgot_link: "Forgot your password?", forgot_title: "Reset your password", forgot_sub: "Enter your e-mail and we will send you a link to choose a new password.",
       forgot_send: "Send link", forgot_done: "If this e-mail is registered with us, a reset link was sent (valid for one hour). Check your inbox and spam folder.",
       forgot_off: "Password reset is not enabled right now. Please contact us at the site's e-mail.", reset_title: "Choose a new password", reset_new: "New password (min 8 characters)",
@@ -104,7 +120,7 @@
     });
   }
 
-  var state = { user: null, businesses: [], features: { passwordReset: false }, resetToken: "" };
+  var state = { user: null, businesses: [], features: { passwordReset: false, emailVerification: false }, resetToken: "", verifyToken: "", flash: "" };
 
   function api(method, url, body) {
     return fetch(url, {
@@ -234,6 +250,7 @@
 
   function viewAdd() {
     if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="' + link("/login") + '">' + t("login") + "</a></div></div>";
+    if (needsVerify()) return '<div class="container"><div class="form">' + verifyPrompt() + "</div></div>";
     return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
       "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
       "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
@@ -262,6 +279,7 @@
     var mine = reviews.filter(function (r) { return r.mine; })[0];
     var form;
     if (!state.user) form = '<p class="meta">' + t("rev_login") + ' <a class="link" href="' + link("/login") + '">' + t("login") + "</a></p>";
+    else if (needsVerify()) form = '<div class="form">' + verifyPrompt() + "</div>";
     else form = '<form class="form" id="reviewForm" data-biz="' + esc(b.id) + '" novalidate><h3>' + t("rev_write") + "</h3>" +
       (mine ? '<p class="meta">' + t("rev_update_hint") + "</p>" : "") +
       "<label>" + t("rev_rating") + '<select name="rating">' + [5, 4, 3, 2, 1].map(function (n) {
@@ -291,6 +309,23 @@
       '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="' + link(reg ? "/login" : "/register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
   }
 
+  function needsVerify() { return !!(state.user && state.features.emailVerification && !state.user.verified); }
+  function resendBtn(cls) { return '<button class="btn ' + (cls || "ghost") + '" type="button" data-resend>' + t("verify_resend") + "</button>"; }
+  function verifyPrompt() { return "<p>" + t("verify_need") + "</p>" + resendBtn("") + ' <span class="meta" data-resend-msg></span>'; }
+  function banner(path) {
+    var out = "";
+    if (state.flash) { out += '<div class="banner flash" role="status">' + esc(state.flash) + "</div>"; state.flash = ""; }
+    if (needsVerify() && path !== "/verify") {
+      out += '<div class="banner" role="status"><span>' + t("verify_banner").replace("{email}", '<strong dir="ltr">' + esc(state.user.email) + "</strong>") + "</span> " +
+        resendBtn() + ' <span class="meta" data-resend-msg></span></div>';
+    }
+    return out;
+  }
+
+  function viewVerify() {
+    return '<div class="container"><div class="form narrow" id="verifyBox"><p id="verifyMsg" role="status">' + t("verify_working") + "</p></div></div>";
+  }
+
   function viewForgot() {
     if (!state.features.passwordReset) return '<div class="container"><div class="form narrow"><p>' + t("forgot_off") + "</p></div></div>";
     return '<div class="container"><form class="form narrow" id="forgotForm" novalidate><h2>' + t("forgot_title") + '</h2><p class="meta">' + t("forgot_sub") + "</p>" +
@@ -312,7 +347,13 @@
       (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
       '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
       '<section class="block"><h2>' + t("acct_title") + "</h2>" +
+      (state.user ? '<p class="meta">' + t("acct_email") + ': <strong dir="ltr">' + esc(state.user.email) + "</strong> · " +
+        (state.features.emailVerification ? (state.user.verified ? t("ev_on") : t("ev_off")) : "") + "</p>" : "") +
       '<p><a class="btn ghost" href="/api/me/export" download="my-data.json">' + t("acct_export") + "</a></p>" +
+      (state.user && state.user.role !== "admin" ? '<form class="form" id="chemForm" novalidate><h3>' + t("chem_title") + '</h3><p class="meta">' + t("chem_hint") + "</p>" +
+        "<label>" + t("chem_new") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
+        "<label>" + t("chem_pw") + '<input name="password" type="password" dir="ltr" autocomplete="current-password" required></label>' +
+        '<div id="chemMsg" role="status"></div><button class="btn" type="submit">' + t("chem_save") + "</button></form>" : "") +
       (state.user && state.user.role !== "admin" ? '<form class="form" id="chpwForm" novalidate><h3>' + t("chpw_title") + "</h3>" +
         "<label>" + t("chpw_current") + '<input name="current" type="password" dir="ltr" autocomplete="current-password" required></label>' +
         "<label>" + t("chpw_new") + '<input name="next" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
@@ -371,7 +412,7 @@
     var r = parseLocation();
     renderUserNav();
 
-    var altPath = (lang === "ar" ? "/en" : "") + r.path + (r.path === "/reset" ? "" : location.search); // never copy the reset token into a link
+    var altPath = (lang === "ar" ? "/en" : "") + r.path + (r.path === "/reset" || r.path === "/verify" ? "" : location.search); // never copy a one-time token into a link
     if (r.path === "/privacy" || r.path === "/terms") {
       if (legalShown) { location.reload(); return; }
       legalShown = true; // first load: the server already rendered this page; just wire up the header
@@ -410,6 +451,10 @@
         if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
           head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
         else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (r.path === "/verify") {
+        // keep the token in memory only and remove it from the address bar / history
+        if (r.params.token) { state.verifyToken = r.params.token; history.replaceState(null, "", location.pathname); }
+        html = viewVerify(); head = [t("brand"), t("home_desc"), "noindex,nofollow"];
       } else if (r.path === "/forgot") { html = viewForgot(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
       else if (r.path === "/reset") {
         // keep the token in memory only and remove it from the address bar / history
@@ -422,7 +467,7 @@
       else if (r.path === "/admin") { html = state.user && state.user.role === "admin" ? viewAdmin(data.businesses, r.params.status || "pending") : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
       else if (r.path === "/") html = viewHome();
       else { html = '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn" href="' + link("/") + '">' + t("nav_home") + "</a></div>"; head = [t("not_found"), t("not_found"), "noindex,follow"]; }
-      app.innerHTML = html;
+      app.innerHTML = banner(r.path) + html;
       setHead(head[0], head[1], head[2]);
       document.querySelectorAll("[data-nav]").forEach(function (a) {
         a.classList.toggle("active", a.getAttribute("href") === link(r.path));
@@ -433,6 +478,43 @@
       if (seq !== renderSeq) return;
       app.innerHTML = '<div class="container"><p class="empty">' + (e && e.code === "auth_required" ? t("e_auth_required") : t("load_err")) + "</p></div>";
     });
+  }
+
+  function bindResend() {
+    document.querySelectorAll("[data-resend]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var note = btn.parentNode.querySelector("[data-resend-msg]");
+        btn.disabled = true;
+        api("POST", "/api/verify/resend", { lang: lang }).then(function (j) {
+          if (j.already) { state.user.verified = true; render(); return; }
+          if (note) { note.className = "meta"; note.textContent = t("verify_sent"); }
+        }).catch(function (err) {
+          btn.disabled = false;
+          if (note) { note.className = "error"; note.textContent = errMsg(err); }
+        });
+      });
+    });
+  }
+
+  function runVerify(box) {
+    var msg = document.getElementById("verifyMsg"), token = state.verifyToken;
+    function ok() {
+      state.verifiedOnce = true;
+      msg.className = "notice"; msg.textContent = t("verify_ok");
+      box.insertAdjacentHTML("beforeend", '<p><a class="btn" href="' + link("/mine") + '">' + t("verify_go") + "</a></p>");
+    }
+    function fail() {
+      msg.className = "error"; msg.textContent = t("verify_fail");
+      box.insertAdjacentHTML("beforeend", state.user ? '<p>' + resendBtn() + ' <span class="meta" data-resend-msg></span></p>'
+        : '<p class="meta">' + t("verify_login") + ' <a class="link" href="' + link("/login") + '">' + t("login") + "</a></p>");
+      bindResend();
+    }
+    if (!token) { if (state.verifiedOnce || (state.user && state.user.verified)) ok(); else fail(); return; }
+    state.verifyToken = ""; // consumed: the page can be re-rendered (language switch) without re-submitting
+    api("POST", "/api/verify", { token: token })
+      .then(function () { return api("GET", "/api/me"); })
+      .then(function (j) { state.user = j.user; renderUserNav(); ok(); })
+      .catch(fail);
   }
 
   function showMsg(ok, text) {
@@ -451,7 +533,7 @@
       e.preventDefault();
       var d = new FormData(au), mode = au.getAttribute("data-mode");
       var body = { email: d.get("email"), password: d.get("password") };
-      if (mode === "register") { body.name = d.get("name"); body.accept = d.get("accept") === "on"; }
+      if (mode === "register") { body.name = d.get("name"); body.accept = d.get("accept") === "on"; body.lang = lang; }
       api("POST", mode === "register" ? "/api/register" : "/api/login", body).then(function (j) {
         state.user = j.user; navigate(link("/mine"));
       }).catch(function (err) { showMsg(false, errMsg(err)); });
@@ -468,6 +550,17 @@
         .catch(function (err) { showMsg(false, errMsg(err)); });
     });
 
+    bindResend();
+    var vb = document.getElementById("verifyBox");
+    if (vb) runVerify(vb);
+    var chem = document.getElementById("chemForm");
+    if (chem) chem.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(chem), box = document.getElementById("chemMsg");
+      api("POST", "/api/me/email", { email: d.get("email"), password: d.get("password"), lang: lang })
+        .then(function (j) { state.user = j.user; state.flash = t("chem_done"); render(); })
+        .catch(function (err) { box.className = "error"; box.textContent = errMsg(err); });
+    });
     var ff = document.getElementById("forgotForm");
     if (ff) ff.addEventListener("submit", function (e) {
       e.preventDefault();

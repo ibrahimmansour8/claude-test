@@ -26,8 +26,12 @@
     try { var raw = localStorage.getItem(KEY); if (raw) { S = JSON.parse(raw); return; } } catch (e) {}
     S = memory || seed();
   }
+  function normalise() {
+    S.verifs = S.verifs || [];
+    S.users.forEach(function (u) { if (!("verified" in u)) u.verified = u.accepted || new Date().toISOString(); }); // saved before verification existed
+  }
   function save() { memory = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
-  var ready = load(), adminReady = null;
+  var ready = (load(), normalise()), adminReady = null;
 
   function ensureAdmin() {
     if (adminReady) return adminReady;
@@ -35,7 +39,7 @@
       if (S.users.some(function (u) { return u.role === "admin"; })) return;
       var salt = rnd(8);
       return hash(ADMIN.password, salt).then(function (h) {
-        S.users.push({ id: S.seq.u++, email: ADMIN.email, name: "Admin", role: "admin", salt: salt, hash: h, accepted: new Date().toISOString() }); save();
+        S.users.push({ id: S.seq.u++, email: ADMIN.email, name: "Admin", role: "admin", salt: salt, hash: h, accepted: new Date().toISOString(), verified: new Date().toISOString() }); save();
       });
     });
     return adminReady;
@@ -53,24 +57,34 @@
   }
   function byRating(a, b) { return b.rating - a.rating || b.reviews - a.reviews || a.id - b.id; }
   function me() { return S.me ? S.users.filter(function (u) { return u.id === S.me; })[0] || null : null; }
-  function pub(u) { return u ? { id: u.id, email: u.email, name: u.name, role: u.role } : null; }
+  function pub(u) { return u ? { id: u.id, email: u.email, name: u.name, role: u.role, verified: !!u.verified } : null; }
+  function gated(u) { return !u.verified; }
   function str(v, n) { return typeof v === "string" ? v.trim().slice(0, n) : ""; }
   function R(status, json) { return { status: status, json: json }; }
-  function mail(to, lang, kind, name, link) {
-    var ar = lang !== "en", brand = ar ? "دليل قطر" : "Qatar Guide";
-    var m = kind === "reset"
-      ? { subject: ar ? "استعادة كلمة المرور – " + brand : "Reset your password – " + brand,
-          text: ar ? "مرحبًا " + name + "،\nافتح الرابط لاختيار كلمة مرور جديدة (صالح ساعة، مرة واحدة)." : "Hello " + name + ",\nOpen the link to choose a new password (valid for one hour, works once).", link: link }
-      : { subject: ar ? "تم تغيير كلمة مرورك – " + brand : "Your password was changed – " + brand,
-          text: ar ? "مرحبًا " + name + "،\nتم للتو تغيير كلمة مرور حسابك وتسجيل الخروج من الأجهزة الأخرى." : "Hello " + name + ",\nYour account password was just changed and other devices were signed out." };
+  function mail(to, lang, kind, name, link, extra) {
+    var ar = lang !== "en", brand = ar ? "دليل قطر" : "Qatar Guide", m;
+    if (kind === "reset") m = { subject: ar ? "استعادة كلمة المرور – " + brand : "Reset your password – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nافتح الرابط لاختيار كلمة مرور جديدة (صالح ساعة، مرة واحدة)." : "Hello " + name + ",\nOpen the link to choose a new password (valid for one hour, works once).", link: link };
+    else if (kind === "verify") m = { subject: ar ? "فعّل بريدك الإلكتروني – " + brand : "Confirm your e-mail – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nأكّد أن هذا البريد لك بفتح الرابط (صالح 24 ساعة)." : "Hello " + name + ",\nConfirm this e-mail address is yours by opening the link (valid for 24 hours).", link: link };
+    else if (kind === "emailchanged") m = { subject: ar ? "تم تغيير بريد حسابك – " + brand : "Your account e-mail was changed – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nتم تغيير بريد حسابك إلى " + extra + ". إن لم تكن أنت فتواصل معنا فورًا." : "Hello " + name + ",\nYour account e-mail was changed to " + extra + ". If this was not you, contact us immediately." };
+    else m = { subject: ar ? "تم تغيير كلمة مرورك – " + brand : "Your password was changed – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nتم للتو تغيير كلمة مرور حسابك وتسجيل الخروج من الأجهزة الأخرى." : "Hello " + name + ",\nYour account password was just changed and other devices were signed out." };
     m.to = to; m.at = new Date().toISOString(); S.mails.unshift(m); S.mails = S.mails.slice(0, 20);
     window.dispatchEvent(new CustomEvent("demo-mail"));
+  }
+  function issueVerif(u, lang) {
+    var token = rnd(32);
+    S.verifs = S.verifs.filter(function (v) { return v.user_id !== u.id; });
+    S.verifs.push({ token: token, user_id: u.id, email: u.email, expires: Date.now() + 86400000 });
+    mail(u.email, lang, "verify", u.name, (lang === "en" ? "/en" : "") + "/verify?token=" + token);
   }
 
   function handle(method, path, query, body) {
     var u = me(), m;
     if (method === "GET" && path === "/api/health") return R(200, { ok: true });
-    if (method === "GET" && path === "/api/me") return R(200, { user: pub(u), features: { passwordReset: true } });
+    if (method === "GET" && path === "/api/me") return R(200, { user: pub(u), features: { passwordReset: true, emailVerification: true } });
 
     if (method === "POST" && path === "/api/register") {
       var email = str(body.email, 120).toLowerCase(), name = str(body.name, 60), pw = typeof body.password === "string" ? body.password : "";
@@ -81,8 +95,8 @@
       if (S.users.some(function (x) { return x.email === email; })) return R(409, { error: "email_taken" });
       var salt = rnd(8);
       return hash(pw, salt).then(function (h) {
-        var nu = { id: S.seq.u++, email: email, name: name, role: "user", salt: salt, hash: h, accepted: new Date().toISOString() };
-        S.users.push(nu); S.me = nu.id; save(); return R(201, { user: pub(nu) });
+        var nu = { id: S.seq.u++, email: email, name: name, role: "user", salt: salt, hash: h, accepted: new Date().toISOString(), verified: null };
+        S.users.push(nu); S.me = nu.id; issueVerif(nu, body.lang === "en" ? "en" : "ar"); save(); return R(201, { user: pub(nu) });
       });
     }
     if (method === "POST" && path === "/api/login") {
@@ -94,6 +108,34 @@
       });
     }
     if (method === "POST" && path === "/api/logout") { S.me = null; save(); return R(200, { ok: true }); }
+
+    if (method === "POST" && path === "/api/verify") {
+      var vt = typeof body.token === "string" ? body.token : "";
+      var vr = S.verifs.filter(function (v) { return v.token === vt; })[0], vu = vr && S.users.filter(function (x) { return x.id === vr.user_id; })[0];
+      if (!vr || vr.expires < Date.now() || !vu || vu.email !== vr.email) return R(400, { error: "invalid_token" });
+      vu.verified = vu.verified || new Date().toISOString(); S.verifs = S.verifs.filter(function (v) { return v.user_id !== vu.id; }); save();
+      return R(200, { ok: true });
+    }
+    if (method === "POST" && path === "/api/verify/resend") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.verified) return R(200, { ok: true, already: true });
+      issueVerif(u, body.lang === "en" ? "en" : "ar"); save(); return R(200, { ok: true });
+    }
+    if (method === "POST" && path === "/api/me/email") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.role === "admin") return R(403, { error: "admin_use_env" });
+      return hash(typeof body.password === "string" ? body.password : "", u.salt).then(function (h) {
+        if (h !== u.hash) return R(401, { error: "bad_credentials" });
+        var ne = str(body.email, 120).toLowerCase(), lg = body.lang === "en" ? "en" : "ar";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ne)) return R(400, { error: "invalid_email" });
+        if (ne === u.email) return R(400, { error: "same_email" });
+        if (S.users.some(function (x) { return x.email === ne; })) return R(409, { error: "email_taken" });
+        var old = u.email; u.email = ne; u.verified = null;
+        S.resets = S.resets.filter(function (r) { return r.user_id !== u.id; });
+        mail(old, lg, "emailchanged", u.name, null, ne); issueVerif(u, lg); save();
+        return R(200, { user: pub(u) });
+      });
+    }
 
     if (method === "POST" && path === "/api/forgot") {
       var fe = str(body.email, 120).toLowerCase(), fl = body.lang === "en" ? "en" : "ar";
@@ -114,7 +156,7 @@
       if (np.length < 8 || np.length > 128) return R(400, { error: "weak_password" });
       var tu = S.users.filter(function (x) { return x.id === rr.user_id; })[0], s2 = rnd(8);
       return hash(np, s2).then(function (h) {
-        tu.salt = s2; tu.hash = h; S.resets = S.resets.filter(function (r) { return r.user_id !== tu.id; });
+        tu.salt = s2; tu.hash = h; tu.verified = tu.verified || new Date().toISOString(); S.resets = S.resets.filter(function (r) { return r.user_id !== tu.id; });
         if (S.me === tu.id) S.me = null; // signed out everywhere
         mail(tu.email, body.lang === "en" ? "en" : "ar", "changed", tu.name); save(); return R(200, { ok: true });
       });
@@ -134,7 +176,7 @@
     if (method === "GET" && path === "/api/me/export") {
       if (!u) return R(401, { error: "auth_required" });
       return R(200, { exported_at: new Date().toISOString(),
-        profile: { id: u.id, email: u.email, name: u.name, role: u.role, terms_accepted_at: u.accepted },
+        profile: { id: u.id, email: u.email, name: u.name, role: u.role, email_verified_at: u.verified, terms_accepted_at: u.accepted },
         businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return { id: b.id, cat: b.cat, city: b.city, name_ar: b.name.ar, phone: b.phone, status: b.status, verified: b.verified }; }),
         reviews: S.reviews.filter(function (r) { return r.user_id === u.id; }).map(function (r) { return { business_id: r.business_id, rating: r.rating, comment: r.comment }; }) });
     }
@@ -146,7 +188,7 @@
         var mine = S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return b.id; });
         S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; });
         S.reviews = S.reviews.filter(function (r) { return r.user_id !== u.id && mine.indexOf(r.business_id) < 0; });
-        S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
+        S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.verifs = S.verifs.filter(function (v) { return v.user_id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
       });
     }
 
@@ -157,6 +199,7 @@
     }
     if (method === "POST" && path === "/api/businesses") {
       if (!u) return R(401, { error: "auth_required" });
+      if (gated(u)) return R(403, { error: "email_unverified" });
       var nameAr = str(body.name_ar, 80), nameEn = str(body.name_en, 80) || nameAr, desc = str(body.desc, 300), area = str(body.area, 80), phone = str(body.phone, 8).replace(/\s/g, "");
       if (!nameAr) return R(400, { error: "invalid_name" });
       if (CATS.indexOf(body.cat) < 0) return R(400, { error: "invalid_category" });
@@ -178,6 +221,7 @@
       }
       if (method === "POST") {
         if (!u) return R(401, { error: "auth_required" });
+        if (gated(u)) return R(403, { error: "email_unverified" });
         if (biz.owner_id === u.id) return R(403, { error: "own_business" });
         var rating = Number(body.rating);
         if (!Number.isInteger(rating) || rating < 1 || rating > 5) return R(400, { error: "invalid_rating" });

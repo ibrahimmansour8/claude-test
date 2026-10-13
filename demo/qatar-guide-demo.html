@@ -95,6 +95,9 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .check-line { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; }
 .danger { border-color: #c0392b; }
 .btn.danger-btn { background: #c0392b; }
+.banner { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: rgba(217, 154, 0, .16); border-bottom: 1px solid var(--line); text-align: center; }
+.banner.flash { background: rgba(31, 122, 77, .16); }
+.banner .btn { padding: 4px 12px; }
 
 /* demo-only additions */
 [hidden] { display: none !important; }
@@ -238,7 +241,7 @@ window.BUSINESSES = [
 ];
 
 ;
-window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>سياسة الخصوصية\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>سياسة الخصوصية\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. من نحن\u003c/h2>\u003cp>يُدير هذا الموقع «Qatar Guide (demo)» (ويُشار إليه بـ«نحن»). هو دليل للأنشطة التجارية والخدمات في دولة قطر. للتواصل بخصوص خصوصيتك: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. البيانات التي نجمعها\u003c/h2>\u003cul>\u003cli>\u003cstrong>بيانات الحساب:\u003c/strong> الاسم والبريد الإلكتروني وكلمة المرور. لا نحفظ كلمة المرور نفسها، بل نحفظ بصمة مشفّرة (مملّحة) لا نستطيع قراءتها.\u003c/li>\u003cli>\u003cstrong>بيانات الأنشطة التي تضيفها:\u003c/strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.\u003c/li>\u003cli>\u003cstrong>التقييمات:\u003c/strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.\u003c/li>\u003cli>\u003cstrong>سجل الموافقة:\u003c/strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.\u003c/li>\u003cli>\u003cstrong>رمز استعادة كلمة المرور:\u003c/strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.\u003c/li>\u003cli>\u003cstrong>بيانات تقنية:\u003c/strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. لماذا نستخدم بياناتك\u003c/h2>\u003cul>\u003cli>إنشاء حسابك وتسجيل دخولك وحمايته.\u003c/li>\u003cli>نشر الأنشطة والتقييمات بعد المراجعة، وإدارة المحتوى ومنع إساءة الاستخدام.\u003c/li>\u003cli>تحسين ظهور الدليل في محركات البحث (للأنشطة والتقييمات المنشورة فقط).\u003c/li>\u003c/ul>\u003cp>أساس المعالجة هو موافقتك عند التسجيل وتقديمنا للخدمة التي طلبتها. لا نستخدم بياناتك للإعلانات ولا نبيعها.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. ما يكون عامًّا\u003c/h2>\u003cp>بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته ورقم هاتفه. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك معلومات شخصية لا تريد نشرها.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. ملفات تعريف الارتباط (الكوكيز)\u003c/h2>\u003cp>نستخدم كوكي واحدًا ضروريًا للتشغيل باسم \u003ccode>sid\u003c/code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. مشاركة البيانات\u003c/h2>\u003cp>لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.\u003c/p>\u003cp>نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (استعادة كلمة المرور وإشعار تغييرها). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.\u003c/p>\u003cp>أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. مدة الاحتفاظ\u003c/h2>\u003cp>نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. حقوقك\u003c/h2>\u003cp>وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:\u003c/p>\u003cul>\u003cli>\u003cstrong>تنزيل بياناتك\u003c/strong> وحذف حسابك مباشرة من صفحة «حسابي» داخل الموقع.\u003c/li>\u003cli>طلب تصحيح أي بيانات أو ممارسة أي حق آخر بمراسلتنا على \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>تقديم شكوى إلى الجهة المختصة في دولة قطر إن رأيت أن بياناتك عولجت بشكل مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. الأمان\u003c/h2>\u003cp>نطبّق إجراءات معقولة: تشفير كلمات المرور، وجلسات محمية، وتحديد محاولات الدخول، واتصال مشفّر. لا توجد حماية مطلقة، وتقع عليك مسؤولية سرية كلمة مرورك.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. الأطفال\u003c/h2>\u003cp>الموقع غير موجّه لمن هم دون 18 عامًا، ولا نجمع بياناتهم عن علم. إذا علمنا بحساب لقاصر نحذفه.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات على هذه السياسة\u003c/h2>\u003cp>قد نحدّث هذه السياسة، وسيظهر تاريخ آخر تحديث أدناه. للتغييرات الجوهرية نبلّغك بوسيلة مناسبة.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"شروط الاستخدام","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>شروط الاستخدام\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>شروط الاستخدام\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. القبول\u003c/h2>\u003cp>باستخدامك الموقع أو إنشاء حساب فيه فإنك توافق على هذه الشروط وعلى سياسة الخصوصية. إن لم توافق فلا تستخدم الموقع.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. طبيعة الخدمة\u003c/h2>\u003cp>الموقع دليل معلومات يعرض أنشطة وخدمات يضيفها مستخدمون. لسنا طرفًا في أي اتفاق أو تعامل بينك وبين أي نشاط، ولا نضمن دقة المعلومات أو جودة الخدمات أو توفّرها. تحقّق بنفسك قبل التعامل.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. الحسابات\u003c/h2>\u003cul>\u003cli>يجب أن تكون 18 عامًا أو أكثر وأن تقدّم معلومات صحيحة.\u003c/li>\u003cli>أنت مسؤول عن سرية كلمة مرورك وعن كل ما يجري عبر حسابك.\u003c/li>\u003cli>يجوز لنا تعليق الحساب أو إغلاقه عند مخالفة هذه الشروط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. إضافة الأنشطة\u003c/h2>\u003cul>\u003cli>لا تضف إلا نشاطًا تملكه أو مخوّلًا بتمثيله، وبمعلومات صحيحة غير مضلّلة، ورقم هاتف قطري يخصّه.\u003c/li>\u003cli>يُمنع إدراج أنشطة أو سلع أو خدمات مخالفة لقوانين دولة قطر أو الآداب العامة.\u003c/li>\u003cli>تخضع الأنشطة لمراجعتنا؛ ولنا قبولها أو رفضها أو تعديلها أو إزالتها في أي وقت دون التزام بإبداء الأسباب.\u003c/li>\u003cli>شارة «موثّق» تعني أننا راجعنا بعض المعلومات؛ وهي ليست ضمانًا ولا توصية بالنشاط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. التقييمات\u003c/h2>\u003cul>\u003cli>اكتب تقييمًا عن تجربة حقيقية فقط. يُمنع التقييم المزوّر أو المدفوع أو تقييم نشاطك أو منافسك للإضرار به.\u003c/li>\u003cli>يُسمح بتقييم واحد لكل نشاط لكل مستخدم، ويمكنك تعديله أو حذفه.\u003c/li>\u003cli>يُمنع في التعليقات السبّ والتشهير والتحريض ونشر بيانات شخصية للآخرين والإعلانات والروابط المزعجة.\u003c/li>\u003cli>لنا إزالة أي تقييم مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. سلوك محظور\u003c/h2>\u003cul>\u003cli>محاولة اختراق الموقع أو تعطيله أو تجاوز حدود الاستخدام.\u003c/li>\u003cli>انتحال شخصية أو جهة.\u003c/li>\u003cli>جمع بيانات الموقع آليًا بشكل مفرط أو إعادة نشرها دون إذن.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. المحتوى الذي تنشره\u003c/h2>\u003cp>تبقى حقوق المحتوى الذي تضيفه لك. وبنشره تمنحنا ترخيصًا غير حصري ومجانيًّا لعرضه وتخزينه وتهيئته للعرض في الموقع وفي نتائج محركات البحث ما دام منشورًا. وتقرّ بأن لك حق نشره.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. إخلاء المسؤولية وحدودها\u003c/h2>\u003cp>تُقدَّم الخدمة «كما هي» دون ضمانات من أي نوع. وفي الحدود التي يسمح بها القانون لا نتحمّل مسؤولية عن خسائر غير مباشرة أو تبعية أو عن تعاملك مع الأنشطة المدرجة. لا يستبعد هذا النص أي مسؤولية لا يجوز استبعادها نظامًا.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. إنهاء الاستخدام\u003c/h2>\u003cp>يمكنك حذف حسابك في أي وقت من صفحة «حسابي». وللموقع إيقاف الخدمة أو تعديلها.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. القانون المطبّق\u003c/h2>\u003cp>تخضع هذه الشروط لقوانين دولة قطر، وتختص محاكمها بالنظر في أي نزاع ينشأ عنها.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات والتواصل\u003c/h2>\u003cp>قد نعدّل هذه الشروط، واستمرارك في الاستخدام بعد التعديل يعني قبولك. للاستفسار: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}},"en":{"privacy":{"title":"Privacy Policy","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Privacy Policy\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Privacy Policy\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Who we are\u003c/h2>\u003cp>This website is operated by “Qatar Guide (demo)” (“we”). It is a directory of businesses and services in the State of Qatar. Privacy contact: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. Data we collect\u003c/h2>\u003cul>\u003cli>\u003cstrong>Account data:\u003c/strong> name, e-mail and password. We never store the password itself, only a salted cryptographic hash that we cannot read.\u003c/li>\u003cli>\u003cstrong>Listings you submit:\u003c/strong> business name, category, city, area, description and phone number.\u003c/li>\u003cli>\u003cstrong>Reviews:\u003c/strong> the star rating and comment you write, displayed with your name.\u003c/li>\u003cli>\u003cstrong>Consent record:\u003c/strong> when you accepted the Terms and Privacy Policy and which version of the text.\u003c/li>\u003cli>\u003cstrong>Password-reset token:\u003c/strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.\u003c/li>\u003cli>\u003cstrong>Technical data:\u003c/strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. Why we use your data\u003c/h2>\u003cul>\u003cli>To create, secure and sign you in to your account.\u003c/li>\u003cli>To publish listings and reviews after moderation, run the site and prevent abuse.\u003c/li>\u003cli>To make published listings and reviews discoverable in search engines.\u003c/li>\u003c/ul>\u003cp>Our basis is your consent at sign-up and providing the service you requested. We do not use your data for advertising and we do not sell it.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. What is public\u003c/h2>\u003cp>Once a listing is approved, its name, description, area and phone number are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing or review.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. Cookies\u003c/h2>\u003cp>We use one strictly necessary cookie, \u003ccode>sid\u003c/code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. Sharing\u003c/h2>\u003cp>We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.\u003c/p>\u003cp>We use an e-mail delivery provider only to send account e-mails (password reset and a notice when it changes). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.\u003c/p>\u003cp>The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. Retention\u003c/h2>\u003cp>We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Backup copies may remain for a limited time until replaced in the normal backup cycle.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Your rights\u003c/h2>\u003cp>Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:\u003c/p>\u003cul>\u003cli>\u003cstrong>Download your data\u003c/strong> and delete your account directly from the “My account” page.\u003c/li>\u003cli>Ask us to correct data or exercise any other right at \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>Complain to the competent authority in the State of Qatar if you believe your data was handled unlawfully.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. Security\u003c/h2>\u003cp>We apply reasonable measures: password hashing, protected sessions, login rate limiting and encrypted connections. No system is perfectly secure, and keeping your password confidential is your responsibility.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Children\u003c/h2>\u003cp>The site is not directed to anyone under 18 and we do not knowingly collect their data. If we learn of an account held by a minor we delete it.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes\u003c/h2>\u003cp>We may update this policy; the last-updated date appears below. For material changes we will notify you by suitable means.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"Terms of Use","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Terms of Use\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Terms of Use\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Acceptance\u003c/h2>\u003cp>By using the site or creating an account you agree to these Terms and to the Privacy Policy. If you do not agree, do not use the site.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. The service\u003c/h2>\u003cp>The site is an information directory showing businesses and services submitted by users. We are not a party to any agreement or dealing between you and any business, and we do not guarantee the accuracy of information or the quality or availability of services. Do your own checks before dealing with anyone.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. Accounts\u003c/h2>\u003cul>\u003cli>You must be 18 or older and provide accurate information.\u003c/li>\u003cli>You are responsible for keeping your password confidential and for everything done through your account.\u003c/li>\u003cli>We may suspend or close an account that breaches these Terms.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. Listing a business\u003c/h2>\u003cul>\u003cli>Only list a business you own or are authorised to represent, with accurate, non-misleading information and its own Qatar phone number.\u003c/li>\u003cli>Listings of businesses, goods or services that break the laws of the State of Qatar or public morals are prohibited.\u003c/li>\u003cli>Listings are subject to our review; we may approve, reject, edit or remove them at any time without giving reasons.\u003c/li>\u003cli>The “Verified” badge means we checked some information. It is not a guarantee or endorsement.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. Reviews\u003c/h2>\u003cul>\u003cli>Write a review only about a genuine experience. Fake, paid, self-reviews or reviews of competitors meant to harm them are prohibited.\u003c/li>\u003cli>One review per business per user; you may edit or delete yours.\u003c/li>\u003cli>Comments must not contain abuse, defamation, incitement, other people’s personal data, advertising or spam links.\u003c/li>\u003cli>We may remove any review that breaches these rules.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. Prohibited conduct\u003c/h2>\u003cul>\u003cli>Attempting to hack, disrupt or bypass the limits of the site.\u003c/li>\u003cli>Impersonating a person or organisation.\u003c/li>\u003cli>Excessive automated scraping or republishing the site’s data without permission.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. Content you post\u003c/h2>\u003cp>You keep the rights to content you post. By posting it you grant us a non-exclusive, free licence to display, store and format it on the site and in search-engine results while it is published. You confirm you have the right to post it.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Disclaimer and liability\u003c/h2>\u003cp>The service is provided “as is” without warranties of any kind. To the extent permitted by law we are not liable for indirect or consequential losses or for your dealings with listed businesses. Nothing here excludes liability that cannot lawfully be excluded.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. Ending use\u003c/h2>\u003cp>You can delete your account at any time from the “My account” page. We may change or discontinue the service.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Governing law\u003c/h2>\u003cp>These Terms are governed by the laws of the State of Qatar and its courts have jurisdiction over any dispute arising from them.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes and contact\u003c/h2>\u003cp>We may amend these Terms; continuing to use the site after a change means you accept it. Questions: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}}};
+window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>سياسة الخصوصية\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>سياسة الخصوصية\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. من نحن\u003c/h2>\u003cp>يُدير هذا الموقع «Qatar Guide (demo)» (ويُشار إليه بـ«نحن»). هو دليل للأنشطة التجارية والخدمات في دولة قطر. للتواصل بخصوص خصوصيتك: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. البيانات التي نجمعها\u003c/h2>\u003cul>\u003cli>\u003cstrong>بيانات الحساب:\u003c/strong> الاسم والبريد الإلكتروني وكلمة المرور. لا نحفظ كلمة المرور نفسها، بل نحفظ بصمة مشفّرة (مملّحة) لا نستطيع قراءتها.\u003c/li>\u003cli>\u003cstrong>بيانات الأنشطة التي تضيفها:\u003c/strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.\u003c/li>\u003cli>\u003cstrong>التقييمات:\u003c/strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.\u003c/li>\u003cli>\u003cstrong>سجل الموافقة:\u003c/strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.\u003c/li>\u003cli>\u003cstrong>تفعيل البريد:\u003c/strong> نرسل رابط تفعيل إلى بريدك ونحفظ بصمة الرمز فقط (يُحذف بعد الاستخدام أو بعد 24 ساعة) ونسجّل وقت تفعيل بريدك.\u003c/li>\u003cli>\u003cstrong>رمز استعادة كلمة المرور:\u003c/strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.\u003c/li>\u003cli>\u003cstrong>بيانات تقنية:\u003c/strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. لماذا نستخدم بياناتك\u003c/h2>\u003cul>\u003cli>إنشاء حسابك وتسجيل دخولك وحمايته، والتأكد من أن البريد يعود لك ومنع إساءة الاستخدام.\u003c/li>\u003cli>نشر الأنشطة والتقييمات بعد المراجعة، وإدارة المحتوى ومنع إساءة الاستخدام.\u003c/li>\u003cli>تحسين ظهور الدليل في محركات البحث (للأنشطة والتقييمات المنشورة فقط).\u003c/li>\u003c/ul>\u003cp>أساس المعالجة هو موافقتك عند التسجيل وتقديمنا للخدمة التي طلبتها. لا نستخدم بياناتك للإعلانات ولا نبيعها.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. ما يكون عامًّا\u003c/h2>\u003cp>بعد اعتماد النشاط يظهر للجميع: اسمه ووصفه ومنطقته ورقم هاتفه. وتظهر التقييمات مع الاسم الذي سجّلت به. يمكن لمحركات البحث فهرسة هذه الصفحات. لا تضع في وصف نشاطك أو تعليقك معلومات شخصية لا تريد نشرها.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. ملفات تعريف الارتباط (الكوكيز)\u003c/h2>\u003cp>نستخدم كوكي واحدًا ضروريًا للتشغيل باسم \u003ccode>sid\u003c/code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. مشاركة البيانات\u003c/h2>\u003cp>لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.\u003c/p>\u003cp>نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (تفعيل البريد واستعادة كلمة المرور وإشعارات تغييرهما). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.\u003c/p>\u003cp>أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. مدة الاحتفاظ\u003c/h2>\u003cp>نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. الحسابات التي لم يُفعَّل بريدها ولا تملك أي محتوى تُحذف تلقائيًا بعد 7 أيام. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. حقوقك\u003c/h2>\u003cp>وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:\u003c/p>\u003cul>\u003cli>\u003cstrong>تنزيل بياناتك\u003c/strong> وحذف حسابك مباشرة من صفحة «حسابي» داخل الموقع.\u003c/li>\u003cli>طلب تصحيح أي بيانات أو ممارسة أي حق آخر بمراسلتنا على \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>تقديم شكوى إلى الجهة المختصة في دولة قطر إن رأيت أن بياناتك عولجت بشكل مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. الأمان\u003c/h2>\u003cp>نطبّق إجراءات معقولة: تشفير كلمات المرور، وجلسات محمية، وتحديد محاولات الدخول، واتصال مشفّر. لا توجد حماية مطلقة، وتقع عليك مسؤولية سرية كلمة مرورك.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. الأطفال\u003c/h2>\u003cp>الموقع غير موجّه لمن هم دون 18 عامًا، ولا نجمع بياناتهم عن علم. إذا علمنا بحساب لقاصر نحذفه.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات على هذه السياسة\u003c/h2>\u003cp>قد نحدّث هذه السياسة، وسيظهر تاريخ آخر تحديث أدناه. للتغييرات الجوهرية نبلّغك بوسيلة مناسبة.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"شروط الاستخدام","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/\">دليل قطر\u003c/a> › \u003cspan>شروط الاستخدام\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>شروط الاستخدام\u003c/h1>\u003cp class=\"meta\">آخر تحديث: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. القبول\u003c/h2>\u003cp>باستخدامك الموقع أو إنشاء حساب فيه فإنك توافق على هذه الشروط وعلى سياسة الخصوصية. إن لم توافق فلا تستخدم الموقع.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. طبيعة الخدمة\u003c/h2>\u003cp>الموقع دليل معلومات يعرض أنشطة وخدمات يضيفها مستخدمون. لسنا طرفًا في أي اتفاق أو تعامل بينك وبين أي نشاط، ولا نضمن دقة المعلومات أو جودة الخدمات أو توفّرها. تحقّق بنفسك قبل التعامل.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. الحسابات\u003c/h2>\u003cul>\u003cli>يجب أن تكون 18 عامًا أو أكثر وأن تقدّم معلومات صحيحة.\u003c/li>\u003cli>أنت مسؤول عن سرية كلمة مرورك وعن كل ما يجري عبر حسابك.\u003c/li>\u003cli>يجوز لنا تعليق الحساب أو إغلاقه عند مخالفة هذه الشروط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. إضافة الأنشطة\u003c/h2>\u003cul>\u003cli>لا تضف إلا نشاطًا تملكه أو مخوّلًا بتمثيله، وبمعلومات صحيحة غير مضلّلة، ورقم هاتف قطري يخصّه.\u003c/li>\u003cli>يُمنع إدراج أنشطة أو سلع أو خدمات مخالفة لقوانين دولة قطر أو الآداب العامة.\u003c/li>\u003cli>تخضع الأنشطة لمراجعتنا؛ ولنا قبولها أو رفضها أو تعديلها أو إزالتها في أي وقت دون التزام بإبداء الأسباب.\u003c/li>\u003cli>شارة «موثّق» تعني أننا راجعنا بعض المعلومات؛ وهي ليست ضمانًا ولا توصية بالنشاط.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. التقييمات\u003c/h2>\u003cul>\u003cli>اكتب تقييمًا عن تجربة حقيقية فقط. يُمنع التقييم المزوّر أو المدفوع أو تقييم نشاطك أو منافسك للإضرار به.\u003c/li>\u003cli>يُسمح بتقييم واحد لكل نشاط لكل مستخدم، ويمكنك تعديله أو حذفه.\u003c/li>\u003cli>يُمنع في التعليقات السبّ والتشهير والتحريض ونشر بيانات شخصية للآخرين والإعلانات والروابط المزعجة.\u003c/li>\u003cli>لنا إزالة أي تقييم مخالف.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. سلوك محظور\u003c/h2>\u003cul>\u003cli>محاولة اختراق الموقع أو تعطيله أو تجاوز حدود الاستخدام.\u003c/li>\u003cli>انتحال شخصية أو جهة.\u003c/li>\u003cli>جمع بيانات الموقع آليًا بشكل مفرط أو إعادة نشرها دون إذن.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. المحتوى الذي تنشره\u003c/h2>\u003cp>تبقى حقوق المحتوى الذي تضيفه لك. وبنشره تمنحنا ترخيصًا غير حصري ومجانيًّا لعرضه وتخزينه وتهيئته للعرض في الموقع وفي نتائج محركات البحث ما دام منشورًا. وتقرّ بأن لك حق نشره.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. إخلاء المسؤولية وحدودها\u003c/h2>\u003cp>تُقدَّم الخدمة «كما هي» دون ضمانات من أي نوع. وفي الحدود التي يسمح بها القانون لا نتحمّل مسؤولية عن خسائر غير مباشرة أو تبعية أو عن تعاملك مع الأنشطة المدرجة. لا يستبعد هذا النص أي مسؤولية لا يجوز استبعادها نظامًا.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. إنهاء الاستخدام\u003c/h2>\u003cp>يمكنك حذف حسابك في أي وقت من صفحة «حسابي». وللموقع إيقاف الخدمة أو تعديلها.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. القانون المطبّق\u003c/h2>\u003cp>تخضع هذه الشروط لقوانين دولة قطر، وتختص محاكمها بالنظر في أي نزاع ينشأ عنها.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. التغييرات والتواصل\u003c/h2>\u003cp>قد نعدّل هذه الشروط، واستمرارك في الاستخدام بعد التعديل يعني قبولك. للاستفسار: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}},"en":{"privacy":{"title":"Privacy Policy","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Privacy Policy\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Privacy Policy\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Who we are\u003c/h2>\u003cp>This website is operated by “Qatar Guide (demo)” (“we”). It is a directory of businesses and services in the State of Qatar. Privacy contact: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. Data we collect\u003c/h2>\u003cul>\u003cli>\u003cstrong>Account data:\u003c/strong> name, e-mail and password. We never store the password itself, only a salted cryptographic hash that we cannot read.\u003c/li>\u003cli>\u003cstrong>Listings you submit:\u003c/strong> business name, category, city, area, description and phone number.\u003c/li>\u003cli>\u003cstrong>Reviews:\u003c/strong> the star rating and comment you write, displayed with your name.\u003c/li>\u003cli>\u003cstrong>Consent record:\u003c/strong> when you accepted the Terms and Privacy Policy and which version of the text.\u003c/li>\u003cli>\u003cstrong>E-mail confirmation:\u003c/strong> we send a confirmation link to your address and store only the token’s hash (deleted once used or after 24 hours), and we record when you confirmed it.\u003c/li>\u003cli>\u003cstrong>Password-reset token:\u003c/strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.\u003c/li>\u003cli>\u003cstrong>Technical data:\u003c/strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>3. Why we use your data\u003c/h2>\u003cul>\u003cli>To create, secure and sign you in to your account, to confirm that the e-mail address is yours and to prevent abuse.\u003c/li>\u003cli>To publish listings and reviews after moderation, run the site and prevent abuse.\u003c/li>\u003cli>To make published listings and reviews discoverable in search engines.\u003c/li>\u003c/ul>\u003cp>Our basis is your consent at sign-up and providing the service you requested. We do not use your data for advertising and we do not sell it.\u003c/p>\u003c/section>\u003csection>\u003ch2>4. What is public\u003c/h2>\u003cp>Once a listing is approved, its name, description, area and phone number are visible to everyone, and reviews appear with the name you registered. Search engines may index these pages. Do not put personal information you do not want published in a listing or review.\u003c/p>\u003c/section>\u003csection>\u003ch2>5. Cookies\u003c/h2>\u003cp>We use one strictly necessary cookie, \u003ccode>sid\u003c/code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie.\u003c/p>\u003c/section>\u003csection>\u003ch2>6. Sharing\u003c/h2>\u003cp>We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.\u003c/p>\u003cp>We use an e-mail delivery provider only to send account e-mails (e-mail confirmation, password reset and notices when they change). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.\u003c/p>\u003cp>The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply.\u003c/p>\u003c/section>\u003csection>\u003ch2>7. Retention\u003c/h2>\u003cp>We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Accounts whose e-mail was never confirmed and that own no content are deleted automatically after 7 days. Backup copies may remain for a limited time until replaced in the normal backup cycle.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Your rights\u003c/h2>\u003cp>Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:\u003c/p>\u003cul>\u003cli>\u003cstrong>Download your data\u003c/strong> and delete your account directly from the “My account” page.\u003c/li>\u003cli>Ask us to correct data or exercise any other right at \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/li>\u003cli>Complain to the competent authority in the State of Qatar if you believe your data was handled unlawfully.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>9. Security\u003c/h2>\u003cp>We apply reasonable measures: password hashing, protected sessions, login rate limiting and encrypted connections. No system is perfectly secure, and keeping your password confidential is your responsibility.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Children\u003c/h2>\u003cp>The site is not directed to anyone under 18 and we do not knowingly collect their data. If we learn of an account held by a minor we delete it.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes\u003c/h2>\u003cp>We may update this policy; the last-updated date appears below. For material changes we will notify you by suitable means.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"},"terms":{"title":"Terms of Use","html":"\u003cdiv class=\"container\">\u003cnav class=\"crumbs\" aria-label=\"breadcrumb\">\u003ca href=\"/en\">Qatar Guide\u003c/a> › \u003cspan>Terms of Use\u003c/span>\u003c/nav>\u003carticle class=\"legal\">\u003ch1>Terms of Use\u003c/h1>\u003cp class=\"meta\">Last updated: 2026-10-13\u003c/p>\u003csection>\u003ch2>1. Acceptance\u003c/h2>\u003cp>By using the site or creating an account you agree to these Terms and to the Privacy Policy. If you do not agree, do not use the site.\u003c/p>\u003c/section>\u003csection>\u003ch2>2. The service\u003c/h2>\u003cp>The site is an information directory showing businesses and services submitted by users. We are not a party to any agreement or dealing between you and any business, and we do not guarantee the accuracy of information or the quality or availability of services. Do your own checks before dealing with anyone.\u003c/p>\u003c/section>\u003csection>\u003ch2>3. Accounts\u003c/h2>\u003cul>\u003cli>You must be 18 or older and provide accurate information.\u003c/li>\u003cli>You are responsible for keeping your password confidential and for everything done through your account.\u003c/li>\u003cli>We may suspend or close an account that breaches these Terms.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>4. Listing a business\u003c/h2>\u003cul>\u003cli>Only list a business you own or are authorised to represent, with accurate, non-misleading information and its own Qatar phone number.\u003c/li>\u003cli>Listings of businesses, goods or services that break the laws of the State of Qatar or public morals are prohibited.\u003c/li>\u003cli>Listings are subject to our review; we may approve, reject, edit or remove them at any time without giving reasons.\u003c/li>\u003cli>The “Verified” badge means we checked some information. It is not a guarantee or endorsement.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>5. Reviews\u003c/h2>\u003cul>\u003cli>Write a review only about a genuine experience. Fake, paid, self-reviews or reviews of competitors meant to harm them are prohibited.\u003c/li>\u003cli>One review per business per user; you may edit or delete yours.\u003c/li>\u003cli>Comments must not contain abuse, defamation, incitement, other people’s personal data, advertising or spam links.\u003c/li>\u003cli>We may remove any review that breaches these rules.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>6. Prohibited conduct\u003c/h2>\u003cul>\u003cli>Attempting to hack, disrupt or bypass the limits of the site.\u003c/li>\u003cli>Impersonating a person or organisation.\u003c/li>\u003cli>Excessive automated scraping or republishing the site’s data without permission.\u003c/li>\u003c/ul>\u003c/section>\u003csection>\u003ch2>7. Content you post\u003c/h2>\u003cp>You keep the rights to content you post. By posting it you grant us a non-exclusive, free licence to display, store and format it on the site and in search-engine results while it is published. You confirm you have the right to post it.\u003c/p>\u003c/section>\u003csection>\u003ch2>8. Disclaimer and liability\u003c/h2>\u003cp>The service is provided “as is” without warranties of any kind. To the extent permitted by law we are not liable for indirect or consequential losses or for your dealings with listed businesses. Nothing here excludes liability that cannot lawfully be excluded.\u003c/p>\u003c/section>\u003csection>\u003ch2>9. Ending use\u003c/h2>\u003cp>You can delete your account at any time from the “My account” page. We may change or discontinue the service.\u003c/p>\u003c/section>\u003csection>\u003ch2>10. Governing law\u003c/h2>\u003cp>These Terms are governed by the laws of the State of Qatar and its courts have jurisdiction over any dispute arising from them.\u003c/p>\u003c/section>\u003csection>\u003ch2>11. Changes and contact\u003c/h2>\u003cp>We may amend these Terms; continuing to use the site after a change means you accept it. Questions: \u003ca class=\"link\" href=\"mailto:demo@example.com\">demo@example.com\u003c/a>.\u003c/p>\u003c/section>\u003c/article>\u003c/div>"}}};
 ;
 /* In-browser stand-in for the Node API, used only by the single-file demo (scripts/build-demo.js).
    Same endpoints and rules as server/server.js, minus rate limiting. Data lives in this browser only. */
@@ -268,8 +271,12 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     try { var raw = localStorage.getItem(KEY); if (raw) { S = JSON.parse(raw); return; } } catch (e) {}
     S = memory || seed();
   }
+  function normalise() {
+    S.verifs = S.verifs || [];
+    S.users.forEach(function (u) { if (!("verified" in u)) u.verified = u.accepted || new Date().toISOString(); }); // saved before verification existed
+  }
   function save() { memory = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
-  var ready = load(), adminReady = null;
+  var ready = (load(), normalise()), adminReady = null;
 
   function ensureAdmin() {
     if (adminReady) return adminReady;
@@ -277,7 +284,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       if (S.users.some(function (u) { return u.role === "admin"; })) return;
       var salt = rnd(8);
       return hash(ADMIN.password, salt).then(function (h) {
-        S.users.push({ id: S.seq.u++, email: ADMIN.email, name: "Admin", role: "admin", salt: salt, hash: h, accepted: new Date().toISOString() }); save();
+        S.users.push({ id: S.seq.u++, email: ADMIN.email, name: "Admin", role: "admin", salt: salt, hash: h, accepted: new Date().toISOString(), verified: new Date().toISOString() }); save();
       });
     });
     return adminReady;
@@ -295,24 +302,34 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
   }
   function byRating(a, b) { return b.rating - a.rating || b.reviews - a.reviews || a.id - b.id; }
   function me() { return S.me ? S.users.filter(function (u) { return u.id === S.me; })[0] || null : null; }
-  function pub(u) { return u ? { id: u.id, email: u.email, name: u.name, role: u.role } : null; }
+  function pub(u) { return u ? { id: u.id, email: u.email, name: u.name, role: u.role, verified: !!u.verified } : null; }
+  function gated(u) { return !u.verified; }
   function str(v, n) { return typeof v === "string" ? v.trim().slice(0, n) : ""; }
   function R(status, json) { return { status: status, json: json }; }
-  function mail(to, lang, kind, name, link) {
-    var ar = lang !== "en", brand = ar ? "دليل قطر" : "Qatar Guide";
-    var m = kind === "reset"
-      ? { subject: ar ? "استعادة كلمة المرور – " + brand : "Reset your password – " + brand,
-          text: ar ? "مرحبًا " + name + "،\nافتح الرابط لاختيار كلمة مرور جديدة (صالح ساعة، مرة واحدة)." : "Hello " + name + ",\nOpen the link to choose a new password (valid for one hour, works once).", link: link }
-      : { subject: ar ? "تم تغيير كلمة مرورك – " + brand : "Your password was changed – " + brand,
-          text: ar ? "مرحبًا " + name + "،\nتم للتو تغيير كلمة مرور حسابك وتسجيل الخروج من الأجهزة الأخرى." : "Hello " + name + ",\nYour account password was just changed and other devices were signed out." };
+  function mail(to, lang, kind, name, link, extra) {
+    var ar = lang !== "en", brand = ar ? "دليل قطر" : "Qatar Guide", m;
+    if (kind === "reset") m = { subject: ar ? "استعادة كلمة المرور – " + brand : "Reset your password – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nافتح الرابط لاختيار كلمة مرور جديدة (صالح ساعة، مرة واحدة)." : "Hello " + name + ",\nOpen the link to choose a new password (valid for one hour, works once).", link: link };
+    else if (kind === "verify") m = { subject: ar ? "فعّل بريدك الإلكتروني – " + brand : "Confirm your e-mail – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nأكّد أن هذا البريد لك بفتح الرابط (صالح 24 ساعة)." : "Hello " + name + ",\nConfirm this e-mail address is yours by opening the link (valid for 24 hours).", link: link };
+    else if (kind === "emailchanged") m = { subject: ar ? "تم تغيير بريد حسابك – " + brand : "Your account e-mail was changed – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nتم تغيير بريد حسابك إلى " + extra + ". إن لم تكن أنت فتواصل معنا فورًا." : "Hello " + name + ",\nYour account e-mail was changed to " + extra + ". If this was not you, contact us immediately." };
+    else m = { subject: ar ? "تم تغيير كلمة مرورك – " + brand : "Your password was changed – " + brand,
+      text: ar ? "مرحبًا " + name + "،\nتم للتو تغيير كلمة مرور حسابك وتسجيل الخروج من الأجهزة الأخرى." : "Hello " + name + ",\nYour account password was just changed and other devices were signed out." };
     m.to = to; m.at = new Date().toISOString(); S.mails.unshift(m); S.mails = S.mails.slice(0, 20);
     window.dispatchEvent(new CustomEvent("demo-mail"));
+  }
+  function issueVerif(u, lang) {
+    var token = rnd(32);
+    S.verifs = S.verifs.filter(function (v) { return v.user_id !== u.id; });
+    S.verifs.push({ token: token, user_id: u.id, email: u.email, expires: Date.now() + 86400000 });
+    mail(u.email, lang, "verify", u.name, (lang === "en" ? "/en" : "") + "/verify?token=" + token);
   }
 
   function handle(method, path, query, body) {
     var u = me(), m;
     if (method === "GET" && path === "/api/health") return R(200, { ok: true });
-    if (method === "GET" && path === "/api/me") return R(200, { user: pub(u), features: { passwordReset: true } });
+    if (method === "GET" && path === "/api/me") return R(200, { user: pub(u), features: { passwordReset: true, emailVerification: true } });
 
     if (method === "POST" && path === "/api/register") {
       var email = str(body.email, 120).toLowerCase(), name = str(body.name, 60), pw = typeof body.password === "string" ? body.password : "";
@@ -323,8 +340,8 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       if (S.users.some(function (x) { return x.email === email; })) return R(409, { error: "email_taken" });
       var salt = rnd(8);
       return hash(pw, salt).then(function (h) {
-        var nu = { id: S.seq.u++, email: email, name: name, role: "user", salt: salt, hash: h, accepted: new Date().toISOString() };
-        S.users.push(nu); S.me = nu.id; save(); return R(201, { user: pub(nu) });
+        var nu = { id: S.seq.u++, email: email, name: name, role: "user", salt: salt, hash: h, accepted: new Date().toISOString(), verified: null };
+        S.users.push(nu); S.me = nu.id; issueVerif(nu, body.lang === "en" ? "en" : "ar"); save(); return R(201, { user: pub(nu) });
       });
     }
     if (method === "POST" && path === "/api/login") {
@@ -336,6 +353,34 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       });
     }
     if (method === "POST" && path === "/api/logout") { S.me = null; save(); return R(200, { ok: true }); }
+
+    if (method === "POST" && path === "/api/verify") {
+      var vt = typeof body.token === "string" ? body.token : "";
+      var vr = S.verifs.filter(function (v) { return v.token === vt; })[0], vu = vr && S.users.filter(function (x) { return x.id === vr.user_id; })[0];
+      if (!vr || vr.expires < Date.now() || !vu || vu.email !== vr.email) return R(400, { error: "invalid_token" });
+      vu.verified = vu.verified || new Date().toISOString(); S.verifs = S.verifs.filter(function (v) { return v.user_id !== vu.id; }); save();
+      return R(200, { ok: true });
+    }
+    if (method === "POST" && path === "/api/verify/resend") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.verified) return R(200, { ok: true, already: true });
+      issueVerif(u, body.lang === "en" ? "en" : "ar"); save(); return R(200, { ok: true });
+    }
+    if (method === "POST" && path === "/api/me/email") {
+      if (!u) return R(401, { error: "auth_required" });
+      if (u.role === "admin") return R(403, { error: "admin_use_env" });
+      return hash(typeof body.password === "string" ? body.password : "", u.salt).then(function (h) {
+        if (h !== u.hash) return R(401, { error: "bad_credentials" });
+        var ne = str(body.email, 120).toLowerCase(), lg = body.lang === "en" ? "en" : "ar";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ne)) return R(400, { error: "invalid_email" });
+        if (ne === u.email) return R(400, { error: "same_email" });
+        if (S.users.some(function (x) { return x.email === ne; })) return R(409, { error: "email_taken" });
+        var old = u.email; u.email = ne; u.verified = null;
+        S.resets = S.resets.filter(function (r) { return r.user_id !== u.id; });
+        mail(old, lg, "emailchanged", u.name, null, ne); issueVerif(u, lg); save();
+        return R(200, { user: pub(u) });
+      });
+    }
 
     if (method === "POST" && path === "/api/forgot") {
       var fe = str(body.email, 120).toLowerCase(), fl = body.lang === "en" ? "en" : "ar";
@@ -356,7 +401,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       if (np.length < 8 || np.length > 128) return R(400, { error: "weak_password" });
       var tu = S.users.filter(function (x) { return x.id === rr.user_id; })[0], s2 = rnd(8);
       return hash(np, s2).then(function (h) {
-        tu.salt = s2; tu.hash = h; S.resets = S.resets.filter(function (r) { return r.user_id !== tu.id; });
+        tu.salt = s2; tu.hash = h; tu.verified = tu.verified || new Date().toISOString(); S.resets = S.resets.filter(function (r) { return r.user_id !== tu.id; });
         if (S.me === tu.id) S.me = null; // signed out everywhere
         mail(tu.email, body.lang === "en" ? "en" : "ar", "changed", tu.name); save(); return R(200, { ok: true });
       });
@@ -376,7 +421,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     if (method === "GET" && path === "/api/me/export") {
       if (!u) return R(401, { error: "auth_required" });
       return R(200, { exported_at: new Date().toISOString(),
-        profile: { id: u.id, email: u.email, name: u.name, role: u.role, terms_accepted_at: u.accepted },
+        profile: { id: u.id, email: u.email, name: u.name, role: u.role, email_verified_at: u.verified, terms_accepted_at: u.accepted },
         businesses: S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return { id: b.id, cat: b.cat, city: b.city, name_ar: b.name.ar, phone: b.phone, status: b.status, verified: b.verified }; }),
         reviews: S.reviews.filter(function (r) { return r.user_id === u.id; }).map(function (r) { return { business_id: r.business_id, rating: r.rating, comment: r.comment }; }) });
     }
@@ -388,7 +433,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
         var mine = S.businesses.filter(function (b) { return b.owner_id === u.id; }).map(function (b) { return b.id; });
         S.businesses = S.businesses.filter(function (b) { return b.owner_id !== u.id; });
         S.reviews = S.reviews.filter(function (r) { return r.user_id !== u.id && mine.indexOf(r.business_id) < 0; });
-        S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
+        S.users = S.users.filter(function (x) { return x.id !== u.id; }); S.verifs = S.verifs.filter(function (v) { return v.user_id !== u.id; }); S.me = null; save(); return R(200, { ok: true });
       });
     }
 
@@ -399,6 +444,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     }
     if (method === "POST" && path === "/api/businesses") {
       if (!u) return R(401, { error: "auth_required" });
+      if (gated(u)) return R(403, { error: "email_unverified" });
       var nameAr = str(body.name_ar, 80), nameEn = str(body.name_en, 80) || nameAr, desc = str(body.desc, 300), area = str(body.area, 80), phone = str(body.phone, 8).replace(/\s/g, "");
       if (!nameAr) return R(400, { error: "invalid_name" });
       if (CATS.indexOf(body.cat) < 0) return R(400, { error: "invalid_category" });
@@ -420,6 +466,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       }
       if (method === "POST") {
         if (!u) return R(401, { error: "auth_required" });
+        if (gated(u)) return R(403, { error: "email_unverified" });
         if (biz.owner_id === u.id) return R(403, { error: "own_business" });
         var rating = Number(body.rating);
         if (!Number.isInteger(rating) || rating < 1 || rating > 5) return R(400, { error: "invalid_rating" });
@@ -534,7 +581,8 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     box.innerHTML = "<p>" + T("هذه نسخة تجريبية كاملة من المنصة تعمل داخل المتصفح. البيانات محفوظة في متصفحك أنت فقط ولا يراها أحد غيرك.", "This is a full demo of the platform running inside your browser. Data stays in your browser only; nobody else sees it.") + "</p>" +
       "<ol>" +
       "<li>" + T("تصفّح التصنيفات وافتح نشاطًا وجرّب البحث وتبديل اللغة.", "Browse categories, open a business, try search and the language switch.") + "</li>" +
-      "<li>" + T("أنشئ حسابًا (يلزم قبول الشروط) ثم أضف نشاطًا: يبقى «قيد المراجعة».", "Create an account (terms acceptance required) and add a business: it stays pending.") + "</li>" +
+      "<li>" + T("أنشئ حسابًا (يلزم قبول الشروط). ستصلك رسالة تفعيل في «البريد التجريبي» أسفل الشاشة: افتح رابطها لتفعيل بريدك.", "Create an account (terms acceptance required). A confirmation message lands in the demo mailbox below: open its link to confirm your e-mail.") + "</li>" +
+      "<li>" + T("أضف نشاطًا: يبقى «قيد المراجعة». (قبل التفعيل لا يمكنك الإضافة ولا التقييم.)", "Add a business: it stays pending. (Before confirming you cannot add or rate.)") + "</li>" +
       "<li>" + T("سجّل الخروج وادخل كأدمن لقبوله، ثم قيّم نشاطًا من حساب آخر.", "Log out and sign in as admin to approve it, then rate a business from another account.") + "</li>" +
       "<li>" + T("جرّب «نسيت كلمة المرور؟» ثم افتح «البريد التجريبي» أسفل الشاشة لتجد الرسالة.", "Try “Forgot your password?”, then open the demo mailbox below to find the message.") + "</li></ol>";
     var cred = el("div", "demo-cred");
@@ -611,6 +659,14 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
 
   var T = {
     ar: {
+      verify_banner: "فعّل بريدك الإلكتروني لتتمكن من إضافة الأنشطة والتقييمات. أرسلنا رابط التفعيل إلى {email}.", verify_resend: "إعادة إرسال الرابط",
+      verify_sent: "أُرسل رابط جديد. تحقق من بريدك ومن مجلد المزعج.", verify_need: "فعّل بريدك الإلكتروني أولًا بفتح الرابط الذي أرسلناه إليك.",
+      verify_working: "جارٍ تفعيل بريدك الإلكتروني…", verify_ok: "تم تفعيل بريدك الإلكتروني. يمكنك الآن إضافة الأنشطة والتقييمات.",
+      verify_fail: "رابط التفعيل غير صالح أو انتهت صلاحيته.", verify_go: "إلى حسابي", verify_login: "سجّل الدخول لطلب رابط جديد.",
+      chem_title: "تغيير البريد الإلكتروني", chem_hint: "أخطأت في كتابة بريدك؟ غيّره هنا وسنرسل رابط تفعيل إلى العنوان الجديد.", chem_new: "البريد الجديد",
+      chem_pw: "كلمة المرور الحالية", chem_save: "تغيير البريد", chem_done: "تم تغيير البريد. أرسلنا رابط تفعيل إلى العنوان الجديد.",
+      acct_email: "البريد", ev_on: "مفعّل", ev_off: "غير مفعّل",
+      e_email_unverified: "فعّل بريدك الإلكتروني أولًا (راجع بريدك).", e_same_email: "هذا هو بريدك الحالي.",
       forgot_link: "نسيت كلمة المرور؟", forgot_title: "استعادة كلمة المرور", forgot_sub: "أدخل بريدك وسنرسل لك رابطًا لاختيار كلمة مرور جديدة.",
       forgot_send: "إرسال الرابط", forgot_done: "إن كان هذا البريد مسجّلًا لدينا فقد أرسلنا إليه رابط الاستعادة (صالح ساعة واحدة). تحقق من صندوق الوارد والبريد المزعج.",
       forgot_off: "استعادة كلمة المرور غير مفعّلة حاليًا. تواصل معنا عبر بريد الموقع.", reset_title: "اختر كلمة مرور جديدة", reset_new: "كلمة المرور الجديدة (8 أحرف على الأقل)",
@@ -654,6 +710,14 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       e_invalid_rating: "اختر تقييمًا من 1 إلى 5.", e_own_business: "لا يمكنك تقييم نشاطك الخاص.", e_forbidden: "غير مسموح.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
+      verify_banner: "Confirm your e-mail to add businesses and reviews. We sent the activation link to {email}.", verify_resend: "Resend the link",
+      verify_sent: "A new link was sent. Check your inbox and spam folder.", verify_need: "Confirm your e-mail first by opening the link we sent you.",
+      verify_working: "Confirming your e-mail…", verify_ok: "Your e-mail is confirmed. You can now add businesses and reviews.",
+      verify_fail: "This confirmation link is invalid or has expired.", verify_go: "Go to my account", verify_login: "Log in to request a new link.",
+      chem_title: "Change e-mail", chem_hint: "Mistyped your e-mail? Change it here and we will send an activation link to the new address.", chem_new: "New e-mail",
+      chem_pw: "Current password", chem_save: "Change e-mail", chem_done: "E-mail changed. We sent an activation link to the new address.",
+      acct_email: "E-mail", ev_on: "confirmed", ev_off: "not confirmed",
+      e_email_unverified: "Confirm your e-mail first (check your inbox).", e_same_email: "That is already your e-mail.",
       forgot_link: "Forgot your password?", forgot_title: "Reset your password", forgot_sub: "Enter your e-mail and we will send you a link to choose a new password.",
       forgot_send: "Send link", forgot_done: "If this e-mail is registered with us, a reset link was sent (valid for one hour). Check your inbox and spam folder.",
       forgot_off: "Password reset is not enabled right now. Please contact us at the site's e-mail.", reset_title: "Choose a new password", reset_new: "New password (min 8 characters)",
@@ -711,7 +775,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     });
   }
 
-  var state = { user: null, businesses: [], features: { passwordReset: false }, resetToken: "" };
+  var state = { user: null, businesses: [], features: { passwordReset: false, emailVerification: false }, resetToken: "", verifyToken: "", flash: "" };
 
   function api(method, url, body) {
     return fetch(url, {
@@ -841,6 +905,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
 
   function viewAdd() {
     if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="' + link("/login") + '">' + t("login") + "</a></div></div>";
+    if (needsVerify()) return '<div class="container"><div class="form">' + verifyPrompt() + "</div></div>";
     return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
       "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
       "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
@@ -869,6 +934,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     var mine = reviews.filter(function (r) { return r.mine; })[0];
     var form;
     if (!state.user) form = '<p class="meta">' + t("rev_login") + ' <a class="link" href="' + link("/login") + '">' + t("login") + "</a></p>";
+    else if (needsVerify()) form = '<div class="form">' + verifyPrompt() + "</div>";
     else form = '<form class="form" id="reviewForm" data-biz="' + esc(b.id) + '" novalidate><h3>' + t("rev_write") + "</h3>" +
       (mine ? '<p class="meta">' + t("rev_update_hint") + "</p>" : "") +
       "<label>" + t("rev_rating") + '<select name="rating">' + [5, 4, 3, 2, 1].map(function (n) {
@@ -898,6 +964,23 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="' + link(reg ? "/login" : "/register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
   }
 
+  function needsVerify() { return !!(state.user && state.features.emailVerification && !state.user.verified); }
+  function resendBtn(cls) { return '<button class="btn ' + (cls || "ghost") + '" type="button" data-resend>' + t("verify_resend") + "</button>"; }
+  function verifyPrompt() { return "<p>" + t("verify_need") + "</p>" + resendBtn("") + ' <span class="meta" data-resend-msg></span>'; }
+  function banner(path) {
+    var out = "";
+    if (state.flash) { out += '<div class="banner flash" role="status">' + esc(state.flash) + "</div>"; state.flash = ""; }
+    if (needsVerify() && path !== "/verify") {
+      out += '<div class="banner" role="status"><span>' + t("verify_banner").replace("{email}", '<strong dir="ltr">' + esc(state.user.email) + "</strong>") + "</span> " +
+        resendBtn() + ' <span class="meta" data-resend-msg></span></div>';
+    }
+    return out;
+  }
+
+  function viewVerify() {
+    return '<div class="container"><div class="form narrow" id="verifyBox"><p id="verifyMsg" role="status">' + t("verify_working") + "</p></div></div>";
+  }
+
   function viewForgot() {
     if (!state.features.passwordReset) return '<div class="container"><div class="form narrow"><p>' + t("forgot_off") + "</p></div></div>";
     return '<div class="container"><form class="form narrow" id="forgotForm" novalidate><h2>' + t("forgot_title") + '</h2><p class="meta">' + t("forgot_sub") + "</p>" +
@@ -919,7 +1002,13 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
       '<p><a class="btn" href="' + link("/add") + '">+ ' + t("nav_add") + "</a></p></section>" +
       '<section class="block"><h2>' + t("acct_title") + "</h2>" +
+      (state.user ? '<p class="meta">' + t("acct_email") + ': <strong dir="ltr">' + esc(state.user.email) + "</strong> · " +
+        (state.features.emailVerification ? (state.user.verified ? t("ev_on") : t("ev_off")) : "") + "</p>" : "") +
       '<p><a class="btn ghost" href="/api/me/export">' + t("acct_export") + "</a></p>" +
+      (state.user && state.user.role !== "admin" ? '<form class="form" id="chemForm" novalidate><h3>' + t("chem_title") + '</h3><p class="meta">' + t("chem_hint") + "</p>" +
+        "<label>" + t("chem_new") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
+        "<label>" + t("chem_pw") + '<input name="password" type="password" dir="ltr" autocomplete="current-password" required></label>' +
+        '<div id="chemMsg" role="status"></div><button class="btn" type="submit">' + t("chem_save") + "</button></form>" : "") +
       (state.user && state.user.role !== "admin" ? '<form class="form" id="chpwForm" novalidate><h3>' + t("chpw_title") + "</h3>" +
         "<label>" + t("chpw_current") + '<input name="current" type="password" dir="ltr" autocomplete="current-password" required></label>' +
         "<label>" + t("chpw_new") + '<input name="next" type="password" dir="ltr" minlength="8" autocomplete="new-password" required></label>' +
@@ -978,7 +1067,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
     var r = parseLocation();
     renderUserNav();
 
-    var altPath = (lang === "ar" ? "/en" : "") + r.path + (r.path === "/reset" ? "" : __vl.search); // never copy the reset token into a link
+    var altPath = (lang === "ar" ? "/en" : "") + r.path + (r.path === "/reset" || r.path === "/verify" ? "" : __vl.search); // never copy a one-time token into a link
     if (r.path === "/privacy" || r.path === "/terms") {
       var L0 = window.__LEGAL[lang][r.path.slice(1)];
       document.getElementById("app").innerHTML = L0.html; setHead(L0.title + " | " + t("brand"), L0.title, "index,follow");
@@ -1018,6 +1107,10 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
         if (bz) { var bc = find(window.CATEGORIES, bz.cat), bcity = find(window.CITIES, bz.city);
           head = [L(bz.name) + " – " + (bc ? L(bc) : "") + " " + (lang === "ar" ? "في" : "in") + " " + (bcity ? L(bcity) : "") + " | " + t("brand"), L(bz.desc), "index,follow"]; }
         else head = [t("not_found"), t("not_found"), "noindex,follow"];
+      } else if (r.path === "/verify") {
+        // keep the token in memory only and remove it from the address bar / history
+        if (r.params.token) { state.verifyToken = r.params.token; __vl.replaceState(null, "", __vl.pathname); }
+        html = viewVerify(); head = [t("brand"), t("home_desc"), "noindex,nofollow"];
       } else if (r.path === "/forgot") { html = viewForgot(); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
       else if (r.path === "/reset") {
         // keep the token in memory only and remove it from the address bar / history
@@ -1030,7 +1123,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       else if (r.path === "/admin") { html = state.user && state.user.role === "admin" ? viewAdmin(data.businesses, r.params.status || "pending") : viewAuth("login"); head = [t("brand"), t("home_desc"), "noindex,nofollow"]; }
       else if (r.path === "/") html = viewHome();
       else { html = '<div class="container"><p class="empty">' + t("not_found") + '</p><a class="btn" href="' + link("/") + '">' + t("nav_home") + "</a></div>"; head = [t("not_found"), t("not_found"), "noindex,follow"]; }
-      app.innerHTML = html;
+      app.innerHTML = banner(r.path) + html;
       setHead(head[0], head[1], head[2]);
       document.querySelectorAll("[data-nav]").forEach(function (a) {
         a.classList.toggle("active", a.getAttribute("href") === link(r.path));
@@ -1041,6 +1134,43 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       if (seq !== renderSeq) return;
       app.innerHTML = '<div class="container"><p class="empty">' + (e && e.code === "auth_required" ? t("e_auth_required") : t("load_err")) + "</p></div>";
     });
+  }
+
+  function bindResend() {
+    document.querySelectorAll("[data-resend]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var note = btn.parentNode.querySelector("[data-resend-msg]");
+        btn.disabled = true;
+        api("POST", "/api/verify/resend", { lang: lang }).then(function (j) {
+          if (j.already) { state.user.verified = true; render(); return; }
+          if (note) { note.className = "meta"; note.textContent = t("verify_sent"); }
+        }).catch(function (err) {
+          btn.disabled = false;
+          if (note) { note.className = "error"; note.textContent = errMsg(err); }
+        });
+      });
+    });
+  }
+
+  function runVerify(box) {
+    var msg = document.getElementById("verifyMsg"), token = state.verifyToken;
+    function ok() {
+      state.verifiedOnce = true;
+      msg.className = "notice"; msg.textContent = t("verify_ok");
+      box.insertAdjacentHTML("beforeend", '<p><a class="btn" href="' + link("/mine") + '">' + t("verify_go") + "</a></p>");
+    }
+    function fail() {
+      msg.className = "error"; msg.textContent = t("verify_fail");
+      box.insertAdjacentHTML("beforeend", state.user ? '<p>' + resendBtn() + ' <span class="meta" data-resend-msg></span></p>'
+        : '<p class="meta">' + t("verify_login") + ' <a class="link" href="' + link("/login") + '">' + t("login") + "</a></p>");
+      bindResend();
+    }
+    if (!token) { if (state.verifiedOnce || (state.user && state.user.verified)) ok(); else fail(); return; }
+    state.verifyToken = ""; // consumed: the page can be re-rendered (language switch) without re-submitting
+    api("POST", "/api/verify", { token: token })
+      .then(function () { return api("GET", "/api/me"); })
+      .then(function (j) { state.user = j.user; renderUserNav(); ok(); })
+      .catch(fail);
   }
 
   function showMsg(ok, text) {
@@ -1059,7 +1189,7 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
       e.preventDefault();
       var d = new FormData(au), mode = au.getAttribute("data-mode");
       var body = { email: d.get("email"), password: d.get("password") };
-      if (mode === "register") { body.name = d.get("name"); body.accept = d.get("accept") === "on"; }
+      if (mode === "register") { body.name = d.get("name"); body.accept = d.get("accept") === "on"; body.lang = lang; }
       api("POST", mode === "register" ? "/api/register" : "/api/login", body).then(function (j) {
         state.user = j.user; navigate(link("/mine"));
       }).catch(function (err) { showMsg(false, errMsg(err)); });
@@ -1076,6 +1206,17 @@ window.__LEGAL = {"ar":{"privacy":{"title":"سياسة الخصوصية","html":
         .catch(function (err) { showMsg(false, errMsg(err)); });
     });
 
+    bindResend();
+    var vb = document.getElementById("verifyBox");
+    if (vb) runVerify(vb);
+    var chem = document.getElementById("chemForm");
+    if (chem) chem.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(chem), box = document.getElementById("chemMsg");
+      api("POST", "/api/me/email", { email: d.get("email"), password: d.get("password"), lang: lang })
+        .then(function (j) { state.user = j.user; state.flash = t("chem_done"); render(); })
+        .catch(function (err) { box.className = "error"; box.textContent = errMsg(err); });
+    });
     var ff = document.getElementById("forgotForm");
     if (ff) ff.addEventListener("submit", function (e) {
       e.preventDefault();

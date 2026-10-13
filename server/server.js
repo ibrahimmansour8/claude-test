@@ -7,12 +7,13 @@ const zlib = require("node:zlib");
 const { openDb, seedIfEmpty, loadSeedData } = require("./db");
 const { createSeo } = require("./seo");
 const { LEGAL_VERSION } = require("./legal");
-const { createMailer, resetEmail, changedEmail } = require("./mailer");
+const { createMailer, resetEmail, changedEmail, verifyEmail, emailChangedNotice } = require("./mailer");
 
 const SITE_DIR = path.join(__dirname, "..", "site");
 const SESSION_TTL_MS = 7 * 24 * 3600 * 1000;
 const MAX_BODY = 20 * 1024;
 const RESET_TTL_MS = 60 * 60 * 1000;
+const VERIFY_TTL_MS = 24 * 60 * 60 * 1000;
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon" };
 
 function createApp(opts = {}) {
@@ -25,6 +26,8 @@ function createApp(opts = {}) {
 
   const mailer = opts.mailer || createMailer();
   if (mailer.name === "none") console.warn("WARNING: e-mail is not configured - password reset is disabled (set EMAIL_PROVIDER, RESEND_API_KEY, EMAIL_FROM).");
+  // E-mail verification needs a working mailer; REQUIRE_VERIFIED_EMAIL=0 switches it off explicitly.
+  const verifyOn = (opts.requireVerifiedEmail ?? process.env.REQUIRE_VERIFIED_EMAIL !== "0") && mailer.name !== "none";
   const hsts = secureCookie ? { "Strict-Transport-Security": "max-age=31536000" } : {};
 
   // ---------- helpers ----------
@@ -33,8 +36,9 @@ function createApp(opts = {}) {
 
   function createUser(email, name, password, role = "user", accepted = false) {
     const salt = crypto.randomBytes(16).toString("hex");
-    const r = db.prepare("INSERT INTO users (email,name,pass_hash,salt,role,terms_accepted_at,terms_version) VALUES (?,?,?,?,?,?,?)")
-      .run(email, name, hashPw(password, salt), salt, role, accepted ? new Date().toISOString() : null, accepted ? LEGAL_VERSION : null);
+    const r = db.prepare("INSERT INTO users (email,name,pass_hash,salt,role,terms_accepted_at,terms_version,email_verified_at) VALUES (?,?,?,?,?,?,?,?)")
+      .run(email, name, hashPw(password, salt), salt, role, accepted ? new Date().toISOString() : null, accepted ? LEGAL_VERSION : null,
+        role === "admin" ? new Date().toISOString() : null);
     return Number(r.lastInsertRowid);
   }
 
@@ -53,7 +57,7 @@ function createApp(opts = {}) {
         db.prepare("UPDATE users SET salt=?, pass_hash=? WHERE id=?").run(salt, hashPw(adminPass, salt), row.id);
         db.prepare("DELETE FROM sessions WHERE user_id=?").run(row.id);
       }
-      db.prepare("UPDATE users SET role='admin' WHERE id=?").run(row.id);
+      db.prepare("UPDATE users SET role='admin', email_verified_at=COALESCE(email_verified_at, datetime('now')) WHERE id=?").run(row.id);
     }
   }
 
@@ -69,12 +73,38 @@ function createApp(opts = {}) {
   function currentUser(req) {
     const token = parseCookies(req).sid;
     if (!token) return null;
-    const row = db.prepare(`SELECT u.id,u.email,u.name,u.role,s.expires_at FROM sessions s
+    const row = db.prepare(`SELECT u.id,u.email,u.name,u.role,u.email_verified_at,s.expires_at FROM sessions s
       JOIN users u ON u.id=s.user_id WHERE s.token_hash=?`).get(sha(token));
     if (!row) return null;
     if (row.expires_at < Date.now()) { db.prepare("DELETE FROM sessions WHERE token_hash=?").run(sha(token)); return null; }
-    return { id: row.id, email: row.email, name: row.name, role: row.role };
+    return userOut(row);
   }
+  const userOut = (r) => ({ id: r.id, email: r.email, name: r.name, role: r.role, verified: !!r.email_verified_at });
+  const needsVerification = (u) => verifyOn && !u.verified;
+
+  // Never build the link from the Host header (poisoning): SITE_URL only, Host only outside production.
+  function issueVerification(req, u, lang) {
+    const linkBase = siteUrl || (process.env.NODE_ENV === "production" ? "" : baseUrl(req));
+    if (!linkBase) { console.error("verification e-mail skipped: set SITE_URL so links can be built safely"); return; }
+    const token = crypto.randomBytes(32).toString("hex");
+    db.prepare("DELETE FROM email_verifications WHERE user_id=? OR expires_at<?").run(u.id, Date.now());
+    db.prepare("INSERT INTO email_verifications (token_hash,user_id,email,expires_at) VALUES (?,?,?,?)").run(sha(token), u.id, u.email, Date.now() + VERIFY_TTL_MS);
+    const link = `${linkBase}${lang === "en" ? "/en" : ""}/verify?token=${token}`;
+    setImmediate(() => mailer.send({ to: u.email, ...verifyEmail(lang, { name: u.name, link, hours: VERIFY_TTL_MS / 3600000 }) })
+      .catch((e) => console.error("verification e-mail failed:", e.message)));
+  }
+
+  function cleanup() {
+    const now = Date.now();
+    db.prepare("DELETE FROM password_resets WHERE expires_at<?").run(now);
+    db.prepare("DELETE FROM email_verifications WHERE expires_at<?").run(now);
+    db.prepare("DELETE FROM sessions WHERE expires_at<?").run(now);
+    // abandoned sign-ups: never verified, a week old, and they own nothing
+    if (verifyOn) db.prepare(`DELETE FROM users WHERE role='user' AND email_verified_at IS NULL AND created_at < datetime('now','-7 days')
+      AND id NOT IN (SELECT owner_id FROM businesses WHERE owner_id IS NOT NULL) AND id NOT IN (SELECT user_id FROM reviews)`).run();
+  }
+  cleanup();
+  setInterval(() => { try { cleanup(); } catch { /* db closed during shutdown */ } }, 60 * 60 * 1000).unref();
 
   function startSession(res, userId) {
     const token = crypto.randomBytes(32).toString("hex");
@@ -149,7 +179,7 @@ function createApp(opts = {}) {
     }
     const user = currentUser(req);
 
-    if (m === "GET" && p === "/api/me") return send(res, 200, { user, features: { passwordReset: mailer.name !== "none" } });
+    if (m === "GET" && p === "/api/me") return send(res, 200, { user, features: { passwordReset: mailer.name !== "none", emailVerification: verifyOn } });
 
     if (m === "POST" && p === "/api/register") {
       if (limited(req, "reg", 10)) return send(res, 429, { error: "rate_limited" });
@@ -162,7 +192,8 @@ function createApp(opts = {}) {
       if (db.prepare("SELECT 1 FROM users WHERE email=?").get(email)) return send(res, 409, { error: "email_taken" });
       const id = createUser(email, name, password, "user", true);
       startSession(res, id);
-      return send(res, 201, { user: { id, email, name, role: "user" } });
+      if (verifyOn) issueVerification(req, { id, email, name }, b.lang === "en" ? "en" : "ar");
+      return send(res, 201, { user: { id, email, name, role: "user", verified: false } });
     }
 
     if (m === "POST" && p === "/api/login") {
@@ -175,7 +206,53 @@ function createApp(opts = {}) {
       const ok = row && crypto.timingSafeEqual(Buffer.from(candidate, "hex"), Buffer.from(row.pass_hash, "hex"));
       if (!ok) return send(res, 401, { error: "bad_credentials" });
       startSession(res, row.id);
-      return send(res, 200, { user: { id: row.id, email: row.email, name: row.name, role: row.role } });
+      return send(res, 200, { user: userOut(row) });
+    }
+
+    // ---- e-mail verification ----
+    if (m === "POST" && p === "/api/verify") {
+      if (limited(req, "verify", 10)) return send(res, 429, { error: "rate_limited" });
+      const b = await readJson(req);
+      const token = typeof b.token === "string" ? b.token : "";
+      const row = /^[0-9a-f]{64}$/.test(token)
+        ? db.prepare("SELECT v.user_id,v.email,v.expires_at,u.email AS current FROM email_verifications v JOIN users u ON u.id=v.user_id WHERE v.token_hash=?").get(sha(token)) : null;
+      // the token only counts for the address it was sent to
+      if (!row || row.expires_at < Date.now() || row.current !== row.email) return send(res, 400, { error: "invalid_token" });
+      db.prepare("UPDATE users SET email_verified_at=COALESCE(email_verified_at, datetime('now')) WHERE id=?").run(row.user_id);
+      db.prepare("DELETE FROM email_verifications WHERE user_id=?").run(row.user_id);
+      return send(res, 200, { ok: true });
+    }
+
+    if (m === "POST" && p === "/api/verify/resend") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      if (!verifyOn) return send(res, 503, { error: "email_disabled" });
+      if (user.verified) return send(res, 200, { ok: true, already: true });
+      if (limited(req, "resend", 5, 60 * 60 * 1000) || limitedKey("resend-user:" + user.id, 3, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
+      const b = await readJson(req);
+      issueVerification(req, user, b.lang === "en" ? "en" : "ar");
+      return send(res, 200, { ok: true });
+    }
+
+    // fixes a mistyped address; needs the password, resets verification, warns the old address
+    if (m === "POST" && p === "/api/me/email") {
+      if (!user) return send(res, 401, { error: "auth_required" });
+      if (user.role === "admin") return send(res, 403, { error: "admin_use_env" });
+      if (limited(req, "chem", 10)) return send(res, 429, { error: "rate_limited" });
+      const b = await readJson(req);
+      const row = db.prepare("SELECT salt, pass_hash FROM users WHERE id=?").get(user.id);
+      const given = hashPw(typeof b.password === "string" ? b.password.slice(0, 128) : "", row.salt);
+      if (!crypto.timingSafeEqual(Buffer.from(given, "hex"), Buffer.from(row.pass_hash, "hex"))) return send(res, 401, { error: "bad_credentials" });
+      const email = str(b.email, 120).toLowerCase(), lang = b.lang === "en" ? "en" : "ar";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return send(res, 400, { error: "invalid_email" });
+      if (email === user.email) return send(res, 400, { error: "same_email" });
+      if (db.prepare("SELECT 1 FROM users WHERE email=?").get(email)) return send(res, 409, { error: "email_taken" });
+      const old = user.email;
+      db.prepare("UPDATE users SET email=?, email_verified_at=NULL WHERE id=?").run(email, user.id);
+      db.prepare("DELETE FROM password_resets WHERE user_id=?").run(user.id);
+      db.prepare("DELETE FROM email_verifications WHERE user_id=?").run(user.id);
+      setImmediate(() => mailer.send({ to: old, ...emailChangedNotice(lang, { name: user.name, newEmail: email }) }).catch((e) => console.error("notice e-mail failed:", e.message)));
+      if (verifyOn) issueVerification(req, { id: user.id, email, name: user.name }, lang);
+      return send(res, 200, { user: { ...user, email, verified: false } });
     }
 
     // ---- password reset by e-mail ----
@@ -216,6 +293,7 @@ function createApp(opts = {}) {
       if (password.length < 8 || password.length > 128) return send(res, 400, { error: "weak_password" });
       const salt = crypto.randomBytes(16).toString("hex");
       db.prepare("UPDATE users SET salt=?, pass_hash=? WHERE id=?").run(salt, hashPw(password, salt), row.user_id);
+      db.prepare("UPDATE users SET email_verified_at=COALESCE(email_verified_at, datetime('now')) WHERE id=?").run(row.user_id); // they received the e-mail
       db.prepare("DELETE FROM password_resets WHERE user_id=?").run(row.user_id); // single use
       db.prepare("DELETE FROM sessions WHERE user_id=?").run(row.user_id);        // sign out everywhere
       setImmediate(() => mailer.send({ to: row.email, ...changedEmail(lang, { name: row.name }) }).catch((e) => console.error("notice e-mail failed:", e.message)));
@@ -243,7 +321,7 @@ function createApp(opts = {}) {
     // ---- data rights: export and delete my account ----
     if (m === "GET" && p === "/api/me/export") {
       if (!user) return send(res, 401, { error: "auth_required" });
-      const prof = db.prepare("SELECT id,email,name,role,created_at,terms_accepted_at,terms_version FROM users WHERE id=?").get(user.id);
+      const prof = db.prepare("SELECT id,email,name,role,created_at,email_verified_at,terms_accepted_at,terms_version FROM users WHERE id=?").get(user.id);
       const businesses = db.prepare("SELECT id,cat,city,name_ar,name_en,desc_ar,area_ar,phone,status,verified,created_at FROM businesses WHERE owner_id=?").all(user.id);
       const reviews = db.prepare("SELECT business_id,rating,comment,created_at,updated_at FROM reviews WHERE user_id=?").all(user.id);
       res.setHeader("Content-Disposition", 'attachment; filename="my-data.json"');
@@ -289,6 +367,7 @@ function createApp(opts = {}) {
 
     if (p === "/api/businesses" && m === "POST") {
       if (!user) return send(res, 401, { error: "auth_required" });
+      if (needsVerification(user)) return send(res, 403, { error: "email_unverified" });
       if (limited(req, "biz", 20, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
       const b = await readJson(req);
       const nameAr = str(b.name_ar, 80), nameEn = str(b.name_en, 80) || nameAr;
@@ -318,6 +397,7 @@ function createApp(opts = {}) {
     }
     if (rm && m === "POST") {
       if (!user) return send(res, 401, { error: "auth_required" });
+      if (needsVerification(user)) return send(res, 403, { error: "email_unverified" });
       if (limited(req, "rev", 30, 60 * 60 * 1000)) return send(res, 429, { error: "rate_limited" });
       const bid = Number(rm[1]);
       const biz = db.prepare("SELECT owner_id FROM businesses WHERE id=? AND status='approved'").get(bid);
@@ -382,6 +462,9 @@ function createApp(opts = {}) {
   });
   if (process.env.NODE_ENV === "production" && !(opts.contactEmail || process.env.CONTACT_EMAIL)) {
     console.warn("WARNING: CONTACT_EMAIL is not set - the privacy policy and terms show a placeholder instead of a contact address.");
+  }
+  if (verifyOn && process.env.NODE_ENV === "production" && !(opts.siteUrl || process.env.SITE_URL)) {
+    console.warn("WARNING: SITE_URL is not set - verification and reset e-mails cannot be sent (links are never built from the Host header).");
   }
   const shell = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
   const clientData = `window.CATEGORIES=${JSON.stringify(seed.CATEGORIES)};window.CITIES=${JSON.stringify(seed.CITIES)};`;
@@ -450,7 +533,7 @@ function createApp(opts = {}) {
     }
   });
   server.on("close", () => db.close());
-  return { server, db };
+  return { server, db, cleanup };
 }
 
 module.exports = { createApp };

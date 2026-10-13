@@ -3,7 +3,7 @@
 // The text describes what THIS software actually does. It is a template, not legal advice:
 // have a qualified lawyer review it before launch (see LEGAL.md).
 
-const LEGAL_VERSION = "2026-10-13-r2"; // bump on every change of the texts; "-rN" = revision within a day
+const LEGAL_VERSION = "2026-10-13-r3"; // bump on every change of the texts; "-rN" = revision within a day
 const shownDate = () => LEGAL_VERSION.split("-r")[0];
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -21,13 +21,14 @@ const TEXT = {
             "<strong>بيانات الأنشطة التي تضيفها:</strong> اسم النشاط وتصنيفه ومدينته ومنطقته ووصفه ورقم هاتفه.",
             "<strong>التقييمات:</strong> عدد النجوم والتعليق الذي تكتبه، ويظهر معه اسمك.",
             "<strong>سجل الموافقة:</strong> وقت موافقتك على الشروط وسياسة الخصوصية ونسخة النص التي وافقت عليها.",
+            "<strong>تفعيل البريد:</strong> نرسل رابط تفعيل إلى بريدك ونحفظ بصمة الرمز فقط (يُحذف بعد الاستخدام أو بعد 24 ساعة) ونسجّل وقت تفعيل بريدك.",
             "<strong>رمز استعادة كلمة المرور:</strong> عند طلبك الاستعادة ننشئ رمزًا مؤقتًا نحفظ بصمته فقط، ويُحذف بعد استخدامه أو بعد ساعة.",
             "<strong>بيانات تقنية:</strong> عنوان IP يُستخدم مؤقتًا في ذاكرة الخادم للحدّ من محاولات الدخول والتسجيل المتكررة ولا نحفظه في قاعدة البيانات. قد يحتفظ مزوّد الاستضافة بسجلات تقنية معتادة."
           ] }
         ]],
         ["لماذا نستخدم بياناتك", [
           { ul: [
-            "إنشاء حسابك وتسجيل دخولك وحمايته.",
+            "إنشاء حسابك وتسجيل دخولك وحمايته، والتأكد من أن البريد يعود لك ومنع إساءة الاستخدام.",
             "نشر الأنشطة والتقييمات بعد المراجعة، وإدارة المحتوى ومنع إساءة الاستخدام.",
             "تحسين ظهور الدليل في محركات البحث (للأنشطة والتقييمات المنشورة فقط)."
           ] },
@@ -37,10 +38,10 @@ const TEXT = {
         ["ملفات تعريف الارتباط (الكوكيز)", ["نستخدم كوكي واحدًا ضروريًا للتشغيل باسم <code>sid</code> لإبقائك مسجّلًا للدخول (مدته حتى 7 أيام، وهو محمي من الوصول عبر JavaScript ولا يُرسل إلا عبر اتصال آمن عند النشر). لا نستخدم كوكيز إعلانية أو تحليلية ولا أدوات تتبّع من أطراف خارجية. اللغة محفوظة في رابط الصفحة وليس في كوكي."]],
         ["مشاركة البيانات", [
           "لا نبيع بياناتك. قد تُعالَج البيانات لدى مزوّد استضافة سحابي نستخدمه لتشغيل الموقع، وقد يكون خوادمه خارج دولة قطر. وقد نكشف عن بيانات عند وجود إلزام قانوني من جهة مختصة.",
-          "نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (استعادة كلمة المرور وإشعار تغييرها). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.",
+          "نستخدم مزوّد خدمة بريد إلكتروني لإرسال رسائل الحساب فقط (تفعيل البريد واستعادة كلمة المرور وإشعارات تغييرهما). يستلم المزوّد بريدك واسمك ومحتوى الرسالة لهذا الغرض، ولا نستخدمه للتسويق.",
           "أزرار «واتساب» و«اتصال» تفتح تطبيقات أطراف ثالثة؛ وتخضع بياناتك فيها لسياساتها."
         ]],
-        ["مدة الاحتفاظ", ["نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ."]],
+        ["مدة الاحتفاظ", ["نحتفظ بحسابك وبياناتك ما دام حسابك قائمًا. عند حذف حسابك نحذف ملفك وتقييماتك وكل الأنشطة التي أضفتها. الحسابات التي لم يُفعَّل بريدها ولا تملك أي محتوى تُحذف تلقائيًا بعد 7 أيام. قد تبقى نسخ احتياطية لفترة محدودة قبل أن تُستبدل بالدورة الاعتيادية للنسخ."]],
         ["حقوقك", [
           "وفق قانون حماية خصوصية البيانات الشخصية في دولة قطر، لك حقوق منها: الاطلاع على بياناتك، وتصحيحها، وطلب حذفها، وسحب موافقتك، والاعتراض على المعالجة. يمكنك:",
           { ul: [
@@ -105,13 +106,14 @@ const TEXT = {
             "<strong>Listings you submit:</strong> business name, category, city, area, description and phone number.",
             "<strong>Reviews:</strong> the star rating and comment you write, displayed with your name.",
             "<strong>Consent record:</strong> when you accepted the Terms and Privacy Policy and which version of the text.",
+            "<strong>E-mail confirmation:</strong> we send a confirmation link to your address and store only the token’s hash (deleted once used or after 24 hours), and we record when you confirmed it.",
             "<strong>Password-reset token:</strong> when you request a reset we create a temporary token and store only its hash; it is deleted once used or after one hour.",
             "<strong>Technical data:</strong> your IP address is used temporarily in server memory to limit repeated login/sign-up attempts and is not stored in the database. Our hosting provider may keep standard technical logs."
           ] }
         ]],
         ["Why we use your data", [
           { ul: [
-            "To create, secure and sign you in to your account.",
+            "To create, secure and sign you in to your account, to confirm that the e-mail address is yours and to prevent abuse.",
             "To publish listings and reviews after moderation, run the site and prevent abuse.",
             "To make published listings and reviews discoverable in search engines."
           ] },
@@ -121,10 +123,10 @@ const TEXT = {
         ["Cookies", ["We use one strictly necessary cookie, <code>sid</code>, to keep you signed in (up to 7 days, not readable by JavaScript and sent only over a secure connection when deployed). We use no advertising or analytics cookies and no third-party trackers. Your language is kept in the page URL, not in a cookie."]],
         ["Sharing", [
           "We do not sell your data. It may be processed by a cloud hosting provider we use to run the site, whose servers may be outside the State of Qatar. We may disclose data where legally required by a competent authority.",
-          "We use an e-mail delivery provider only to send account e-mails (password reset and a notice when it changes). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.",
+          "We use an e-mail delivery provider only to send account e-mails (e-mail confirmation, password reset and notices when they change). The provider receives your e-mail address, name and the message content for that purpose; we do not use it for marketing.",
           "The “WhatsApp” and “Call” buttons open third-party apps, whose own policies apply."
         ]],
-        ["Retention", ["We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Backup copies may remain for a limited time until replaced in the normal backup cycle."]],
+        ["Retention", ["We keep your account and data while your account exists. When you delete your account we delete your profile, your reviews and every listing you submitted. Accounts whose e-mail was never confirmed and that own no content are deleted automatically after 7 days. Backup copies may remain for a limited time until replaced in the normal backup cycle."]],
         ["Your rights", [
           "Under Qatar’s personal data privacy law you have rights including access, correction, erasure, withdrawal of consent and objection to processing. You can:",
           { ul: [

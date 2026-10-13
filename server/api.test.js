@@ -16,7 +16,7 @@ async function call(method, path, body, cookie) {
 }
 
 test.before(async () => {
-  ({ server } = createApp({ dbFile: ":memory:", adminEmail: "admin@example.com", adminPassword: "admin-pass-123" }));
+  ({ server } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", adminEmail: "admin@example.com", adminPassword: "admin-pass-123" }));
   await new Promise((r) => server.listen(0, r));
   base = "http://127.0.0.1:" + server.address().port;
 });
@@ -141,17 +141,17 @@ test("health endpoint needs no auth", async () => {
 });
 
 test("production guards: weak admin password is rejected, SEED_DEMO=0 starts empty", () => {
-  assert.throws(() => createApp({ dbFile: ":memory:", adminEmail: "a@b.co", adminPassword: "short" }), /at least 10/);
+  assert.throws(() => createApp({ requireVerifiedEmail: false, dbFile: ":memory:", adminEmail: "a@b.co", adminPassword: "short" }), /at least 10/);
   process.env.SEED_DEMO = "0";
   try {
-    const { server: s2, db } = createApp({ dbFile: ":memory:" });
+    const { server: s2, db } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:" });
     assert.equal(db.prepare("SELECT COUNT(*) n FROM businesses").get().n, 0);
     s2.close();
   } finally { delete process.env.SEED_DEMO; }
 });
 
 test("rate limit keys on proxy-provided client IP when TRUST_PROXY is on", async () => {
-  const { server: s3 } = createApp({ dbFile: ":memory:", trustProxy: true });
+  const { server: s3 } = createApp({ requireVerifiedEmail: false, dbFile: ":memory:", trustProxy: true });
   await new Promise((r) => s3.listen(0, r));
   const url = "http://127.0.0.1:" + s3.address().port + "/api/login";
   const tryLogin = (ip) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "X-Real-IP": ip }, body: JSON.stringify({ email: "x@y.co", password: "wrong-pass" }) }).then((r) => r.status);
@@ -166,7 +166,7 @@ test("changing ADMIN_PASSWORD and restarting rotates the admin password", async 
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "qd-"));
   const file = path.join(dir, "t.db");
   const boot = async (pw) => {
-    const { server: sv, db } = createApp({ dbFile: file, seed: false, adminEmail: "root@test.qa", adminPassword: pw });
+    const { server: sv, db } = createApp({ requireVerifiedEmail: false, dbFile: file, seed: false, adminEmail: "root@test.qa", adminPassword: pw });
     await new Promise((r) => sv.listen(0, r));
     const res = await fetch(`http://127.0.0.1:${sv.address().port}/api/login`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: "root@test.qa", password: "first-password-1" }) });
     await new Promise((r) => sv.close(r)); // closing also closes the db

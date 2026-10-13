@@ -64,6 +64,12 @@ function openDb(file) {
       user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       expires_at INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS email_verifications (
+      token_hash TEXT PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      email TEXT NOT NULL,
+      expires_at INTEGER NOT NULL
+    );
     CREATE INDEX IF NOT EXISTS idx_rev_biz ON reviews(business_id);
     CREATE INDEX IF NOT EXISTS idx_biz_status ON businesses(status);
     CREATE INDEX IF NOT EXISTS idx_biz_owner ON businesses(owner_id);
@@ -72,6 +78,11 @@ function openDb(file) {
   const cols = db.prepare("PRAGMA table_info(users)").all().map((c) => c.name);
   if (!cols.includes("terms_accepted_at")) db.exec("ALTER TABLE users ADD COLUMN terms_accepted_at TEXT");
   if (!cols.includes("terms_version")) db.exec("ALTER TABLE users ADD COLUMN terms_version TEXT");
+  if (!cols.includes("email_verified_at")) {
+    db.exec("ALTER TABLE users ADD COLUMN email_verified_at TEXT");
+    // accounts that existed before e-mail verification was introduced are grandfathered as verified
+    db.exec("UPDATE users SET email_verified_at = datetime('now')");
+  }
   return db;
 }
 
