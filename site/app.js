@@ -20,7 +20,16 @@
       f_name_ar: "اسم النشاط بالعربية", f_name_en: "اسم النشاط بالإنجليزية (اختياري)", f_desc: "وصف مختصر",
       f_phone: "رقم الهاتف (8 أرقام قطرية)", f_area: "المنطقة / العنوان", submit: "إرسال",
       phone_err: "أدخل رقمًا قطريًا صحيحًا من 8 أرقام (يبدأ بـ 3 أو 4 أو 5 أو 6 أو 7).",
-      sent: "تم الإرسال! سيظهر نشاطك في «تصفح الدليل» كطلب قيد المراجعة.", pending: "قيد المراجعة"
+      sent: "تم الإرسال! نشاطك قيد المراجعة وسيظهر في الدليل بعد الموافقة.", pending: "قيد المراجعة",
+      rejected: "مرفوض", login: "تسجيل الدخول", register: "إنشاء حساب", logout: "خروج", email: "البريد الإلكتروني",
+      password: "كلمة المرور (8 أحرف على الأقل)", your_name: "الاسم", need_login: "سجّل الدخول أولًا لإضافة نشاطك.",
+      my_listings: "أنشطتي", admin: "لوحة الإدارة", approve: "قبول", reject: "رفض", verify: "توثيق", unverify: "إلغاء التوثيق",
+      no_pending: "لا توجد طلبات.", hello: "مرحبًا", have_account: "لديك حساب؟", no_account: "ليس لديك حساب؟", load_err: "تعذّر تحميل البيانات.",
+      status_pending: "قيد المراجعة", status_approved: "مقبول", status_rejected: "مرفوض",
+      e_invalid_email: "البريد الإلكتروني غير صحيح.", e_invalid_name: "الاسم مطلوب.", e_weak_password: "كلمة المرور يجب أن تكون 8 أحرف على الأقل.",
+      e_email_taken: "هذا البريد مسجّل مسبقًا.", e_bad_credentials: "البريد أو كلمة المرور غير صحيحة.", e_rate_limited: "محاولات كثيرة، حاول لاحقًا.",
+      e_invalid_category: "اختر التصنيف.", e_invalid_city: "اختر المدينة.", e_invalid_phone: "أدخل رقمًا قطريًا صحيحًا من 8 أرقام.",
+      e_auth_required: "يلزم تسجيل الدخول.", e_generic: "حدث خطأ، حاول مرة أخرى."
     },
     en: {
       brand: "Qatar Guide", nav_home: "Home", nav_browse: "Browse", nav_add: "List your business",
@@ -37,7 +46,16 @@
       f_name_ar: "Business name (Arabic)", f_name_en: "Business name (English, optional)", f_desc: "Short description",
       f_phone: "Phone (8-digit Qatar number)", f_area: "Area / address", submit: "Submit",
       phone_err: "Enter a valid 8-digit Qatar number (starting with 3, 4, 5, 6 or 7).",
-      sent: "Submitted! Your listing shows in Browse as pending review.", pending: "Pending review"
+      sent: "Submitted! Your listing is pending review and will appear once approved.", pending: "Pending review",
+      rejected: "Rejected", login: "Log in", register: "Sign up", logout: "Log out", email: "Email",
+      password: "Password (min 8 characters)", your_name: "Name", need_login: "Log in first to list your business.",
+      my_listings: "My listings", admin: "Admin", approve: "Approve", reject: "Reject", verify: "Verify", unverify: "Unverify",
+      no_pending: "Nothing here.", hello: "Hello", have_account: "Have an account?", no_account: "No account yet?", load_err: "Could not load data.",
+      status_pending: "Pending", status_approved: "Approved", status_rejected: "Rejected",
+      e_invalid_email: "Invalid email.", e_invalid_name: "Name is required.", e_weak_password: "Password must be at least 8 characters.",
+      e_email_taken: "This email is already registered.", e_bad_credentials: "Wrong email or password.", e_rate_limited: "Too many attempts, try later.",
+      e_invalid_category: "Choose a category.", e_invalid_city: "Choose a city.", e_invalid_phone: "Enter a valid 8-digit Qatar number.",
+      e_auth_required: "Please log in.", e_generic: "Something went wrong, try again."
     }
   };
 
@@ -52,16 +70,22 @@
     });
   }
 
-  function loadSubmissions() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch (e) { return []; }
+  var state = { user: null, businesses: [] };
+
+  function api(method, url, body) {
+    return fetch(url, {
+      method: method, credentials: "same-origin",
+      headers: body ? { "Content-Type": "application/json" } : {},
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.error || "generic"); e.code = j.error || "generic"; throw e; }
+        return j;
+      });
+    });
   }
-  function saveSubmission(item) {
-    try {
-      var list = loadSubmissions(); list.push(item);
-      localStorage.setItem(STORE_KEY, JSON.stringify(list));
-    } catch (e) {}
-  }
-  function allBusinesses() { return window.BUSINESSES.concat(loadSubmissions()); }
+  function errMsg(e) { var k = "e_" + (e && e.code); return T[lang][k] ? t(k) : t("e_generic"); }
+  function allBusinesses() { return state.businesses; }
 
   function setLang(l) {
     lang = l;
@@ -87,7 +111,7 @@
     var city = window.CITIES.filter(function (c) { return c.id === b.city; })[0];
     return '<article class="card">' +
       "<h3>" + esc(L(b.name)) + (b.verified ? ' <span class="badge">✓ ' + t("verified") + "</span>" : "") +
-      (b.pending ? ' <span class="badge" style="background:rgba(217,154,0,.15);color:#a87400">' + t("pending") + "</span>" : "") + "</h3>" +
+      (b.status === "pending" ? ' <span class="badge warn">' + t("pending") + "</span>" : b.status === "rejected" ? ' <span class="badge bad">' + t("rejected") + "</span>" : "") + "</h3>" +
       '<div class="meta">' + (cat ? cat.icon + " " + esc(L(cat)) : "") + " · " + (city ? esc(L(city)) : "") + "</div>" +
       "<p>" + esc(L(b.desc)) + "</p>" +
       (b.reviews ? '<div class="meta"><span class="stars">★ ' + esc(b.rating) + "</span> (" + esc(b.reviews) + " " + t("reviews") + ")</div>" : "") +
@@ -133,7 +157,7 @@
       "<label>" + t("city") + '<select name="city">' + opts(window.CITIES, t("all_cities"), params.city) + "</select></label>" +
       "<label>" + t("sort") + '<select name="sort"><option value="rating">' + t("sort_rating") + '</option><option value="name"' +
       (params.sort === "name" ? " selected" : "") + ">" + t("sort_name") + "</option></select></label>" +
-      '<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="verified" value="1"' +
+      '<label class="check"><input type="checkbox" name="verified" value="1"' +
       (params.verified === "1" ? " checked" : "") + "> " + t("verified_only") + "</label>" +
       '<button class="btn" type="submit">' + t("search") + "</button></form>" +
       "<div><p class=\"meta\">" + list.length + " " + t("results") + "</p>" +
@@ -152,12 +176,13 @@
       "<p>" + esc(L(b.desc)) + "</p><dl>" +
       "<dt>" + t("area") + "</dt><dd>" + esc(b.area ? L(b.area) : "") + "</dd>" +
       (b.hours ? "<dt>" + t("hours") + "</dt><dd>" + esc(L(b.hours)) + "</dd>" : "") +
-      "<dt>" + t("phone") + '</dt><dd dir="ltr" style="text-align:start">' + esc(b.phone) + "</dd></dl>" +
+      "<dt>" + t("phone") + '</dt><dd dir="ltr" class="ltr">' + esc(b.phone) + "</dd></dl>" +
       '<div class="actions"><a class="btn" href="' + telHref(b.phone) + '">📞 ' + t("call") + "</a>" +
       '<a class="btn wa" target="_blank" rel="noopener" href="' + waHref(b.whatsapp) + '">💬 ' + t("whatsapp") + "</a></div></div></div>";
   }
 
   function viewAdd() {
+    if (!state.user) return '<div class="container"><div class="form"><p>' + t("need_login") + '</p><a class="btn" href="#/login">' + t("login") + "</a></div></div>";
     return '<div class="container"><form class="form" id="addForm" novalidate><h2>' + t("add_title") + '</h2><p class="meta">' + t("add_sub") + "</p>" +
       "<label>" + t("f_name_ar") + '<input name="name_ar" required maxlength="80"></label>' +
       "<label>" + t("f_name_en") + '<input name="name_en" maxlength="80"></label>' +
@@ -167,6 +192,37 @@
       "<label>" + t("f_phone") + '<input name="phone" inputmode="numeric" maxlength="8" dir="ltr" required></label>' +
       "<label>" + t("f_desc") + '<textarea name="desc" rows="3" maxlength="300"></textarea></label>' +
       '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t("submit") + "</button></form></div>";
+  }
+
+  function viewAuth(mode) {
+    var reg = mode === "register";
+    return '<div class="container"><form class="form narrow" id="authForm" data-mode="' + mode + '" novalidate><h2>' + t(reg ? "register" : "login") + "</h2>" +
+      (reg ? "<label>" + t("your_name") + '<input name="name" maxlength="60" autocomplete="name" required></label>' : "") +
+      "<label>" + t("email") + '<input name="email" type="email" dir="ltr" autocomplete="email" required></label>' +
+      "<label>" + t("password") + '<input name="password" type="password" dir="ltr" minlength="8" autocomplete="' + (reg ? "new-password" : "current-password") + '" required></label>' +
+      '<div id="formMsg" role="status"></div><button class="btn" type="submit">' + t(reg ? "register" : "login") + "</button>" +
+      '<p class="meta">' + t(reg ? "have_account" : "no_account") + ' <a class="link" href="#/' + (reg ? "login" : "register") + '">' + t(reg ? "login" : "register") + "</a></p></form></div>";
+  }
+
+  function viewMine(list) {
+    return '<div class="container"><section class="block"><h2>' + t("my_listings") + "</h2>" +
+      (list.length ? '<div class="grid">' + list.map(card).join("") + "</div>" : '<p class="empty">' + t("no_pending") + '</p>') +
+      '<p><a class="btn" href="#/add">+ ' + t("nav_add") + "</a></p></section></div>";
+  }
+
+  function viewAdmin(list, status) {
+    var tabs = ["pending", "approved", "rejected"].map(function (st) {
+      return '<a class="btn' + (st === status ? "" : " ghost") + '" href="#/admin?status=' + st + '">' + t("status_" + st) + "</a>";
+    }).join(" ");
+    var rows = list.map(function (b) {
+      return '<div class="card"><h3>' + esc(L(b.name)) + "</h3><div class=\"meta\">" + esc(b.phone) + " · " + esc(b.cat) + " · " + esc(b.city) + "</div><p>" + esc(L(b.desc)) + '</p><div class="actions">' +
+        (b.status !== "approved" ? '<button class="btn" data-act="approve" data-id="' + b.id + '">' + t("approve") + "</button>" : "") +
+        (b.status !== "rejected" ? '<button class="btn ghost" data-act="reject" data-id="' + b.id + '">' + t("reject") + "</button>" : "") +
+        (b.status === "approved" ? '<button class="btn ghost" data-act="' + (b.verified ? "unverify" : "verify") + '" data-id="' + b.id + '">' + t(b.verified ? "unverify" : "verify") + "</button>" : "") +
+        "</div></div>";
+    }).join("");
+    return '<div class="container"><section class="block"><h2>' + t("admin") + '</h2><div class="actions">' + tabs + "</div><br>" +
+      (list.length ? '<div class="grid">' + rows + "</div>" : '<p class="empty">' + t("no_pending") + "</p>") + "</section></div>";
   }
 
   function parseHash() {
@@ -183,20 +239,56 @@
     return p.toString();
   }
 
+  function renderUserNav() {
+    var el = document.getElementById("userNav");
+    if (!state.user) { el.innerHTML = '<a href="#/login">' + t("login") + "</a>"; return; }
+    el.innerHTML = '<a href="#/mine">' + esc(state.user.name) + "</a>" +
+      (state.user.role === "admin" ? ' <a href="#/admin">' + t("admin") + "</a>" : "") +
+      ' <button id="logoutBtn" class="lang-btn" type="button">' + t("logout") + "</button>";
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      api("POST", "/api/logout", {}).then(function () { state.user = null; location.hash = "#/"; render(); });
+    });
+  }
+
+  var renderSeq = 0;
   function render() {
+    var seq = ++renderSeq;
     var app = document.getElementById("app");
     var r = parseHash();
-    var html;
-    if (r.path === "/browse") html = viewBrowse(r.params);
-    else if (r.path.indexOf("/b/") === 0) html = viewDetail(decodeURIComponent(r.path.slice(3)));
-    else if (r.path === "/add") html = viewAdd();
-    else html = viewHome();
-    app.innerHTML = html;
-    document.querySelectorAll("[data-nav]").forEach(function (a) {
-      a.classList.toggle("active", a.getAttribute("href") === "#" + r.path);
+    renderUserNav();
+
+    var jobs = [api("GET", "/api/businesses").then(function (j) { state.businesses = j.businesses; })];
+    var extra = null;
+    if (r.path === "/mine" && state.user) extra = api("GET", "/api/my/businesses");
+    if (r.path === "/admin" && state.user && state.user.role === "admin") extra = api("GET", "/api/admin/businesses?status=" + encodeURIComponent(r.params.status || "pending"));
+
+    Promise.all([Promise.all(jobs), extra]).then(function (res) {
+      if (seq !== renderSeq) return;
+      var data = res[1];
+      var html;
+      if (r.path === "/browse") html = viewBrowse(r.params);
+      else if (r.path.indexOf("/b/") === 0) html = viewDetail(decodeURIComponent(r.path.slice(3)));
+      else if (r.path === "/add") html = viewAdd();
+      else if (r.path === "/login") html = viewAuth("login");
+      else if (r.path === "/register") html = viewAuth("register");
+      else if (r.path === "/mine") html = state.user ? viewMine(data.businesses) : viewAuth("login");
+      else if (r.path === "/admin") html = state.user && state.user.role === "admin" ? viewAdmin(data.businesses, r.params.status || "pending") : viewAuth("login");
+      else html = viewHome();
+      app.innerHTML = html;
+      document.querySelectorAll("[data-nav]").forEach(function (a) {
+        a.classList.toggle("active", a.getAttribute("href") === "#" + r.path);
+      });
+      bind();
+      window.scrollTo(0, 0);
+    }).catch(function (e) {
+      if (seq !== renderSeq) return;
+      app.innerHTML = '<div class="container"><p class="empty">' + (e && e.code === "auth_required" ? t("e_auth_required") : t("load_err")) + "</p></div>";
     });
-    bind();
-    window.scrollTo(0, 0);
+  }
+
+  function showMsg(ok, text) {
+    var msg = document.getElementById("formMsg");
+    msg.className = ok ? "notice" : "error"; msg.textContent = text;
   }
 
   function bind() {
@@ -204,25 +296,34 @@
     if (hs) hs.addEventListener("submit", function (e) { e.preventDefault(); location.hash = "#/browse?" + toQuery(hs); });
     var f = document.getElementById("filters");
     if (f) f.addEventListener("submit", function (e) { e.preventDefault(); location.hash = "#/browse?" + toQuery(f); });
+
+    var au = document.getElementById("authForm");
+    if (au) au.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(au), mode = au.getAttribute("data-mode");
+      var body = { email: d.get("email"), password: d.get("password") };
+      if (mode === "register") body.name = d.get("name");
+      api("POST", mode === "register" ? "/api/register" : "/api/login", body).then(function (j) {
+        state.user = j.user; location.hash = "#/mine"; render();
+      }).catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
     var af = document.getElementById("addForm");
     if (af) af.addEventListener("submit", function (e) {
       e.preventDefault();
       var d = new FormData(af);
-      var msg = document.getElementById("formMsg");
-      var phone = String(d.get("phone")).replace(/\s/g, "");
-      if (!/^[34567]\d{7}$/.test(phone) || !String(d.get("name_ar")).trim() || !d.get("cat") || !d.get("city")) {
-        msg.className = ""; msg.style.color = "#c0392b"; msg.textContent = t("phone_err"); return;
-      }
-      var nameAr = String(d.get("name_ar")).trim();
-      var nameEn = String(d.get("name_en")).trim() || nameAr;
-      var desc = String(d.get("desc")).trim();
-      var area = String(d.get("area")).trim();
-      saveSubmission({
-        id: "u" + Date.now(), cat: d.get("cat"), city: d.get("city"), pending: true, verified: false,
-        name: { ar: nameAr, en: nameEn }, desc: { ar: desc, en: desc }, area: { ar: area, en: area },
-        phone: "+974" + phone, whatsapp: "974" + phone, rating: 0, reviews: 0
+      api("POST", "/api/businesses", {
+        name_ar: d.get("name_ar"), name_en: d.get("name_en"), cat: d.get("cat"), city: d.get("city"),
+        area: d.get("area"), phone: String(d.get("phone")).replace(/\s/g, ""), desc: d.get("desc")
+      }).then(function () { af.reset(); showMsg(true, t("sent")); })
+        .catch(function (err) { showMsg(false, errMsg(err)); });
+    });
+
+    document.querySelectorAll("[data-act]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        api("POST", "/api/admin/businesses/" + btn.getAttribute("data-id") + "/" + btn.getAttribute("data-act"), {})
+          .then(render).catch(function (err) { alert(errMsg(err)); });
       });
-      af.reset(); msg.style.color = ""; msg.className = "notice"; msg.textContent = t("sent");
     });
   }
 
@@ -231,5 +332,5 @@
   });
   window.addEventListener("hashchange", render);
   setLang(lang);
-  render();
+  api("GET", "/api/me").then(function (j) { state.user = j.user; }).catch(function () {}).then(render);
 })();

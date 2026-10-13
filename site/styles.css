@@ -65,3 +65,12 @@ form.form input, form.form select, form.form textarea { border: 1px solid var(--
 .footer { text-align: center; color: var(--muted); padding: 24px 16px; border-top: 1px solid var(--line); font-size: .85rem; }
 
 @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+
+.badge.warn { background: rgba(217,154,0,.15); color: #a87400; }
+.badge.bad { background: rgba(192,57,43,.14); color: #c0392b; }
+.filters .check { display: flex; gap: 8px; align-items: center; }
+.ltr { text-align: start; }
+.error { color: #c0392b; }
+.form.narrow { max-width: 440px; margin-inline: auto; }
+.user-nav { display: inline-flex; gap: 10px; align-items: center; }
+.link { color: var(--maroon); text-decoration: underline; }
